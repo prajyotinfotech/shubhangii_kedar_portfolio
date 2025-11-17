@@ -1,4 +1,5 @@
 import { useMiniPlayer } from '../hooks/useMiniPlayer'
+import { useWebPlayback } from '../contexts/SpotifyWebPlaybackContext'
 
 const IconPlay = () => (
   <svg className="icon" viewBox="0 0 20 20" aria-hidden="true">
@@ -31,6 +32,8 @@ const IconClose = () => (
 )
 
 export const MiniPlayer = () => {
+  const web = useWebPlayback()
+  const usingSdk = web?.playerReady && !!web.track
   const {
     audioRef,
     progressRef,
@@ -46,9 +49,15 @@ export const MiniPlayer = () => {
     formatTime,
   } = useMiniPlayer()
 
-  if (!track) return null
+  // Choose data source: Spotify SDK when available, otherwise local mini player
+  const uiTrack = usingSdk
+    ? { title: web.track?.title || '', artist: web.track?.artist || '', color: undefined, coverSrc: web.track?.cover }
+    : track
+  if (!uiTrack) return null
 
-  const progressPercent = time.duration ? Math.min((time.current / time.duration) * 100, 100) : 0
+  const current = usingSdk ? web.position / 1000 : time.current
+  const duration = usingSdk ? web.duration / 1000 : time.duration
+  const progressPercent = duration ? Math.min((current / duration) * 100, 100) : 0
 
   return (
     <div className={`mini-player${collapsed ? ' collapsed' : ''}`} id="miniPlayer">
@@ -56,46 +65,64 @@ export const MiniPlayer = () => {
         <div
           className="mini-cover"
           style={{
-            background: track.color,
-            backgroundImage: (track as any).coverSrc ? `url(${(track as any).coverSrc})` : undefined,
-            backgroundSize: (track as any).coverSrc ? 'cover' : undefined,
-            backgroundPosition: (track as any).coverSrc ? 'center' : undefined,
+            background: (uiTrack as any).color,
+            backgroundImage: (uiTrack as any).coverSrc ? `url(${(uiTrack as any).coverSrc})` : undefined,
+            backgroundSize: (uiTrack as any).coverSrc ? 'cover' : undefined,
+            backgroundPosition: (uiTrack as any).coverSrc ? 'center' : undefined,
           }}
         />
         <div className="mini-text">
-          <div className="mini-title">{track.title}</div>
-          <div className="mini-artist">{track.artist}</div>
+          <div className="mini-title">{uiTrack.title}</div>
+          <div className="mini-artist">{uiTrack.artist}</div>
         </div>
       </div>
 
       <div className="mini-progress">
-        <span className="progress-time current">{formatTime(time.current)}</span>
+        <span className="progress-time current">{formatTime(current)}</span>
         <div
           className="progress-bar"
           ref={progressRef}
-          onClick={seek}
+          onClick={(e) => {
+            if (usingSdk) {
+              const el = progressRef.current
+              if (!el) return
+              const rect = el.getBoundingClientRect()
+              const ratio = (e.clientX - rect.left) / rect.width
+              web.seekTo(ratio * (web.duration || 0))
+            } else {
+              seek(e)
+            }
+          }}
           role="progressbar"
           aria-valuemin={0}
-          aria-valuemax={Math.round(time.duration) || 0}
-          aria-valuenow={Math.round(time.current) || 0}
+          aria-valuemax={Math.round(duration) || 0}
+          aria-valuenow={Math.round(current) || 0}
         >
           <span className="progress-fill" style={{ width: `${progressPercent}%` }} />
         </div>
-        <span className="progress-time duration">{formatTime(time.duration)}</span>
+        <span className="progress-time duration">{formatTime(duration)}</span>
       </div>
 
       <div className="mini-controls">
-        <button className="mini-btn prev" onClick={prevTrack} aria-label="Previous track">
+        <button
+          className="mini-btn prev"
+          onClick={() => (usingSdk ? web.previous() : prevTrack())}
+          aria-label="Previous track"
+        >
           <IconPrev />
         </button>
         <button
           className="mini-btn play"
-          onClick={togglePlay}
-          aria-label={isPlaying ? 'Pause track' : 'Play track'}
+          onClick={() => (usingSdk ? web.togglePlay() : togglePlay())}
+          aria-label={(usingSdk ? web.isPlaying : isPlaying) ? 'Pause track' : 'Play track'}
         >
-          {isPlaying ? <IconPause /> : <IconPlay />}
+          {(usingSdk ? web.isPlaying : isPlaying) ? <IconPause /> : <IconPlay />}
         </button>
-        <button className="mini-btn next" onClick={nextTrack} aria-label="Next track">
+        <button
+          className="mini-btn next"
+          onClick={() => (usingSdk ? web.next() : nextTrack())}
+          aria-label="Next track"
+        >
           <IconNext />
         </button>
       </div>
@@ -108,7 +135,8 @@ export const MiniPlayer = () => {
         <IconPlay />
       </button>
 
-      <audio ref={audioRef} preload="none" />
+      {/* Hide local audio element when using Spotify SDK */}
+      {!usingSdk && <audio ref={audioRef} preload="none" />}
     </div>
   )
 }
