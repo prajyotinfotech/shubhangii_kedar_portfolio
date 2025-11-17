@@ -1293,6 +1293,47 @@ html.is-playing .disc { animation: spinDisc 6s linear infinite; }
     background: #282828;
 }
 
+/* Active track row styling */
+.track-row.active {
+    position: relative;
+    background: linear-gradient(90deg, rgba(29,185,84,0.12), rgba(29,185,84,0.06) 60%, transparent);
+    box-shadow: inset 2px 0 0 var(--spotify-green);
+}
+
+/* Tiny equalizer-like playing indicator */
+.playing-indicator {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 2px;
+    width: 12px;
+    height: 12px;
+}
+.playing-indicator span {
+    display: inline-block;
+    width: 2px;
+    height: 4px;
+    background: var(--spotify-green);
+    border-radius: 1px;
+    animation: wave 0.9s infinite ease-in-out;
+}
+.playing-indicator span:nth-child(2) { animation-delay: 0.15s; }
+.playing-indicator span:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes wave {
+  0%, 100% { transform: scaleY(0.6); opacity: 0.7; }
+  50% { transform: scaleY(1.6); opacity: 1; }
+}
+
+/* Subtle glow on spinning disc */
+.disc.spinning {
+    box-shadow: 0 0 0 rgba(29,185,84,0.0), 0 0 0 rgba(29,185,84,0.0);
+    animation: spinDisc 6s linear infinite, discGlow 2.4s ease-in-out infinite;
+}
+@keyframes discGlow {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(29,185,84,0)); }
+  50% { filter: drop-shadow(0 0 16px rgba(29,185,84,0.25)); }
+}
+
 .track-info {
     display: flex;
     align-items: center;

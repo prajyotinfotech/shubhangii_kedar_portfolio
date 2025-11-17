@@ -165,8 +165,20 @@ export const Playlist: React.FC = () => {
           </div>
 
           {topTracks.map((track: any, index: number) => (
-            <div className="track-row" key={track.id} onClick={() => playViaMiniPlayer(index)}>
-              <div className="col index">{index + 1}</div>
+            <div
+              className={`track-row${index === currentIndex ? ' active' : ''}`}
+              key={track.id}
+              onClick={() => playViaMiniPlayer(index)}
+            >
+              <div className="col index">
+                {index === currentIndex && (usingSdk ? web.isPlaying : isPlaying) ? (
+                  <span className="playing-indicator" aria-label="Playing">
+                    <span></span><span></span><span></span>
+                  </span>
+                ) : (
+                  <span>{index + 1}</span>
+                )}
+              </div>
               <div className="col title">
                 <div className="track-info">
                   <div className="track-cover">

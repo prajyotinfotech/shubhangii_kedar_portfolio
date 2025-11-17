@@ -1,6 +1,7 @@
 import type { MouseEvent as ReactMouseEvent } from 'react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { playlistTracks } from '../data/content'
+import { useSpotify } from '../contexts/SpotifyContext'
 
 const formatTime = (value: number) => {
   if (!isFinite(value)) return '0:00'
@@ -12,6 +13,7 @@ const formatTime = (value: number) => {
 }
 
 export const useMiniPlayer = () => {
+  const { topTracks } = useSpotify()
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const progressRef = useRef<HTMLDivElement | null>(null)
   const [trackIndex, setTrackIndex] = useState(0)
@@ -33,7 +35,21 @@ export const useMiniPlayer = () => {
     console.log('MiniPlayer collapsed state changed to:', collapsed);
   }, [collapsed]);
   const [time, setTime] = useState({ current: 0, duration: 0 })
-  const tracks = playlistTracks
+  // Prefer Spotify top tracks that have a preview_url; otherwise fall back to local demo tracks
+  const spotifyPreviewTracks = useMemo(() => {
+    if (!topTracks || topTracks.length === 0) return [] as { title: string; artist: string; coverSrc?: string; color?: string; src: string }[]
+    return topTracks
+      .filter((t: any) => !!t.preview_url)
+      .map((t: any) => ({
+        title: t.name as string,
+        artist: (t.artists || []).map((a: any) => a.name).join(', '),
+        coverSrc: t.album?.images?.[0]?.url as string | undefined,
+        color: undefined,
+        src: t.preview_url as string,
+      }))
+  }, [topTracks])
+
+  const tracks = spotifyPreviewTracks.length > 0 ? spotifyPreviewTracks : playlistTracks
   const track = useMemo(() => (externalTrack ? externalTrack : tracks[trackIndex]), [externalTrack, trackIndex, tracks])
 
   const loadTrack = (index: number) => {

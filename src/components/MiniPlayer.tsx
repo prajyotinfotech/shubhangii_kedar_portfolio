@@ -69,8 +69,8 @@ export const MiniPlayer = () => {
   const uiTrack = usingSdk
     ? (web.track ? { title: web.track?.title || '', artist: web.track?.artist || '', color: undefined, coverSrc: web.track?.cover } : null)
     : track
-  // Only render when we actually have something playing: SDK track present, or local is actively playing
-  if ((usingSdk && !uiTrack) || (!usingSdk && !isPlaying)) return null
+  // Do NOT return early. We always render the mini-player so the collapsed expand button is visible.
+  // We will simply hide the meta/progress/controls until a real track is available.
 
   const current = usingSdk ? web.position / 1000 : time.current
   const duration = usingSdk ? web.duration / 1000 : time.duration
@@ -78,6 +78,7 @@ export const MiniPlayer = () => {
 
   return (
     <div className={`mini-player${collapsed ? ' collapsed' : ''}`} id="miniPlayer">
+      {uiTrack && (
       <div className="mini-track-meta">
         <div
           className="mini-cover"
@@ -93,7 +94,9 @@ export const MiniPlayer = () => {
           <div className="mini-artist">{(uiTrack as any).artist}</div>
         </div>
       </div>
+      )}
 
+      {uiTrack && (
       <div className="mini-progress">
         <span className="progress-time current">{formatTime(current)}</span>
         <div
@@ -119,30 +122,21 @@ export const MiniPlayer = () => {
         </div>
         <span className="progress-time duration">{formatTime(duration)}</span>
       </div>
+      )}
 
+      {uiTrack && (
       <div className="mini-controls">
-        <button
-          className="mini-btn prev"
-          onClick={() => (usingSdk ? web.previous() : prevTrack())}
-          aria-label="Previous track"
-        >
+        <button className="mini-btn prev" onClick={() => (usingSdk ? web.previous() : prevTrack())} aria-label="Previous track">
           <IconPrev />
         </button>
-        <button
-          className="mini-btn play"
-          onClick={() => (usingSdk ? web.togglePlay() : togglePlay())}
-          aria-label={(usingSdk ? web.isPlaying : isPlaying) ? 'Pause track' : 'Play track'}
-        >
+        <button className="mini-btn play" onClick={() => (usingSdk ? web.togglePlay() : togglePlay())} aria-label={(usingSdk ? web.isPlaying : isPlaying) ? 'Pause track' : 'Play track'}>
           {(usingSdk ? web.isPlaying : isPlaying) ? <IconPause /> : <IconPlay />}
         </button>
-        <button
-          className="mini-btn next"
-          onClick={() => (usingSdk ? web.next() : nextTrack())}
-          aria-label="Next track"
-        >
+        <button className="mini-btn next" onClick={() => (usingSdk ? web.next() : nextTrack())} aria-label="Next track">
           <IconNext />
         </button>
       </div>
+      )}
 
       <button className="mini-btn mini-close" onClick={() => setCollapsed(true)} aria-label="Collapse player">
         <IconClose />
