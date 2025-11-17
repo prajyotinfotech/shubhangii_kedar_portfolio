@@ -322,7 +322,7 @@ a {
 .hanging-mic {
     position: fixed;
     top: 0;
-    right: 24px;
+    right: 12px;
     left: auto;
     height: 100vh;
     display: flex;
@@ -341,7 +341,7 @@ a {
     position: relative;
     overflow: hidden;
     border-radius: 999px;
-    transition: height 0.3s ease-out;
+    transition: height 0.08s linear;
 }
 
 .mic-wire-glow {
@@ -362,17 +362,17 @@ a {
 
 /* Make sure the mic image is properly sized and positioned */
 .mic-image {
-    width: 30px;
+    width: 26px;
     height: auto;
     transform: translateX(0); /* Ensure no horizontal translation */
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-    .hanging-mic { right: 14px; left: auto; }
+    .hanging-mic { right: 6px; left: auto; }
     
     .mic-image {
-        width: 35px;  /* Slightly smaller on mobile */
+        width: 20px;  /* Smaller on mobile */
     }
 }
 

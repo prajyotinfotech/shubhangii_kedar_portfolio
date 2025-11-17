@@ -16,16 +16,12 @@ export const HangingMic: React.FC = () => {
   const [isDragging, setIsDragging] = useState(false)
 
   useEffect(() => {
-    let rafId = 0
-
     const updateProgress = () => {
       const scrollTop = window.scrollY
       const maxScrollable = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1)
       const next = clamp(scrollTop / maxScrollable, 0, 1)
-
-      rafId = window.requestAnimationFrame(() => {
-        setProgress((prev) => (Math.abs(prev - next) > 0.003 ? next : prev))
-      })
+      // Update immediately for a more instant feel
+      setProgress(next)
     }
 
     const onScroll = () => updateProgress()
@@ -40,7 +36,6 @@ export const HangingMic: React.FC = () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
       window.removeEventListener('orientationchange', onResize)
-      window.cancelAnimationFrame(rafId)
     }
   }, [])
 
@@ -96,7 +91,7 @@ export const HangingMic: React.FC = () => {
     for (const off of offsets) {
       if (Math.abs(off - scrollY) < Math.abs(nearest - scrollY)) nearest = off
     }
-    const threshold = Math.max(100, window.innerHeight * 0.12)
+    const threshold = Math.max(80, window.innerHeight * 0.08)
     if (Math.abs(nearest - scrollY) <= threshold) smoothScrollTo(nearest)
   }
 
@@ -117,11 +112,11 @@ export const HangingMic: React.FC = () => {
 
   const startInertia = () => {
     // Momentum scrolling after release
-    let v = velocityRef.current * (maxScrollableRef.current / extraWire) * 16 // convert to px per frame approx
-    const friction = 0.92
+    let v = velocityRef.current * (maxScrollableRef.current / extraWire) * 12 // convert to px per frame approx
+    const friction = 0.86
     const step = () => {
       v *= friction
-      if (Math.abs(v) < 0.3) {
+      if (Math.abs(v) < 0.8) {
         inertiaRafRef.current = 0
         snapToNearest()
         return
@@ -138,7 +133,7 @@ export const HangingMic: React.FC = () => {
     <div
       className="hanging-mic"
       aria-hidden="true"
-      style={{ right: 24, left: 'auto', cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'none' as any }}
+      style={{ right: 8, left: 'auto', cursor: isDragging ? 'grabbing' : 'grab', touchAction: 'none' as any }}
       onPointerDown={onPointerDown}
       onPointerMove={onPointerMove}
       onPointerUp={onPointerUp}
