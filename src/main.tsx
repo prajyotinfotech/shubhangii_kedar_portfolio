@@ -10,6 +10,7 @@ createRoot(document.getElementById('root')!).render(
     <Router>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/callback" element={<App />} />
         <Route path="/journey" element={<JourneyPage />} />
       </Routes>
     </Router>
