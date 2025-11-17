@@ -54,7 +54,6 @@ export const SpotifyWebPlaybackProvider: React.FC<{ children: React.ReactNode }>
   const [isPlaying, setIsPlaying] = useState(false)
   const [position, setPosition] = useState(0)
   const [duration, setDuration] = useState(0)
-  const [playerRef, setPlayerRef] = useState<any>(null)
 
   useEffect(() => {
     let player: any
@@ -114,7 +113,6 @@ export const SpotifyWebPlaybackProvider: React.FC<{ children: React.ReactNode }>
         window.dispatchEvent(evt)
       })
 
-      setPlayerRef(player)
       await player.connect()
     })()
 
