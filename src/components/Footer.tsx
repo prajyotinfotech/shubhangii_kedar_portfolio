@@ -15,7 +15,13 @@ export const Footer: React.FC = () => {
           </div>
           <div className="footer-social">
             {socialLinks.map((social) => (
-              <a href={social.href} key={social.label} aria-label={social.label}>
+              <a
+                href={social.href}
+                key={social.label}
+                aria-label={social.label}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <Icon name={social.icon} className="footer-social-icon" />
               </a>
             ))}

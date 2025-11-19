@@ -232,8 +232,8 @@ export const contactItems: ContactItem[] = [
 ]
 
 export const socialLinks: SocialLink[] = [
-  { label: 'Spotify', href: '#', icon: 'spotify' },
-  { label: 'YouTube', href: '#', icon: 'youtube' },
-  { label: 'Instagram', href: '#', icon: 'instagram' },
+  { label: 'Spotify', href: 'https://open.spotify.com/artist/5egpRukgysKxUuzH5Iu1ae', icon: 'spotify' },
+  { label: 'YouTube', href: 'https://www.youtube.com/@ShubhangiiKedar', icon: 'youtube' },
+  { label: 'Instagram', href: 'https://www.instagram.com/shubhangikedarofficial?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', icon: 'instagram' },
   { label: 'Twitter', href: '#', icon: 'twitter' },
 ]

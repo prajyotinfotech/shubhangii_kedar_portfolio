@@ -2,8 +2,7 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 // import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import Journey from '../components/Journey';
-import HangingMic from '../components/HangingMic';
+import JourneyAurora from '../components/JourneyAurora';
 
 const JourneyPage: React.FC = () => {
   // Scroll to top when component mounts
@@ -14,15 +13,15 @@ const JourneyPage: React.FC = () => {
   return (
     <div className="app">
       {/* <Navbar /> */}
-      <HangingMic />
       <main>
-        <div className="container">
+        <div className="container" style={{ position: 'relative', zIndex: 5, paddingTop: '0.0rem' }}>
           <Link to="/" className="back-to-home">
             ← Back to Home
           </Link>
-          <Journey />
         </div>
+        <JourneyAurora />
       </main>
+
       <Footer />
     </div>
   );
