@@ -237,3 +237,70 @@ export const socialLinks: SocialLink[] = [
   { label: 'Instagram', href: 'https://www.instagram.com/shubhangikedarofficial?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', icon: 'instagram' },
   { label: 'Twitter', href: '#', icon: 'twitter' },
 ]
+
+export type JourneyMilestone = {
+  id: number
+  title: string
+  description: string
+  year: string
+  side: 'left' | 'right'
+  color: string
+  image: string
+}
+
+export const journeyMilestones: JourneyMilestone[] = [
+  {
+    id: 1,
+    title: 'Roots in Maharashtra',
+    description: 'My journey began in the small towns of Maharashtra, where devotional songs and folk melodies filled the air. Singing started as something I did for family and friends, immersed in the rich tradition of abhangs and Marathi folk music.',
+    year: '2010',
+    side: 'left',
+    color: '#ff6b35',
+    image: '/src/assets/1.png',
+  },
+  {
+    id: 2,
+    title: 'First Competition',
+    description: 'Won the State Vocal Championship, marking the first step into professional music. This victory ignited my dream to share our stories and sounds with the world.',
+    year: '2015',
+    side: 'right',
+    color: '#00ccff',
+    image: '/src/assets/2.png',
+  },
+  {
+    id: 3,
+    title: 'Debut Single',
+    description: 'Released "Midnight Dreams", which garnered 100k+ streams in the first month. The beginning of building a family that would span continents.',
+    year: '2018',
+    side: 'left',
+    color: '#ffd700',
+    image: '/src/assets/3.png',
+  },
+  {
+    id: 4,
+    title: 'Govyachya Kinaryav & Ishkkachi Nauka',
+    description: 'These breakthrough hits together crossed 43 million+ streams, becoming anthems for Marathi music lovers worldwide. The songs blended traditional folk with contemporary sounds, resonating across generations.',
+    year: '2020',
+    side: 'right',
+    color: '#cc00ff',
+    image: '/src/assets/4.png',
+  },
+  {
+    id: 5,
+    title: 'Mirchi Music Award',
+    description: 'Earned the prestigious Mirchi Music Award for Upcoming Playback Singer. Recognition for preserving the soul of Marathi music while embracing modern influences, and lending my voice to films in Marathi, Kannada, and Hindi.',
+    year: '2022',
+    side: 'left',
+    color: '#00ff99',
+    image: '/src/assets/5.png',
+  },
+  {
+    id: 6,
+    title: 'Global Marathi Icon',
+    description: 'Today, I\'m humbled to see my dream becoming reality: 540M+ YouTube views, 65M+ Spotify streams, 750k monthly listeners, 408k YouTube subscribers, 480k+ Instagram followers, and 50+ original songs. Our mission continues: taking Marathi music across oceans.',
+    year: '2024',
+    side: 'right',
+    color: '#ff0055',
+    image: '/src/assets/6.png',
+  },
+]
