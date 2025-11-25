@@ -1,3 +1,11 @@
+// Import journey milestone images
+import journeyImg1 from '../assets/1.png'
+import journeyImg2 from '../assets/2.png'
+import journeyImg3 from '../assets/3.png'
+import journeyImg4 from '../assets/4.png'
+import journeyImg5 from '../assets/5.png'
+import journeyImg6 from '../assets/6.png'
+
 export type FeatureStat = {
   label: string
   value: number
@@ -200,15 +208,15 @@ export const galleryItems: GalleryItem[] = [
 
 export const testimonials: Testimonial[] = [
   {
-    quote: '“A voice that lingers long after the last note. Captivating and soulful.”',
+    quote: '"A voice that lingers long after the last note. Captivating and soulful."',
     author: '— SoundWave Magazine',
   },
   {
-    quote: '“Her live shows are pure magic. An unforgettable experience.”',
+    quote: '"Her live shows are pure magic. An unforgettable experience."',
     author: '— City Arts Weekly',
   },
   {
-    quote: '“A rising star redefining modern pop with elegance.”',
+    quote: '"A rising star redefining modern pop with elegance."',
     author: '— The Music Journal',
   },
 ]
@@ -256,7 +264,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2010',
     side: 'left',
     color: '#ff6b35',
-    image: '/src/assets/1.png',
+    image: journeyImg1,
   },
   {
     id: 2,
@@ -265,7 +273,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2015',
     side: 'right',
     color: '#00ccff',
-    image: '/src/assets/2.png',
+    image: journeyImg2,
   },
   {
     id: 3,
@@ -274,7 +282,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2018',
     side: 'left',
     color: '#ffd700',
-    image: '/src/assets/3.png',
+    image: journeyImg3,
   },
   {
     id: 4,
@@ -283,7 +291,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2020',
     side: 'right',
     color: '#cc00ff',
-    image: '/src/assets/4.png',
+    image: journeyImg4,
   },
   {
     id: 5,
@@ -292,7 +300,7 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2022',
     side: 'left',
     color: '#00ff99',
-    image: '/src/assets/5.png',
+    image: journeyImg5,
   },
   {
     id: 6,
@@ -301,6 +309,6 @@ export const journeyMilestones: JourneyMilestone[] = [
     year: '2024',
     side: 'right',
     color: '#ff0055',
-    image: '/src/assets/6.png',
+    image: journeyImg6,
   },
 ]
