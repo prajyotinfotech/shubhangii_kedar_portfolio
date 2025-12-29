@@ -1,0 +1,329 @@
+/**
+ * Shared Editor Styles
+ * Common styles for all admin section editors
+ */
+
+/* Page Layout */
+.editor-page {
+    padding: 2rem;
+    max-width: 900px;
+}
+
+.editor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 2rem;
+}
+
+.editor-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 0.5rem;
+}
+
+.editor-header p {
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+/* Loading State */
+.editor-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.editor-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #667eea;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Messages */
+.editor-message {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+}
+
+.editor-message--success {
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    color: #4ade80;
+}
+
+.editor-message--error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+/* Form */
+.editor-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.editor-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.editor-field label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.editor-field input,
+.editor-field textarea,
+.editor-field select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    outline: none;
+}
+
+.editor-field input::placeholder,
+.editor-field textarea::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.editor-field input:focus,
+.editor-field textarea:focus,
+.editor-field select:focus {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
+}
+
+.editor-field textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.editor-field select {
+    cursor: pointer;
+}
+
+.editor-field select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+/* Row Layout */
+.editor-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.editor-row--3 {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Preview */
+.editor-preview {
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.editor-preview img {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+/* Buttons */
+.editor-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.editor-button {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.editor-button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.editor-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.editor-button--primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.editor-button--primary:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.editor-button--danger {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #f87171;
+}
+
+.editor-button--danger:hover:not(:disabled) {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+.editor-button--small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+}
+
+/* Card */
+.editor-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.editor-card h3 {
+    font-size: 1.1rem;
+    color: #fff;
+    margin: 0 0 1.25rem;
+}
+
+/* List */
+.editor-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.editor-list-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.editor-list-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.editor-list-item__content {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.editor-list-item__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    padding: 0.5rem;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    border-radius: 8px;
+}
+
+.editor-list-item__day {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+.editor-list-item__month {
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+}
+
+.editor-list-item__info h4 {
+    font-size: 1rem;
+    color: #fff;
+    margin: 0 0 0.25rem;
+}
+
+.editor-list-item__info p {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
+}
+
+.editor-list-item__actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.editor-list-item__image {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+/* Empty State */
+.editor-empty {
+    text-align: center;
+    padding: 3rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+
+    .editor-row,
+    .editor-row--3 {
+        grid-template-columns: 1fr;
+    }
+
+    .editor-list-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .editor-list-item__actions {
+        justify-content: flex-end;
+    }
+}

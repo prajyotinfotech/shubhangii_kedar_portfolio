@@ -20,8 +20,11 @@ import { SPOTIFY_ARTIST_ID } from './config/spotify'
 import { AuthProvider } from './contexts/AuthContext'
 import { SpotifyWebPlaybackProvider } from './contexts/SpotifyWebPlaybackContext'
 
+import { useContentContext } from './contexts/ContentContext'
+
 function App() {
-  useScrollReveal()
+  const { content } = useContentContext()
+  useScrollReveal([content])
   useScrollToExpandPlayer()
   return (
     <AuthProvider>
@@ -37,7 +40,7 @@ function App() {
               <Playlist />
               <Music />
               <Events />
-              
+
               <Gallery />
               <Testimonials />
               <Newsletter />
@@ -46,7 +49,7 @@ function App() {
             <Footer />
             <MiniPlayer />
             <a href="/journey" className="follow-journey-button follow-fab" aria-label="Follow My Journey">
-             Follow My Journey
+              Follow My Journey
             </a>
           </div>
         </SpotifyProvider>

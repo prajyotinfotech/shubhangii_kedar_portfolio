@@ -1,11 +1,15 @@
 import { useEffect, useRef, useState } from 'react'
 import './VinylScrollPage.css'
-import { journeyMilestones } from '../../data/content'
 import { Link } from 'react-router-dom'
+import { journeyMilestones as STATIC_MILESTONES } from '../../data/content'
+import { useContentContext } from '../../contexts/ContentContext'
 
 export default function VinylScrollPage() {
-    const [currentIndex, setCurrentIndex] = useState(0)
+    const { content } = useContentContext()
     const containerRef = useRef<HTMLDivElement>(null)
+    const [currentIndex, setCurrentIndex] = useState(0)
+
+    const journeyMilestones = content?.journeyMilestones?.length ? content.journeyMilestones : STATIC_MILESTONES
 
     useEffect(() => {
         const handleScroll = () => {

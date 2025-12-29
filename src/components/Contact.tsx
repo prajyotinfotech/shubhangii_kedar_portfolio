@@ -1,7 +1,23 @@
-import { contactItems, socialLinks } from '../data/content'
+import { useContentContext } from '../contexts/ContentContext'
+import { contactItems as staticContactItems, socialLinks as staticSocialLinks } from '../data/content'
+import type { IconName } from '../data/content'
 import Icon from './Icon'
 
 export const Contact: React.FC = () => {
+  const { content } = useContentContext()
+
+  // Transform API contact content to match expected format
+  const contactItems = content?.contact ? [
+    { icon: 'mail' as IconName, label: 'Email', value: content.contact.email },
+    { icon: 'phone' as IconName, label: 'Phone', value: content.contact.phone },
+    { icon: 'location' as IconName, label: 'Location', value: content.contact.location }
+  ].filter(item => item.value) : staticContactItems
+
+  const socialLinks = content?.socialLinks?.map(link => ({
+    ...link,
+    icon: link.icon as IconName
+  })) || staticSocialLinks
+
   return (
     <section id="contact" className="contact">
       <div className="container">
@@ -66,3 +82,4 @@ export const Contact: React.FC = () => {
 }
 
 export default Contact
+

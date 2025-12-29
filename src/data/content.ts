@@ -225,17 +225,12 @@ export const contactItems: ContactItem[] = [
   {
     icon: 'mail',
     label: 'Email',
-    value: 'aria.rose@music.com',
-  },
-  {
-    icon: 'phone',
-    label: 'Phone',
-    value: '+1 (555) 123-4567',
+    value: 'shubhangikedar@music.com',
   },
   {
     icon: 'location',
     label: 'Location',
-    value: 'Los Angeles, CA',
+    value: 'Maharashtra, India',
   },
 ]
 
