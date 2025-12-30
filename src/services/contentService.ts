@@ -129,11 +129,16 @@ export async function fetchContent(): Promise<ContentData> {
         return contentCache;
     }
 
+    // DIRECT GIST FETCH (Zero Cost)
+    // We use the "Raw" URL to fetch content directly from GitHub's CDN.
+    // This bypasses the Vercel backend entirely for public visitors.
+    const GIST_RAW_URL = import.meta.env.VITE_GIST_RAW_URL || 'https://gist.githubusercontent.com/prajyotinfotech/9edd7314a8b2f69a855037af01072b7e/raw/content.json';
+
     try {
-        const response = await fetch(`${API_URL}/api/content`);
+        const response = await fetch(GIST_RAW_URL);
 
         if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
+            throw new Error(`Gist fetch error: ${response.status}`);
         }
 
         const data = await response.json();
