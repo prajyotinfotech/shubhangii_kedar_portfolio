@@ -98,7 +98,7 @@ function getStaticContent(): ContentData {
             href: s.href,
             icon: s.icon
         })),
-        journeySteps: (staticContent.journeySteps || []).map(s => ({
+        journeySteps: ((staticContent as any).journeySteps || []).map((s: any) => ({
             ...s,
             highlights: s.highlights || []
         })),

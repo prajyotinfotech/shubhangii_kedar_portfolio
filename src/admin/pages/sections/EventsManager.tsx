@@ -2,7 +2,7 @@
  * Events Manager
  * Add, edit, and delete events
  */
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { fetchSection, updateSection, addItem, deleteItem } from '../../api/client';
 import '../styles/editor.css';
 
