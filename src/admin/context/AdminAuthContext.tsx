@@ -2,7 +2,8 @@
  * Admin Authentication Context
  * Manages JWT token and admin authentication state
  */
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 
 interface Admin {
     email: string;
