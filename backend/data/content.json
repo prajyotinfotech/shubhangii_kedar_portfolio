@@ -136,7 +136,7 @@
       "id": "gallery-2",
       "title": "Portrait",
       "description": "Professional portrait",
-      "image": "/src/assets/PWP09949.png",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075750/singer_portfolio/Still202510261456453-1767075743294.png",
       "aspect": "tall"
     },
     {
@@ -171,7 +171,7 @@
       "id": "gallery-7",
       "title": "On stage",
       "description": "Performance highlight",
-      "image": "/src/assets/4.png",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075572/singer_portfolio/Screenshot20251110at5-1767075565492.png",
       "aspect": "wide"
     },
     {

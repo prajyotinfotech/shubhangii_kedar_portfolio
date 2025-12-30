@@ -3,7 +3,7 @@
  * Add, edit, and delete gallery items
  */
 import { useState, useEffect } from 'react';
-import { fetchSection, updateSection, addItem, deleteItem } from '../../api/client';
+import { fetchSection, updateSection, addItem, deleteItem, uploadImage } from '../../api/client';
 import '../styles/editor.css';
 
 interface GalleryItem {
@@ -96,6 +96,22 @@ export default function GalleryManager() {
         }
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, onChange: (item: any) => void, currentItem: any) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            onChange({ ...currentItem, image: result.data.url });
+            setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const renderForm = (item: Partial<GalleryItem>, onChange: (item: any) => void) => {
         const gradient = item.gradient || ['#667eea', '#764ba2'];
         const aspect = item.aspect || 'square';
@@ -121,13 +137,24 @@ export default function GalleryManager() {
                     />
                 </div>
                 <div className="editor-field">
-                    <label>Image URL</label>
-                    <input
-                        type="text"
-                        value={item.image || ''}
-                        onChange={(e) => onChange({ ...item, image: e.target.value })}
-                        placeholder="https://example.com/image.jpg"
-                    />
+                    <label>Image</label>
+                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleImageUpload(e, onChange, item)}
+                            disabled={saving}
+                            style={{ width: 'auto' }}
+                        />
+                        <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                        <input
+                            type="text"
+                            value={item.image || ''}
+                            onChange={(e) => onChange({ ...item, image: e.target.value })}
+                            placeholder="Image URL"
+                            style={{ flex: 1 }}
+                        />
+                    </div>
                     {item.image && (
                         <div className="editor-preview">
                             <img src={item.image} alt="Preview" />

@@ -1,63 +1,51 @@
 /**
  * Upload Routes
- * Handle local image uploads (Cloudinary integration to be added later)
+ * Handle image uploads to Cloudinary
  */
 const express = require('express');
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs').promises;
-const { v4: uuidv4 } = require('uuid');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const router = express.Router();
 const { authenticateToken } = require('../middleware/auth');
 const config = require('../config');
 
-// Ensure uploads directory exists
-async function ensureUploadsDir() {
-    try {
-        await fs.mkdir(config.uploadsPath, { recursive: true });
-    } catch (error) {
-        if (error.code !== 'EEXIST') {
-            throw error;
-        }
-    }
-}
-
-ensureUploadsDir();
-
-// Configure multer for local storage
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, config.uploadsPath);
-    },
-    filename: (req, file, cb) => {
-        // Generate unique filename with original extension
-        const ext = path.extname(file.originalname);
-        const filename = `${uuidv4()}${ext}`;
-        cb(null, filename);
-    }
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: config.cloudinary.cloudName,
+    api_key: config.cloudinary.apiKey,
+    api_secret: config.cloudinary.apiSecret
 });
 
-// File filter for images only
-const fileFilter = (req, file, cb) => {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
-    if (allowedTypes.includes(file.mimetype)) {
-        cb(null, true);
-    } else {
-        cb(new Error('Only JPEG, PNG, GIF, and WebP images are allowed'), false);
-    }
-};
+// Configure Multer Storage for Cloudinary
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: async (req, file) => {
+        // Generate a clean public_id from original filename + timestamp
+        const name = file.originalname.split('.')[0].replace(/[^a-zA-Z0-9]/g, '');
+        const fileId = `${name}-${Date.now()}`;
+
+        return {
+            folder: 'singer_portfolio',
+            public_id: fileId,
+            // Use 'format' to force format or let Cloudinary detect it.
+            // allowed_formats is a property of the storage engine options, NOT the params object in some versions.
+            // But if we return it here it might be passed to upload.
+            // Safer to just rely on Cloudinary's auto-detection or explicit format if needed.
+        };
+    },
+});
 
 const upload = multer({
-    storage,
-    fileFilter,
+    storage: storage,
     limits: {
-        fileSize: 5 * 1024 * 1024 // 5MB limit
+        fileSize: 10 * 1024 * 1024 // Increased to 10MB
     }
 });
 
 /**
  * POST /api/upload
- * Upload single image (protected)
+ * Upload single image to Cloudinary (protected)
  */
 router.post('/', authenticateToken, upload.single('image'), async (req, res, next) => {
     try {
@@ -68,9 +56,7 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
             });
         }
 
-        // Generate URL for the uploaded file
-        const imageUrl = `/uploads/${req.file.filename}`;
-
+        // Return the Cloudinary URL
         res.status(201).json({
             success: true,
             message: 'Image uploaded successfully',
@@ -79,7 +65,7 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
                 originalName: req.file.originalname,
                 size: req.file.size,
                 mimetype: req.file.mimetype,
-                url: imageUrl
+                url: req.file.path // Secure URL from Cloudinary
             }
         });
     } catch (error) {
@@ -88,63 +74,53 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
 });
 
 /**
- * DELETE /api/upload/:filename
- * Delete uploaded image (protected)
+ * DELETE /api/upload/:publicId
+ * Delete uploaded image from Cloudinary (protected)
  */
-router.delete('/:filename', authenticateToken, async (req, res, next) => {
+router.delete('/:publicId', authenticateToken, async (req, res, next) => {
     try {
-        const { filename } = req.params;
-        const filePath = path.join(config.uploadsPath, filename);
+        const { publicId } = req.params;
 
-        // Security: prevent directory traversal
-        if (filename.includes('..') || filename.includes('/') || filename.includes('\\')) {
+        // publicId in Cloudinary typically includes the folder name, e.g., 'singer_portfolio/filename'
+        // But multer-storage-cloudinary might return it differently.
+        // We expect the full public_id to be passed here.
+
+        const result = await cloudinary.uploader.destroy(publicId);
+
+        if (result.result !== 'ok') {
             return res.status(400).json({
-                error: 'Invalid filename',
-                message: 'Invalid characters in filename'
+                error: 'Delete failed',
+                message: result.result === 'not found' ? 'Image not found' : 'Failed to delete from Cloudinary'
             });
         }
-
-        await fs.unlink(filePath);
 
         res.json({
             success: true,
-            message: 'Image deleted successfully'
+            message: 'Image deleted from Cloudinary successfully'
         });
     } catch (error) {
-        if (error.code === 'ENOENT') {
-            return res.status(404).json({
-                error: 'Not found',
-                message: 'Image file not found'
-            });
-        }
         next(error);
     }
 });
 
 /**
  * GET /api/upload/list
- * List all uploaded images (protected)
+ * List all uploaded images from Cloudinary (protected)
  */
 router.get('/list', authenticateToken, async (req, res, next) => {
     try {
-        const files = await fs.readdir(config.uploadsPath);
-        const imageFiles = files.filter(file => {
-            const ext = path.extname(file).toLowerCase();
-            return ['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext);
+        const { resources } = await cloudinary.api.resources({
+            type: 'upload',
+            prefix: 'singer_portfolio/', // Only list files in our folder
+            max_results: 100
         });
 
-        const images = await Promise.all(
-            imageFiles.map(async (filename) => {
-                const filePath = path.join(config.uploadsPath, filename);
-                const stats = await fs.stat(filePath);
-                return {
-                    filename,
-                    url: `/uploads/${filename}`,
-                    size: stats.size,
-                    uploadedAt: stats.mtime
-                };
-            })
-        );
+        const images = resources.map(resource => ({
+            filename: resource.public_id,
+            url: resource.secure_url,
+            size: resource.bytes,
+            uploadedAt: resource.created_at
+        }));
 
         res.json({
             success: true,
@@ -157,6 +133,7 @@ router.get('/list', authenticateToken, async (req, res, next) => {
 
 // Handle multer errors
 router.use((error, req, res, next) => {
+    console.error('Upload Error Details:', error); // Debug logging
     if (error instanceof multer.MulterError) {
         if (error.code === 'LIMIT_FILE_SIZE') {
             return res.status(400).json({
@@ -169,6 +146,14 @@ router.use((error, req, res, next) => {
             message: error.message
         });
     }
+    // Handle Cloudinary/Storage errors that might not be MulterErrors
+    if (error.message && error.message.includes('Cloudinary')) {
+        return res.status(400).json({
+            error: 'Cloudinary Error',
+            message: error.message
+        });
+    }
+
     next(error);
 });
 

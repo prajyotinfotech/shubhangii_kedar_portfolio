@@ -28,4 +28,11 @@ module.exports = {
     // Rate limiting
     rateLimitWindowMs: 15 * 60 * 1000, // 15 minutes
     rateLimitMax: 5, // 5 login attempts per window
+
+    // Cloudinary configuration
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+        apiKey: process.env.CLOUDINARY_API_KEY,
+        apiSecret: process.env.CLOUDINARY_API_SECRET
+    }
 };

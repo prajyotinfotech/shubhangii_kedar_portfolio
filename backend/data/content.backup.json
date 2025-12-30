@@ -62,7 +62,7 @@
     "stats": [],
     "show": {
       "title": "The Show",
-      "description": "Shubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\n\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\n\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\n\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable.\n\nShubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable."
+      "description": "Shubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable."
     },
     "performanceBanner": {
       "cities": "25+ CITIES",
@@ -136,8 +136,8 @@
       "id": "gallery-2",
       "title": "Portrait",
       "description": "Professional portrait",
-      "image": "/src/assets/PWP09949.png",
-      "aspect": "tall"
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075750/singer_portfolio/Still202510261456453-1767075743294.png",
+      "aspect": "square"
     },
     {
       "id": "gallery-3",
@@ -171,7 +171,7 @@
       "id": "gallery-7",
       "title": "On stage",
       "description": "Performance highlight",
-      "image": "/src/assets/4.png",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075572/singer_portfolio/Screenshot20251110at5-1767075565492.png",
       "aspect": "wide"
     },
     {
