@@ -1,15 +1,20 @@
 import { useEffect, useState } from 'react'
-import { testimonials } from '../data/content'
+import { useContentContext } from '../contexts/ContentContext'
+import { testimonials as staticTestimonials } from '../data/content'
 
 export const Testimonials: React.FC = () => {
+  const { content } = useContentContext()
   const [index, setIndex] = useState(0)
+
+  // Use API content or fallback to static
+  const testimonials = content?.testimonials || staticTestimonials
 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % testimonials.length)
     }, 5000)
     return () => clearInterval(timer)
-  }, [])
+  }, [testimonials.length])
 
   const prev = () => setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
   const next = () => setIndex((prev) => (prev + 1) % testimonials.length)
@@ -43,3 +48,4 @@ export const Testimonials: React.FC = () => {
 }
 
 export default Testimonials
+

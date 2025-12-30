@@ -2,12 +2,12 @@ import { useEffect, useRef, useState } from 'react'
 import CountUp from './CountUp'
 import youtubeIcon from '../assets/icons/youtube.svg'
 import instagramIcon from '../assets/icons/instagram.svg'
-// import musicIcon from '../assets/icons/music.svg'
 import spotifyIcon from '../assets/icons/spotify.svg'
 import slidePrimary from '../assets/3.png'
 import slideStudio from '../assets/6.png'
 import slideLive from '../assets/backofthelatestR.png'
 import slidePrimaryMobile from '../assets/mobile1stslide.png'
+import { useContentContext } from '../contexts/ContentContext'
 
 const HERO_VIDEO = '' // Provide a video URL if available
 
@@ -29,51 +29,51 @@ type HeroSlide = {
 
 type PillKind = 'youtube' | 'tracks' | 'instagram'
 type PillStat = { kind: PillKind; top?: string; sub?: string; value: number; color: string; delta?: string }
-const HERO_PILLS: PillStat[] = [
+
+const STATIC_PILLS: PillStat[] = [
   { kind: 'instagram', top: 'Instagram', sub: 'followers', value: 480_000, color: '#B84DFF' },
   { kind: 'youtube', top: 'YouTube', sub: 'Views', value: 540_000_000, color: '#FF0000' },
   { kind: 'tracks', top: 'Streaming', sub: 'Views', value: 65_000_000, color: '#1DB954' },
 ]
-const heroSlides: HeroSlide[] = [
+
+const staticHeroSlides: HeroSlide[] = [
   {
     id: 'live-neon-stage',
     image: slidePrimary,
     alt: 'Shubhangi Kedar performing live',
     heading: ['Namaskar, I’m Shubhangii Kedar'],
-    subtitle: 'A voice rooted in Maharashtra, resonating around the world',
+    subtitle: 'A voice rooted in Maharashtra, resonating around the world',
     mobileImage: slidePrimaryMobile,
-    // actions: [
-    //   { label: 'Listen Now', href: '#playlist', variant: 'primary' },
-    //   { label: 'Book Me', href: '#contact', variant: 'secondary' },
-    // ],
   },
   {
     id: 'studio-microphone',
     image: slideStudio,
     alt: 'Shubhangi Kedar recording in studio',
     heading: ['#Marathi Worldwide Mission'],
-    subtitle: 'Join our journey to take Marathi music across oceans',
-    actions: [
-      // { label: 'Watch Sessions', href: '#playlist', variant: 'primary' },
-      // { label: 'Read Journal', href: '#about', variant: 'secondary' },
-    ],
+    subtitle: 'Join our journey to take Marathi music across oceans',
   },
   {
     id: 'crowd-concert',
     image: slideLive,
     alt: 'Shubhangi Kedar on stage with vibrant crowd',
     heading: ['Experience the Story behind every Song'],
-    subtitle: 'From devotional abhangs to contemporary originals, each melody holds a story',
-    actions: [
-      // { label: 'View Tour Dates', href: '#events', variant: 'primary' },
-      // { label: 'Get Tickets', href: '#events', variant: 'secondary' },
-    ],
+    subtitle: 'From devotional abhangs to contemporary originals, each melody holds a story',
   },
 ]
 
 export const Hero: React.FC = () => {
+  const { content } = useContentContext()
   const [activeSlide, setActiveSlide] = useState(0)
-  const currentSlide = heroSlides[activeSlide]
+
+  const heroSlides = content?.hero?.slides?.length ? content.hero.slides.map(s => ({
+    ...s,
+    // Use local assets if the image path matches what we expect, or the path itself
+    image: s.image.includes('/assets/') ? s.image : s.image,
+  })) : staticHeroSlides
+
+  const heroPills = (content?.hero?.pills as PillStat[]) || STATIC_PILLS
+
+  const currentSlide = heroSlides[activeSlide] || heroSlides[0]
   const touchStartX = useRef<number | null>(null)
   const touchDeltaX = useRef(0)
   const [typedSubtitle, setTypedSubtitle] = useState('')
@@ -210,16 +210,15 @@ export const Hero: React.FC = () => {
             ))}
           </h1>
           <p
-            className={`hero-subtitle${subtitleVisible ? ' is-visible' : ''}${
-              subtitleComplete ? ' is-complete' : ''
-            }`}
+            className={`hero-subtitle${subtitleVisible ? ' is-visible' : ''}${subtitleComplete ? ' is-complete' : ''
+              }`}
             aria-live="polite"
           >
             {typedSubtitle}
             <span className="typing-caret" aria-hidden="true" />
           </p>
           <div className="hero-pills">
-            {HERO_PILLS.map((p, idx) => (
+            {heroPills.map((p: PillStat, idx: number) => (
               <div className={`hero-pill ${p.kind}`} key={`${p.kind}-${idx}`}>
                 <span className="pill-icon" aria-hidden="true">
                   {p.kind === 'youtube' && <img src={youtubeIcon} alt="" />}

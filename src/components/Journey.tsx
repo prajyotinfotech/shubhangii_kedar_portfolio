@@ -1,6 +1,16 @@
 import { useEffect, useMemo, useState } from 'react'
+import { useContentContext } from '../contexts/ContentContext'
 
-const journeySteps = [
+type JourneyStep = {
+  id: string
+  label: string
+  heading: string
+  subheading: string
+  body: string
+  highlights: string[]
+}
+
+const STATIC_STEPS: JourneyStep[] = [
   {
     id: 'roots',
     label: 'Chapter 01',
@@ -49,6 +59,8 @@ const journeySteps = [
 ]
 
 export const Journey: React.FC = () => {
+  const { content } = useContentContext()
+  const journeySteps = content?.journeySteps?.length ? content.journeySteps : STATIC_STEPS
   const [activeStepId, setActiveStepId] = useState(journeySteps[0]?.id ?? '')
 
   const activeStep = useMemo(

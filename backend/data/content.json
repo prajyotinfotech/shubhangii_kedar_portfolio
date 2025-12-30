@@ -1,0 +1,379 @@
+{
+  "hero": {
+    "slides": [
+      {
+        "id": "live-neon-stage",
+        "image": "/src/assets/3.png",
+        "alt": "Shubhangi Kedar performing live",
+        "heading": [
+          "Namaskar, I’m Shubhangii Kedar"
+        ],
+        "subtitle": "A voice rooted in Maharashtra, resonating around the world",
+        "mobileImage": "/src/assets/mobile1stslide.png"
+      },
+      {
+        "id": "studio-microphone",
+        "image": "/src/assets/6.png",
+        "alt": "Shubhangi Kedar recording in studio",
+        "heading": [
+          "#Marathi Worldwide Mission"
+        ],
+        "subtitle": "Join our journey to take Marathi music across oceans"
+      },
+      {
+        "id": "crowd-concert",
+        "image": "/src/assets/backofthelatestR.png",
+        "alt": "Shubhangi Kedar on stage with vibrant crowd",
+        "heading": [
+          "Experience the Story behind every Song"
+        ],
+        "subtitle": "From devotional abhangs to contemporary originals, each melody holds a story"
+      }
+    ],
+    "pills": [
+      {
+        "kind": "instagram",
+        "top": "",
+        "sub": "followers",
+        "value": 480000,
+        "color": "#f524bd"
+      },
+      {
+        "kind": "youtube",
+        "top": "",
+        "sub": "Views",
+        "value": 540000000,
+        "color": "#ff0000"
+      },
+      {
+        "kind": "tracks",
+        "top": "",
+        "sub": "Streams",
+        "value": 65000000,
+        "color": "#1DB954"
+      }
+    ]
+  },
+  "about": {
+    "title": "About",
+    "description": "Known for popular songs like Govyachya Kinaryav, Kokan Kokan, Tuji Feeling, Sanj Rangali and many more, Shubhangii is a pioneer in Marathi independent music, blending traditional and modern sounds to craft her style.",
+    "descriptionSecondary": "With a growing fanbase and a goal to take Marathi music worldwide, she has made a strong mark as a performer who deeply connects with her audience. Her powerful stage presence, sweet voice, and creative approach make her a standout in the indie music scene.",
+    "image": "",
+    "stats": [],
+    "show": {
+      "title": "The Show",
+      "description": "Shubhangii Kedar Live is not just a concert; it’s a personally designed musical experience. The show takes the audience on an emotional roller coaster, blending Shubhangii’s originals with engaging storytelling by the lyricist. Each song carries its own story, creating a deep connection with the audience. The journey culminates with the rich flavors of Marathi folk music that bring the roots of Maharashtra to life. It’s a complete package of entertainment — soulful, powerful, and unforgettable."
+    },
+    "performanceBanner": {
+      "cities": "25+ CITIES",
+      "footfall": "30,000+ FOOTFALL"
+    },
+    "metrics": [
+      {
+        "id": "instagram-followers",
+        "category": "Instagram",
+        "label": "Followers",
+        "value": 480000,
+        "display": "480K+",
+        "accent": "#E4405F",
+        "icon": "instagram"
+      },
+      {
+        "id": "facebook-followers",
+        "category": "Facebook",
+        "label": "Followers",
+        "value": 487000,
+        "display": "487K+",
+        "accent": "#1877F2",
+        "icon": "facebook"
+      },
+      {
+        "id": "youtube-views",
+        "category": "YouTube",
+        "label": "Views",
+        "value": 540000000,
+        "display": "540M+",
+        "accent": "#FF0033",
+        "icon": "youtube"
+      },
+      {
+        "id": "youtube-subs",
+        "category": "YouTube",
+        "label": "Subscribers",
+        "value": 408000,
+        "display": "408K+",
+        "accent": "#FF0033",
+        "icon": "youtube"
+      },
+      {
+        "id": "spotify-streams",
+        "category": "Spotify",
+        "label": "Streams",
+        "value": 65000000,
+        "display": "65M+",
+        "accent": "#1DB954",
+        "icon": "spotify"
+      },
+      {
+        "id": "spotify-monthly",
+        "category": "Spotify",
+        "label": "Monthly Listeners",
+        "value": 750000,
+        "display": "750K+",
+        "accent": "#1DB954",
+        "icon": "spotify"
+      }
+    ],
+    "achievements": [
+      "50+ Originals",
+      "Independently crafted the second most viewed song in Marathi language",
+      "Mirchi Music Award Winner for Upcoming Playback Singer",
+      "Playback for movies across different languages like Marathi, Kannada and Hindi"
+    ]
+  },
+  "gallery": [
+    {
+      "id": "gallery-2",
+      "title": "Portrait",
+      "description": "Professional portrait",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075750/singer_portfolio/Still202510261456453-1767075743294.png",
+      "aspect": "tall"
+    },
+    {
+      "id": "gallery-3",
+      "title": "Live Performance",
+      "description": "In the studio",
+      "image": "/src/assets/1a.png",
+      "aspect": "wide"
+    },
+    {
+      "id": "gallery-4",
+      "title": "Backdrop",
+      "description": "Stage backdrop",
+      "image": "/src/assets/backofthelatestR.png",
+      "aspect": "wide"
+    },
+    {
+      "id": "gallery-5",
+      "title": "Backstage",
+      "description": "Behind the scenes",
+      "image": "/src/assets/3a.png",
+      "aspect": "tall"
+    },
+    {
+      "id": "gallery-6",
+      "title": "Concert moment",
+      "description": "Live on stage",
+      "image": "/src/assets/3.png",
+      "aspect": "tall"
+    },
+    {
+      "id": "gallery-7",
+      "title": "On stage",
+      "description": "Performance highlight",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075572/singer_portfolio/Screenshot20251110at5-1767075565492.png",
+      "aspect": "wide"
+    },
+    {
+      "id": "gallery-8",
+      "title": "Recording",
+      "description": "Studio recording",
+      "image": "/src/assets/6a.png",
+      "aspect": "square"
+    },
+    {
+      "id": "gallery-9",
+      "title": "Audience vibe",
+      "description": "Crowd energy",
+      "image": "/src/assets/5.png",
+      "aspect": "tall"
+    },
+    {
+      "id": "gallery-10",
+      "title": "Show highlight",
+      "description": "Live highlight",
+      "image": "/src/assets/6.png",
+      "aspect": "wide"
+    },
+    {
+      "id": "gallery-11",
+      "title": "Concert crowd",
+      "description": "Vibrant audience",
+      "image": "/src/assets/consert1.png",
+      "aspect": "wide"
+    }
+  ],
+  "journeySteps": [
+    {
+      "id": "roots",
+      "label": "Chapter 01",
+      "heading": "Namaskar, I’m Shubhangii Kedar",
+      "subheading": "A voice rooted in Maharashtra, resonating around the world",
+      "body": "My journey began in the small towns of Maharashtra, where devotional songs and folk melodies filled the air. Singing started as something I did for family and friends, but my dream was always bigger: to share our stories and sounds with the world.",
+      "highlights": []
+    },
+    {
+      "id": "mission",
+      "label": "Chapter 02",
+      "heading": "Marathi Worldwide Mission",
+      "subheading": "Join our journey to take Marathi music across oceans",
+      "body": "Today, I’m humbled to see that dream becoming reality. Our community has grown from a handful of listeners to a family that spans continents.",
+      "highlights": [
+        "540M+ total views across YouTube",
+        "65M+ Spotify streams with 750K monthly listeners",
+        "480K+ Instagram followers • 487K+ on Facebook",
+        "408K subscribers in our YouTube family"
+      ]
+    },
+    {
+      "id": "stories",
+      "label": "Chapter 03",
+      "heading": "Experience the Story behind every Song",
+      "subheading": "From devotional abhangs to contemporary originals, each melody holds a story",
+      "body": "Hits like “Govyachya Kinaryav” and “Ishkkachi Nauka” have together crossed more than 43 million streams. Along the way I’ve released over 50 original songs and collaborated with films in Marathi, Kannada, and Hindi.",
+      "highlights": [
+        "Mirchi Music Award for Upcoming Playback Singer",
+        "One of the most-viewed songs in the Marathi language",
+        "43M+ streams from audience favourites “Govyachya Kinaryav” & “Ishkkachi Nauka”"
+      ]
+    },
+    {
+      "id": "future",
+      "label": "Chapter 04",
+      "heading": "Welcome to my world",
+      "subheading": "Let’s write the next chapter together",
+      "body": "Through every performance I remain devoted to preserving the soul of Marathi music while embracing modern influences. Thank you for being here—together, we carry this sound to every stage and every soul.",
+      "highlights": [
+        "50+ original releases, countless stages, and a future we create together"
+      ]
+    }
+  ],
+  "journeyMilestones": [
+    {
+      "id": 1,
+      "title": "Roots in Maharashtra",
+      "description": "My journey began in the small towns of Maharashtra, where devotional songs and folk melodies filled the air. Singing started as something I did for family and friends, immersed in the rich tradition of abhangs and Marathi folk music.",
+      "year": "2010",
+      "side": "left",
+      "color": "#ff6b35",
+      "image": "/src/assets/1.png"
+    },
+    {
+      "id": 2,
+      "title": "First Competition",
+      "description": "Won the State Vocal Championship, marking the first step into professional music. This victory ignited my dream to share our stories and sounds with the world.",
+      "year": "2015",
+      "side": "right",
+      "color": "#00ccff",
+      "image": "/src/assets/2.png"
+    },
+    {
+      "id": 3,
+      "title": "Debut Single",
+      "description": "Released \"Midnight Dreams\", which garnered 100k+ streams in the first month. The beginning of building a family that would span continents.",
+      "year": "2018",
+      "side": "left",
+      "color": "#ffd700",
+      "image": "/src/assets/3.png"
+    },
+    {
+      "id": 4,
+      "title": "Govyachya Kinaryav & Ishkkachi Nauka",
+      "description": "These breakthrough hits together crossed 43 million+ streams, becoming anthems for Marathi music lovers worldwide. The songs blended traditional folk with contemporary sounds, resonating across generations.",
+      "year": "2020",
+      "side": "right",
+      "color": "#cc00ff",
+      "image": "/src/assets/backofthelatestR.png"
+    },
+    {
+      "id": 5,
+      "title": "Mirchi Music Award",
+      "description": "Earned the prestigious Mirchi Music Award for Upcoming Playback Singer. Recognition for preserving the soul of Marathi music while embracing modern influences, and lending my voice to films in Marathi, Kannada, and Hindi.",
+      "year": "2022",
+      "side": "left",
+      "color": "#00ff99",
+      "image": "/src/assets/5.png"
+    },
+    {
+      "id": 6,
+      "title": "Global Marathi Icon",
+      "description": "Today, I'm humbled to see my dream becoming reality: 540M+ YouTube views, 65M+ Spotify streams, 750k monthly listeners, 408k YouTube subscribers, 480k+ Instagram followers, and 50+ original songs. Our mission continues: taking Marathi music across oceans.",
+      "year": "2024",
+      "side": "right",
+      "color": "#ff0055",
+      "image": "/src/assets/6.png"
+    }
+  ],
+  "testimonials": [
+    {
+      "id": "1",
+      "quote": "\"A voice that lingers long after the last note. Captivating and soulful.\"",
+      "author": "— SoundWave Magazine"
+    },
+    {
+      "id": "2",
+      "quote": "\"Her live shows are pure magic. An unforgettable experience.\"",
+      "author": "— City Arts Weekly"
+    },
+    {
+      "id": "3",
+      "quote": "\"A rising star redefining modern pop with elegance.\"",
+      "author": "— The Music Journal"
+    }
+  ],
+  "contact": {
+    "email": "shubhangikedar@music.com",
+    "phone": "",
+    "location": "Maharashtra, India"
+  },
+  "socialLinks": [
+    {
+      "id": "1",
+      "label": "Spotify",
+      "href": "https://open.spotify.com/artist/5egpRukgysKxUuzH5Iu1ae",
+      "icon": "spotify"
+    },
+    {
+      "id": "2",
+      "label": "YouTube",
+      "href": "https://www.youtube.com/@ShubhangiiKedar",
+      "icon": "youtube"
+    },
+    {
+      "id": "3",
+      "label": "Instagram",
+      "href": "https://www.instagram.com/shubhangikedarofficial",
+      "icon": "instagram"
+    },
+    {
+      "id": "4",
+      "label": "Facebook",
+      "href": "#",
+      "icon": "facebook"
+    }
+  ],
+  "events": [],
+  "featureStats": [],
+  "musicReleases": [],
+  "theme": {
+    "fonts": {
+      "heading": {
+        "family": "Rustic Roadway",
+        "fallback": "Georgia, serif",
+        "source": "local"
+      },
+      "body": {
+        "family": "system-ui",
+        "fallback": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "source": "system"
+      }
+    },
+    "colors": {
+      "primary": "#1DB954",
+      "secondary": "#1DB954",
+      "accent": "#1DB954",
+      "dark": "#121212",
+      "light": "#242424"
+    }
+  }
+}

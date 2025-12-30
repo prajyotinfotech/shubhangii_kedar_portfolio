@@ -1,7 +1,12 @@
-import { socialLinks } from '../data/content'
+import React from 'react'
+import { socialLinks as staticSocialLinks, type IconName } from '../data/content'
 import Icon from './Icon'
+import { useContentContext } from '../contexts/ContentContext'
 
 export const Footer: React.FC = () => {
+  const { content } = useContentContext()
+  const socialLinks = content?.socialLinks || staticSocialLinks
+
   return (
     <footer className="footer">
       <div className="container">
@@ -22,7 +27,7 @@ export const Footer: React.FC = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <Icon name={social.icon} className="footer-social-icon" />
+                <Icon name={social.icon as IconName} className="footer-social-icon" />
               </a>
             ))}
           </div>

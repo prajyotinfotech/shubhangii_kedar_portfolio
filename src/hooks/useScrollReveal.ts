@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 
 const selectors = ['.reveal-left', '.reveal-right', '.reveal-scale']
 
-export const useScrollReveal = () => {
+export const useScrollReveal = (deps: any[] = []) => {
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>(selectors.join(', '))
     if (!elements.length) return
@@ -22,10 +22,14 @@ export const useScrollReveal = () => {
       },
     )
 
-    elements.forEach((el) => observer.observe(el))
+    elements.forEach((el) => {
+      // If it's already active, don't observe it again
+      if (el.classList.contains('active')) return
+      observer.observe(el)
+    })
 
     return () => observer.disconnect()
-  }, [])
+  }, deps)
 }
 
 export default useScrollReveal

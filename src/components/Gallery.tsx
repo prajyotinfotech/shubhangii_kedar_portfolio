@@ -10,6 +10,8 @@ import imgC from '../assets/consert1.png'
 import heroBg from '../assets/backofthelatestR.png'
 import portrait from '../assets/PWP09949.png'
 
+import { useContentContext } from '../contexts/ContentContext'
+
 type Aspect = 'tall' | 'wide' | 'square'
 
 const aspectClass = (aspect?: Aspect) => {
@@ -24,20 +26,28 @@ const aspectClass = (aspect?: Aspect) => {
   }
 }
 
+const STATIC_PHOTOS: { src: string; alt: string; aspect: Aspect }[] = [
+  { src: img1, alt: 'Live performance', aspect: 'wide' },
+  { src: portrait, alt: 'Portrait', aspect: 'tall' },
+  { src: img2, alt: 'Studio session', aspect: 'square' },
+  { src: heroBg, alt: 'Backdrop', aspect: 'wide' },
+  { src: imgA, alt: 'Backstage', aspect: 'square' },
+  { src: img3, alt: 'Concert moment', aspect: 'tall' },
+  { src: img4, alt: 'On stage', aspect: 'wide' },
+  { src: imgB, alt: 'Recording', aspect: 'square' },
+  { src: img5, alt: 'Audience vibe', aspect: 'tall' },
+  { src: img6, alt: 'Show highlight', aspect: 'wide' },
+  { src: imgC, alt: 'Concert crowd', aspect: 'wide' },
+]
+
 export const Gallery: React.FC = () => {
-  const photos: { src: string; alt: string; aspect: Aspect }[] = [
-    { src: img1, alt: 'Live performance', aspect: 'wide' },
-    { src: portrait, alt: 'Portrait', aspect: 'tall' },
-    { src: img2, alt: 'Studio session', aspect: 'square' },
-    { src: heroBg, alt: 'Backdrop', aspect: 'wide' },
-    { src: imgA, alt: 'Backstage', aspect: 'square' },
-    { src: img3, alt: 'Concert moment', aspect: 'tall' },
-    { src: img4, alt: 'On stage', aspect: 'wide' },
-    { src: imgB, alt: 'Recording', aspect: 'square' },
-    { src: img5, alt: 'Audience vibe', aspect: 'tall' },
-    { src: img6, alt: 'Show highlight', aspect: 'wide' },
-    { src: imgC, alt: 'Concert crowd', aspect: 'wide' },
-  ]
+  const { content } = useContentContext()
+
+  const photos = content?.gallery?.length ? content.gallery.map(item => ({
+    src: item.image,
+    alt: item.title,
+    aspect: item.aspect as Aspect
+  })) : STATIC_PHOTOS
   return (
     <section id="gallery" className="gallery">
       <div className="container-fluid">
