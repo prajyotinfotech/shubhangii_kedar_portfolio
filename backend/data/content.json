@@ -33,22 +33,22 @@
     "pills": [
       {
         "kind": "instagram",
-        "top": "Instagram",
+        "top": "",
         "sub": "followers",
         "value": 480000,
         "color": "#f524bd"
       },
       {
         "kind": "youtube",
-        "top": "YouTube",
+        "top": "",
         "sub": "Views",
         "value": 540000000,
         "color": "#ff0000"
       },
       {
         "kind": "tracks",
-        "top": "Streaming",
-        "sub": "Views",
+        "top": "",
+        "sub": "Streams",
         "value": 65000000,
         "color": "#1DB954"
       }
@@ -354,5 +354,26 @@
   ],
   "events": [],
   "featureStats": [],
-  "musicReleases": []
+  "musicReleases": [],
+  "theme": {
+    "fonts": {
+      "heading": {
+        "family": "Rustic Roadway",
+        "fallback": "Georgia, serif",
+        "source": "local"
+      },
+      "body": {
+        "family": "system-ui",
+        "fallback": "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+        "source": "system"
+      }
+    },
+    "colors": {
+      "primary": "#1DB954",
+      "secondary": "#1DB954",
+      "accent": "#1DB954",
+      "dark": "#121212",
+      "light": "#242424"
+    }
+  }
 }

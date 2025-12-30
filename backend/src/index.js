@@ -15,9 +15,9 @@ const path = require('path');
 const config = require('./config');
 const errorHandler = require('./middleware/errorHandler');
 const { apiLimiter } = require('./middleware/rateLimit');
+const { sanitizeInput } = require('./middleware/sanitize');
 const fileService = require('./services/fileService');
 
-// Import routes
 const authRoutes = require('./routes/auth');
 const contentRoutes = require('./routes/content');
 const uploadRoutes = require('./routes/upload');
@@ -40,6 +40,9 @@ app.use(cors({
 // Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// Input sanitization (XSS protection)
+app.use(sanitizeInput);
 
 // Rate limiting for API routes
 app.use('/api', apiLimiter);
@@ -72,14 +75,19 @@ app.use('/api/*', (req, res) => {
 // Global error handler
 app.use(errorHandler);
 
+// ... imports ...
+// (imports section is fine, I will replace the end of file)
+
 // Initialize and start server
 async function startServer() {
     try {
-        // Initialize content file if needed
+        // Initialize content file if needed (No-op in Gist mode)
         await fileService.initializeContent();
 
-        app.listen(config.port, () => {
-            console.log(`
+        // Only listen if run directly
+        if (require.main === module) {
+            app.listen(config.port, () => {
+                console.log(`
 ╔════════════════════════════════════════════════════════════╗
 ║         Singer Portfolio CMS Backend Server                ║
 ╠════════════════════════════════════════════════════════════╣
@@ -88,26 +96,9 @@ async function startServer() {
 ║  Mode:    ${config.nodeEnv}                                   ║
 ║  CORS:    ${config.frontendUrl}                     ║
 ╚════════════════════════════════════════════════════════════╝
-
-API Endpoints:
-  Auth:    POST /api/auth/login
-           GET  /api/auth/verify
-           POST /api/auth/logout
-  
-  Content: GET  /api/content
-           GET  /api/content/:section
-           PUT  /api/content/:section
-           POST /api/content/:section/items
-           PUT  /api/content/:section/items/:id
-           DELETE /api/content/:section/items/:id
-  
-  Upload:  POST /api/upload
-           DELETE /api/upload/:filename
-           GET  /api/upload/list
-  
-  Health:  GET  /api/health
-      `);
-        });
+`);
+            });
+        }
     } catch (error) {
         console.error('Failed to start server:', error);
         process.exit(1);
@@ -115,3 +106,6 @@ API Endpoints:
 }
 
 startServer();
+
+// Export for Serverless (Vercel/Netlify)
+module.exports = app;

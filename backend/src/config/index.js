@@ -34,5 +34,9 @@ module.exports = {
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
         apiKey: process.env.CLOUDINARY_API_KEY,
         apiSecret: process.env.CLOUDINARY_API_SECRET
-    }
+    },
+
+    // GitHub Gist configuration
+    gistId: process.env.GIST_ID,
+    githubToken: process.env.GITHUB_TOKEN
 };

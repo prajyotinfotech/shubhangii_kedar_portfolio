@@ -1,89 +1,130 @@
 /**
- * File Service - Safe File Operations for CMS
+ * File Service - Gist Storage Implementation
  * 
- * Implements:
- * - Read-modify-write pattern
- * - Atomic file writes (temp file + rename)
- * - Auto-backup before every write
- * - File locking to prevent concurrent writes
- * - Proper error handling
+ * STRATEGY:
+ * instead of saving to a local JSON file (which gets deleted on free hosting),
+ * we use GitHub Gist as a "Cloud Database".
+ * 
+ * HOW IT WORKS:
+ * 1. READ: We fetch the raw JSON from your private Gist URL.
+ * 2. WRITE: We use the GitHub API to update that Gist.
+ * 3. CACHE: To make it fast, we remember the last fetch for 30 seconds.
+ * 
+ * REQUIRED ENV VARS:
+ * - GIST_ID: The ID of your secret gist
+ * - GITHUB_TOKEN: Your Personal Access Token
  */
-const fs = require('fs').promises;
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
 const config = require('../config');
 
-// Simple in-memory lock to prevent concurrent writes
-let isWriting = false;
+// Simple in-memory cache to prevent hitting GitHub Rate Limits
+// We keep data in memory for 30 seconds.
+let memoryCache = null;
+let lastFetch = 0;
+const CACHE_TTL = 30000; // 30 seconds
 
 /**
- * Read content from content.json
+ * Get headers for GitHub API
+ */
+function getHeaders() {
+    return {
+        'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+        'Accept': 'application/vnd.github.v3+json',
+        'User-Agent': 'Singer-Portfolio-Backend'
+    };
+}
+
+/**
+ * Read content from Gist
  * @returns {Promise<Object>} Parsed content object
  */
 async function readContent() {
+    // Return cache if valid
+    const now = Date.now();
+    if (memoryCache && (now - lastFetch) < CACHE_TTL) {
+        return memoryCache;
+    }
+
     try {
-        const data = await fs.readFile(config.contentPath, 'utf-8');
-        return JSON.parse(data);
-    } catch (error) {
-        if (error.code === 'ENOENT') {
-            // File doesn't exist, return empty content structure
-            console.log('content.json not found, returning default structure');
+        const gistId = process.env.GIST_ID;
+        if (!gistId || !process.env.GITHUB_TOKEN) {
+            console.warn('GIST_ID or GITHUB_TOKEN not set, using default content');
             return getDefaultContent();
         }
-        throw error;
+
+        const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+            headers: getHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error(`GitHub API Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        const file = data.files['content.json'];
+
+        if (!file) {
+            throw new Error('content.json not found in Gist');
+        }
+
+        const content = JSON.parse(file.content);
+
+        // Update cache
+        memoryCache = content;
+        lastFetch = now;
+
+        return content;
+    } catch (error) {
+        console.error('Failed to read from Gist:', error);
+        // Fallback to cache if available even if stale
+        if (memoryCache) return memoryCache;
+        return getDefaultContent();
     }
 }
 
 /**
- * Write content to content.json with safety measures
+ * Write content to Gist
  * @param {Object} content - Content object to write
- * @throws {Error} If another write is in progress
  */
 async function writeContent(content) {
-    // Check for concurrent writes
-    if (isWriting) {
-        throw new Error('Another write operation is in progress. Please try again.');
-    }
-
-    isWriting = true;
-    const tempPath = config.contentPath + '.tmp.' + uuidv4();
-
     try {
-        // 1. Create backup of current content (if exists)
-        try {
-            await fs.copyFile(config.contentPath, config.backupPath);
-            console.log('Backup created at:', config.backupPath);
-        } catch (backupError) {
-            if (backupError.code !== 'ENOENT') {
-                throw backupError;
-            }
-            // Original file doesn't exist yet, skip backup
+        const gistId = process.env.GIST_ID;
+        if (!gistId || !process.env.GITHUB_TOKEN) {
+            throw new Error('GIST_ID or GITHUB_TOKEN not set');
         }
 
-        // 2. Write to temp file first
-        await fs.writeFile(tempPath, JSON.stringify(content, null, 2), 'utf-8');
+        const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+            method: 'PATCH',
+            headers: {
+                ...getHeaders(),
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                files: {
+                    'content.json': {
+                        content: JSON.stringify(content, null, 2)
+                    }
+                }
+            })
+        });
 
-        // 3. Atomic rename temp file to actual content file
-        await fs.rename(tempPath, config.contentPath);
+        if (!response.ok) {
+            throw new Error(`GitHub API Update Error: ${response.status} ${response.statusText}`);
+        }
 
-        console.log('Content saved successfully');
+        // Update cache immediately
+        memoryCache = content;
+        lastFetch = Date.now();
+
+        console.log('Content saved to Gist successfully');
+        return content;
     } catch (error) {
-        // Cleanup temp file if it exists
-        try {
-            await fs.unlink(tempPath);
-        } catch (unlinkError) {
-            // Temp file might not exist, ignore
-        }
+        console.error('Failed to write to Gist:', error);
         throw error;
-    } finally {
-        isWriting = false;
     }
 }
 
 /**
  * Update a specific section of content
- * @param {string} section - Section name to update
- * @param {any} data - New data for the section
  */
 async function updateSection(section, data) {
     const content = await readContent();
@@ -93,17 +134,16 @@ async function updateSection(section, data) {
 }
 
 /**
- * Add an item to an array section (gallery, events, etc.)
- * @param {string} section - Section name
- * @param {Object} item - Item to add
+ * Add an item to an array section
  */
 async function addItem(section, item) {
+    const { v4: uuidv4 } = require('uuid');
     const content = await readContent();
+
     if (!Array.isArray(content[section])) {
         throw new Error(`Section "${section}" is not an array`);
     }
 
-    // Add unique ID if not present
     if (!item.id) {
         item.id = uuidv4();
     }
@@ -115,12 +155,10 @@ async function addItem(section, item) {
 
 /**
  * Update an item in an array section
- * @param {string} section - Section name
- * @param {string} itemId - Item ID to update
- * @param {Object} updates - Updates to apply
  */
 async function updateItem(section, itemId, updates) {
     const content = await readContent();
+
     if (!Array.isArray(content[section])) {
         throw new Error(`Section "${section}" is not an array`);
     }
@@ -137,11 +175,10 @@ async function updateItem(section, itemId, updates) {
 
 /**
  * Delete an item from an array section
- * @param {string} section - Section name
- * @param {string} itemId - Item ID to delete
  */
 async function deleteItem(section, itemId) {
     const content = await readContent();
+
     if (!Array.isArray(content[section])) {
         throw new Error(`Section "${section}" is not an array`);
     }
@@ -157,7 +194,7 @@ async function deleteItem(section, itemId) {
 }
 
 /**
- * Get default content structure
+ * Get default content structure (Fallback)
  */
 function getDefaultContent() {
     return {
@@ -189,32 +226,9 @@ function getDefaultContent() {
     };
 }
 
-/**
- * Ensure data directory exists
- */
-async function ensureDataDirectory() {
-    const dataDir = path.dirname(config.contentPath);
-    try {
-        await fs.mkdir(dataDir, { recursive: true });
-    } catch (error) {
-        if (error.code !== 'EEXIST') {
-            throw error;
-        }
-    }
-}
-
-/**
- * Initialize content file if it doesn't exist
- */
+// No-op for Gist implementation
 async function initializeContent() {
-    await ensureDataDirectory();
-    try {
-        await fs.access(config.contentPath);
-        console.log('Content file exists');
-    } catch {
-        console.log('Creating initial content.json');
-        await writeContent(getDefaultContent());
-    }
+    console.log('Gist storage initialized');
 }
 
 module.exports = {
