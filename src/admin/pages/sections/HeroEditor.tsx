@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSection, updateSection, uploadImage } from '../../api/client';
+import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
 interface Slide {
@@ -130,84 +131,131 @@ export default function HeroEditor() {
                 <p>Manage home page slides and platform stats.</p>
             </div>
 
-            {message.text && (
-                <div className={`editor-message editor-message--${message.type}`}>
-                    {message.text}
-                </div>
-            )}
+            <div className={`editor-message editor-message--${message.type}`}>
+                {message.text}
+            </div>
+
 
             <form className="editor-form" onSubmit={handleSubmit}>
                 <div className="editor-section">
                     <h3>Slides</h3>
-                    {content.slides.map((slide, idx) => (
-                        <div key={slide.id} className="editor-item-box">
-                            <div className="editor-field">
-                                <label>Alt Text</label>
-                                <input value={slide.alt} onChange={(e) => handleSlideChange(idx, 'alt', e.target.value)} />
-                            </div>
-                            <div className="editor-field">
-                                <label>Image (Desktop)</label>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageUpload(e, idx, 'image')}
-                                        disabled={saving}
-                                        style={{ width: 'auto' }}
+                    <div className="editor-list">
+                        {content.slides.map((slide, idx) => (
+                            <details key={slide.id} className="editor-card" open={idx === 0}>
+                                <summary style={{ cursor: 'pointer', outline: 'none', listStyle: 'none' }} className="editor-accordion-header">
+                                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            {slide.image && <img src={slide.image} alt="" style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '4px' }} />}
+                                            <h3>{slide.heading[0]?.replace(/<[^>]*>/g, '') || 'New Slide'}</h3>
+                                        </div>
+                                        <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.5)' }}>▼</span>
+                                    </div>
+                                </summary>
+
+                                <div className="editor-form" style={{ marginTop: '1.5rem' }}>
+                                    <div className="editor-field">
+                                        <label>Alt Text</label>
+                                        <input value={slide.alt} onChange={(e) => handleSlideChange(idx, 'alt', e.target.value)} />
+                                    </div>
+
+                                    <div className="editor-row">
+                                        <div className="editor-field">
+                                            <label>Desktop Image</label>
+                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleImageUpload(e, idx, 'image')}
+                                                    disabled={saving}
+                                                    style={{ width: 'auto' }}
+                                                    id={`slide-img-${idx}`}
+                                                    hidden
+                                                />
+                                                <label htmlFor={`slide-img-${idx}`} className="editor-button editor-button--small" style={{ margin: 0 }}>Upload</label>
+                                                <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                                <input
+                                                    value={slide.image}
+                                                    onChange={(e) => handleSlideChange(idx, 'image', e.target.value)}
+                                                    placeholder="Image URL"
+                                                    style={{ flex: 1 }}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="editor-field">
+                                            <label>Mobile Image (Optional)</label>
+                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleImageUpload(e, idx, 'mobileImage')}
+                                                    disabled={saving}
+                                                    style={{ width: 'auto' }}
+                                                    id={`slide-mob-${idx}`}
+                                                    hidden
+                                                />
+                                                <label htmlFor={`slide-mob-${idx}`} className="editor-button editor-button--small" style={{ margin: 0 }}>Upload</label>
+                                                <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                                <input
+                                                    value={slide.mobileImage || ''}
+                                                    onChange={(e) => handleSlideChange(idx, 'mobileImage', e.target.value)}
+                                                    placeholder="URL"
+                                                    style={{ flex: 1 }}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="editor-field">
+                                        <label>Heading Lines</label>
+                                        <div className="editor-list" style={{ gap: '1rem' }}>
+                                            {slide.heading.map((line, lIdx) => (
+                                                <div key={lIdx} style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px', alignItems: 'start' }}>
+                                                    <RichTextField
+                                                        label={`Line ${lIdx + 1}`}
+                                                        value={line}
+                                                        onChange={(val) => handleHeadingChange(idx, lIdx, val)}
+                                                        rows={2}
+                                                    />
+                                                    <button
+                                                        type="button"
+                                                        className="editor-button editor-button--danger editor-button--small"
+                                                        style={{ marginTop: '28px' }}
+                                                        onClick={() => {
+                                                            const newHeading = slide.heading.filter((_, i) => i !== lIdx);
+                                                            handleSlideChange(idx, 'heading', newHeading);
+                                                        }}
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button
+                                                type="button"
+                                                className="editor-button editor-button--small"
+                                                onClick={() => handleSlideChange(idx, 'heading', [...slide.heading, 'New Line'])}
+                                            >
+                                                + Add Line
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <RichTextField
+                                        label="Subtitle (Note: Styles disable typing animation)"
+                                        value={slide.subtitle}
+                                        onChange={(val) => handleSlideChange(idx, 'subtitle', val)}
+                                        rows={2}
                                     />
-                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
-                                    <input
-                                        value={slide.image}
-                                        onChange={(e) => handleSlideChange(idx, 'image', e.target.value)}
-                                        placeholder="Image URL"
-                                        style={{ flex: 1 }}
-                                    />
+
+                                    <div className="editor-actions" style={{ justifyContent: 'flex-end', marginTop: '1rem' }}>
+                                        <button type="button" className="editor-button editor-button--danger" onClick={() => removeSlide(idx)}>Remove Slide</button>
+                                    </div>
                                 </div>
-                                {slide.image && <img src={slide.image} alt="Preview" style={{ height: '60px', objectFit: 'cover', borderRadius: '4px', marginTop: '5px' }} />}
-                            </div>
-                            <div className="editor-field">
-                                <label>Mobile Image (Optional)</label>
-                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleImageUpload(e, idx, 'mobileImage')}
-                                        disabled={saving}
-                                        style={{ width: 'auto' }}
-                                    />
-                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
-                                    <input
-                                        value={slide.mobileImage || ''}
-                                        onChange={(e) => handleSlideChange(idx, 'mobileImage', e.target.value)}
-                                        placeholder="Mobile Image URL"
-                                        style={{ flex: 1 }}
-                                    />
-                                </div>
-                                {slide.mobileImage && <img src={slide.mobileImage} alt="Mobile Preview" style={{ height: '60px', objectFit: 'cover', borderRadius: '4px', marginTop: '5px' }} />}
-                            </div>
-                            <div className="editor-field">
-                                <label>Heading Lines</label>
-                                {slide.heading.map((line, lIdx) => (
-                                    <input
-                                        key={lIdx}
-                                        value={line}
-                                        onChange={(e) => handleHeadingChange(idx, lIdx, e.target.value)}
-                                        style={{ marginBottom: '8px' }}
-                                    />
-                                ))}
-                            </div>
-                            <div className="editor-field">
-                                <label>Subtitle</label>
-                                <textarea
-                                    value={slide.subtitle}
-                                    onChange={(e) => handleSlideChange(idx, 'subtitle', e.target.value)}
-                                    rows={2}
-                                />
-                            </div>
-                            <button type="button" className="editor-button editor-button--danger" onClick={() => removeSlide(idx)}>Remove Slide</button>
-                        </div>
-                    ))}
-                    <button type="button" className="editor-button" onClick={addSlide}>+ Add Slide</button>
+                            </details>
+                        ))}
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                        <button type="button" className="editor-button" onClick={addSlide}>+ Add New Slide</button>
+                    </div>
                 </div>
 
                 <div className="editor-section">
@@ -244,7 +292,7 @@ export default function HeroEditor() {
 
                 <div className="editor-actions">
                     <button type="submit" className="editor-button editor-button--primary" disabled={saving}>
-                        {saving ? 'Saving...' : 'Save Changes'}
+                        {saving ? 'Saving...' : 'Save All Changes'}
                     </button>
                 </div>
             </form>

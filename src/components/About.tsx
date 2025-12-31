@@ -1,18 +1,6 @@
 import React from 'react'
 import portraitImg from '../assets/6.png'
-import { CountUp } from './CountUp'
-import instagramIcon from '../assets/icons/instagram.svg'
-import facebookIcon from '../assets/icons/facebook.svg'
-import youtubeIcon from '../assets/icons/youtube.svg'
-import spotifyIcon from '../assets/icons/spotify.svg'
 import { useContentContext } from '../contexts/ContentContext'
-
-const ICON_MAP: Record<string, string> = {
-  instagram: instagramIcon,
-  facebook: facebookIcon,
-  youtube: youtubeIcon,
-  spotify: spotifyIcon,
-}
 
 export const About: React.FC = () => {
   const { content, loading } = useContentContext()
@@ -37,13 +25,15 @@ export const About: React.FC = () => {
           <div className="about-content reveal-right">
             <h2 className="section-title">{about.title || 'About'}</h2>
             <div className="title-decoration"></div>
-            <p className="about-text">
-              {about.description}
-            </p>
+            <div
+              className="about-text"
+              dangerouslySetInnerHTML={{ __html: about.description }}
+            />
             {about.descriptionSecondary && (
-              <p className="about-text">
-                {about.descriptionSecondary}
-              </p>
+              <div
+                className="about-text"
+                dangerouslySetInnerHTML={{ __html: about.descriptionSecondary }}
+              />
             )}
           </div>
         </div>
@@ -59,43 +49,32 @@ export const About: React.FC = () => {
           </div>
         )}
 
-        {/* The Show description */}
-        {about.show?.title && (
-          <div className="about-show reveal-scale">
-            <h3 className="about-subtitle">{about.show.title}</h3>
-            <p>{about.show.description}</p>
-          </div>
-        )}
 
-        {/* Social presence metrics */}
-        <div className="about-metrics reveal-scale">
-          {about.metrics?.map((metric: any) => (
-            <div className="about-metric-card" key={metric.id}>
-              <div className="about-metric-icon" style={{ backgroundColor: `${metric.accent}22` }}>
-                <img src={ICON_MAP[metric.icon] || metric.icon} alt="" />
-              </div>
-              <div className="about-metric-body">
-                <span className="about-metric-category">{metric.category}</span>
-                <CountUp
-                  value={metric.value || 0}
-                  className="about-metric-value"
-                  formatter={() => metric.display || metric.value?.toString() || '0'}
-                />
-                <span className="about-metric-label">{metric.label}</span>
-              </div>
-            </div>
-          ))}
-        </div>
 
         {/* Achievements */}
         {about.achievements && about.achievements.length > 0 && (
-          <div className="about-achievements reveal-scale">
-            <h3 className="about-subtitle">Achievements</h3>
-            <ul className="about-list">
+          <div className="about-achievements reveal-scale" style={{ marginTop: '4rem' }}>
+            <h3 className="about-subtitle" style={{ textAlign: 'center', marginBottom: '2rem' }}>Achievements</h3>
+            <div className="achievements-grid" style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+              gap: '1.5rem'
+            }}>
               {about.achievements.map((achievement: string, idx: number) => (
-                <li key={idx}><strong>{achievement}</strong></li>
+                <div key={idx} className="achievement-card" style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid rgba(255,255,255,0.08)',
+                  padding: '1.5rem',
+                  borderRadius: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '1rem'
+                }}>
+                  <span style={{ fontSize: '1.5rem', color: '#ff0033' }}>🏆</span>
+                  <span style={{ fontSize: '1.1rem', color: '#e0e0e0', fontWeight: 500 }}>{achievement}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
       </div>

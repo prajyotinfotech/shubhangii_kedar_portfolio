@@ -1,9 +1,13 @@
+/* Google Fonts - All available for client customization */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Great+Vibes&family=League+Spartan:wght@300;400;500;600;700&family=Montserrat:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Pacifico&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
 .album-art img {
     width: 100%;
     height: auto;
     display: block;
 }
 
+/* Note: Glacial Indifference and Garet are not on Google Fonts - need local files */
 /* @import url('https://fonts.cdnfonts.com/css/rustic-roadway'); */
 @font-face {
     font-family: 'Rustic Roadway';
@@ -348,8 +352,23 @@ a {
     color: #00ff55ec;
 }
 
+.logo.logo-image {
+    display: flex;
+    align-items: center;
+}
+
+.logo.logo-image img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+
 .navbar.scrolled .logo {
     font-size: 24px;
+}
+
+.navbar.scrolled .logo.logo-image img {
+    height: 32px;
 }
 
 .nav-menu {
@@ -2567,8 +2586,8 @@ html.is-playing .disc {
     align-items: center;
     justify-content: center;
     padding: 1.2rem 2.5rem;
-    background-color: black;
-    color: var(--primary-color);
+    background-color: var(--primary-color);
+    color: white;
     font-size: 1.1rem;
     font-weight: 600;
     text-decoration: none;
@@ -2577,7 +2596,7 @@ html.is-playing .disc {
     box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);
     text-transform: uppercase;
     letter-spacing: 1px;
-    border: 1px solid var(--primary-color);
+    border: none;
     cursor: pointer;
     font-family: 'Poppins', sans-serif;
 }
@@ -2585,7 +2604,7 @@ html.is-playing .disc {
 .follow-journey-button:hover {
     transform: translateY(-3px);
     box-shadow: 0 6px 20px rgba(29, 185, 84, 0.4);
-    background-color: black;
+    background-color: #1ed760;
 }
 
 .follow-journey-button:active {

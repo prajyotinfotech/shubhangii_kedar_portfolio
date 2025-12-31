@@ -111,6 +111,21 @@ export interface ContentData {
         color: string;
         image: string;
     }[];
+    theme?: {
+        logoImage?: string;
+        fonts?: {
+            heading?: { family: string; size?: string; weight?: number; style?: string };
+            body?: { family: string; size?: string; weight?: number; style?: string };
+            availableFonts?: string[];
+        };
+        colors?: {
+            primary: string;
+            secondary: string;
+            accent: string;
+            dark: string;
+            light: string;
+        };
+    };
 }
 
 // Cache for content

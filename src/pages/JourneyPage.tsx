@@ -1,5 +1,5 @@
-import VinylScrollPage from '../components/Journey/VinylScrollPage'
+import JourneyTimeline from '../components/Journey/JourneyTimeline'
 
 export default function JourneyPage() {
-    return <VinylScrollPage />
+    return <JourneyTimeline />
 }

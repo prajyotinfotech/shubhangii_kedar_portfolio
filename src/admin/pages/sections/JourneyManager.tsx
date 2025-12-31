@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { fetchSection, updateSection, addItem, deleteItem } from '../../api/client';
+import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
 interface JourneyStep {
@@ -139,36 +140,55 @@ export default function JourneyManager() {
 
             <div className="editor-section">
                 <h2>Home Page Journey (Chapters)</h2>
-                {steps.map((step, idx) => (
-                    <div key={step.id} className="editor-item-box">
-                        <div className="editor-field">
-                            <label>Label</label>
-                            <input value={step.label} onChange={(e) => handleStepChange(idx, 'label', e.target.value)} />
-                        </div>
-                        <div className="editor-field">
-                            <label>Heading</label>
-                            <input value={step.heading} onChange={(e) => handleStepChange(idx, 'heading', e.target.value)} />
-                        </div>
-                        <div className="editor-field">
-                            <label>Subheading</label>
-                            <input value={step.subheading} onChange={(e) => handleStepChange(idx, 'subheading', e.target.value)} />
-                        </div>
-                        <div className="editor-field">
-                            <label>Body Text</label>
-                            <textarea value={step.body} onChange={(e) => handleStepChange(idx, 'body', e.target.value)} rows={3} />
-                        </div>
-                        <div className="editor-field">
-                            <label>Highlights</label>
-                            {step.highlights.map((h, hIdx) => (
-                                <div key={hIdx} className="editor-row" style={{ marginBottom: '8px' }}>
-                                    <input value={h} onChange={(e) => handleHighlightChange(idx, hIdx, e.target.value)} />
-                                    <button type="button" className="editor-button editor-button--danger" onClick={() => removeHighlight(idx, hIdx)}>×</button>
+                <div className="editor-list">
+                    {steps.map((step, idx) => (
+                        <details key={step.id} className="editor-card" open={idx === 0}>
+                            <summary style={{ cursor: 'pointer', outline: 'none', listStyle: 'none' }} className="editor-accordion-header">
+                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+                                    <h3>{step.label || `Chapter ${idx + 1}`} - {step.heading || 'Untitled'}</h3>
+                                    <span style={{ fontSize: '1.2rem', color: 'rgba(255,255,255,0.5)' }}>▼</span>
                                 </div>
-                            ))}
-                            <button type="button" className="editor-button editor-button--small" onClick={() => addHighlight(idx)}>+ Add Highlight</button>
-                        </div>
-                    </div>
-                ))}
+                            </summary>
+
+                            <div className="editor-form" style={{ marginTop: '1.5rem' }}>
+                                <div className="editor-row">
+                                    <div className="editor-field">
+                                        <label>Chapter Label</label>
+                                        <input value={step.label} onChange={(e) => handleStepChange(idx, 'label', e.target.value)} placeholder="e.g. Chapter 01" />
+                                    </div>
+                                    <div className="editor-field">
+                                        <label>Heading</label>
+                                        <input value={step.heading} onChange={(e) => handleStepChange(idx, 'heading', e.target.value)} />
+                                    </div>
+                                </div>
+
+                                <div className="editor-field">
+                                    <label>Subheading</label>
+                                    <input value={step.subheading} onChange={(e) => handleStepChange(idx, 'subheading', e.target.value)} />
+                                </div>
+
+                                <RichTextField
+                                    label="Body Text"
+                                    value={step.body}
+                                    onChange={(val) => handleStepChange(idx, 'body', val)}
+                                />
+
+                                <div className="editor-field">
+                                    <label>Highlights (Bullet Points)</label>
+                                    <div className="editor-list" style={{ gap: '0.5rem' }}>
+                                        {step.highlights.map((h, hIdx) => (
+                                            <div key={hIdx} className="editor-row" style={{ gridTemplateColumns: '1fr auto', gap: '8px' }}>
+                                                <input value={h} onChange={(e) => handleHighlightChange(idx, hIdx, e.target.value)} />
+                                                <button type="button" className="editor-button editor-button--danger editor-button--small" onClick={() => removeHighlight(idx, hIdx)}>×</button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button type="button" className="editor-button editor-button--small" style={{ marginTop: '8px', alignSelf: 'flex-start' }} onClick={() => addHighlight(idx)}>+ Add Highlight</button>
+                                </div>
+                            </div>
+                        </details>
+                    ))}
+                </div>
                 <div className="editor-actions">
                     <button className="editor-button editor-button--primary" onClick={handleSaveSteps} disabled={saving}>
                         {saving ? 'Saving...' : 'Save All Chapters'}
@@ -190,7 +210,12 @@ export default function JourneyManager() {
                                 <div className="editor-field"><label>Title*</label><input value={newMilestone.title} onChange={(e) => setNewMilestone({ ...newMilestone, title: e.target.value })} /></div>
                                 <div className="editor-field"><label>Year*</label><input value={newMilestone.year} onChange={(e) => setNewMilestone({ ...newMilestone, year: e.target.value })} /></div>
                             </div>
-                            <div className="editor-field"><label>Description</label><textarea value={newMilestone.description} onChange={(e) => setNewMilestone({ ...newMilestone, description: e.target.value })} rows={2} /></div>
+                            <RichTextField
+                                label="Description"
+                                value={newMilestone.description}
+                                onChange={(val) => setNewMilestone({ ...newMilestone, description: val })}
+                                rows={2}
+                            />
                             <div className="editor-row">
                                 <div className="editor-field"><label>Side</label><select value={newMilestone.side} onChange={(e) => setNewMilestone({ ...newMilestone, side: e.target.value as any })}><option value="left">Left</option><option value="right">Right</option></select></div>
                                 <div className="editor-field"><label>Color</label><input type="color" value={newMilestone.color} onChange={(e) => setNewMilestone({ ...newMilestone, color: e.target.value })} /></div>
