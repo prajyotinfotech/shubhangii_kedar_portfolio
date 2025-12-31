@@ -32,7 +32,7 @@ const IconClose = () => (
   </svg>
 )
 
-export const MiniPlayer = () => {
+export const MiniPlayer = ({ style }: { style?: React.CSSProperties }) => {
   const web = useWebPlayback()
   const usingSdk = web?.playerReady && !!web.track
   const {
@@ -77,65 +77,65 @@ export const MiniPlayer = () => {
   const progressPercent = duration ? Math.min((current / duration) * 100, 100) : 0
 
   return (
-    <div className={`mini-player${collapsed ? ' collapsed' : ''}`} id="miniPlayer">
+    <div className={`mini-player${collapsed ? ' collapsed' : ''}`} id="miniPlayer" style={style}>
       {uiTrack && (
-      <div className="mini-track-meta">
-        <div
-          className="mini-cover"
-          style={{
-            background: (uiTrack as any).color,
-            backgroundImage: (uiTrack as any).coverSrc ? `url(${(uiTrack as any).coverSrc})` : undefined,
-            backgroundSize: (uiTrack as any).coverSrc ? 'cover' : undefined,
-            backgroundPosition: (uiTrack as any).coverSrc ? 'center' : undefined,
-          }}
-        />
-        <div className="mini-text">
-          <div className="mini-title">{(uiTrack as any).title}</div>
-          <div className="mini-artist">{(uiTrack as any).artist}</div>
+        <div className="mini-track-meta">
+          <div
+            className="mini-cover"
+            style={{
+              background: (uiTrack as any).color,
+              backgroundImage: (uiTrack as any).coverSrc ? `url(${(uiTrack as any).coverSrc})` : undefined,
+              backgroundSize: (uiTrack as any).coverSrc ? 'cover' : undefined,
+              backgroundPosition: (uiTrack as any).coverSrc ? 'center' : undefined,
+            }}
+          />
+          <div className="mini-text">
+            <div className="mini-title">{(uiTrack as any).title}</div>
+            <div className="mini-artist">{(uiTrack as any).artist}</div>
+          </div>
         </div>
-      </div>
       )}
 
       {uiTrack && (
-      <div className="mini-progress">
-        <span className="progress-time current">{formatTime(current)}</span>
-        <div
-          className="progress-bar"
-          ref={progressRef}
-          onClick={(e) => {
-            if (usingSdk) {
-              const el = progressRef.current
-              if (!el) return
-              const rect = el.getBoundingClientRect()
-              const ratio = (e.clientX - rect.left) / rect.width
-              web.seekTo(ratio * (web.duration || 0))
-            } else {
-              seek(e)
-            }
-          }}
-          role="progressbar"
-          aria-valuemin={0}
-          aria-valuemax={Math.round(duration) || 0}
-          aria-valuenow={Math.round(current) || 0}
-        >
-          <span className="progress-fill" style={{ width: `${progressPercent}%` }} />
+        <div className="mini-progress">
+          <span className="progress-time current">{formatTime(current)}</span>
+          <div
+            className="progress-bar"
+            ref={progressRef}
+            onClick={(e) => {
+              if (usingSdk) {
+                const el = progressRef.current
+                if (!el) return
+                const rect = el.getBoundingClientRect()
+                const ratio = (e.clientX - rect.left) / rect.width
+                web.seekTo(ratio * (web.duration || 0))
+              } else {
+                seek(e)
+              }
+            }}
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={Math.round(duration) || 0}
+            aria-valuenow={Math.round(current) || 0}
+          >
+            <span className="progress-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
+          <span className="progress-time duration">{formatTime(duration)}</span>
         </div>
-        <span className="progress-time duration">{formatTime(duration)}</span>
-      </div>
       )}
 
       {uiTrack && (
-      <div className="mini-controls">
-        <button className="mini-btn prev" onClick={() => (usingSdk ? web.previous() : prevTrack())} aria-label="Previous track">
-          <IconPrev />
-        </button>
-        <button className="mini-btn play" onClick={() => (usingSdk ? web.togglePlay() : togglePlay())} aria-label={(usingSdk ? web.isPlaying : isPlaying) ? 'Pause track' : 'Play track'}>
-          {(usingSdk ? web.isPlaying : isPlaying) ? <IconPause /> : <IconPlay />}
-        </button>
-        <button className="mini-btn next" onClick={() => (usingSdk ? web.next() : nextTrack())} aria-label="Next track">
-          <IconNext />
-        </button>
-      </div>
+        <div className="mini-controls">
+          <button className="mini-btn prev" onClick={() => (usingSdk ? web.previous() : prevTrack())} aria-label="Previous track">
+            <IconPrev />
+          </button>
+          <button className="mini-btn play" onClick={() => (usingSdk ? web.togglePlay() : togglePlay())} aria-label={(usingSdk ? web.isPlaying : isPlaying) ? 'Pause track' : 'Play track'}>
+            {(usingSdk ? web.isPlaying : isPlaying) ? <IconPause /> : <IconPlay />}
+          </button>
+          <button className="mini-btn next" onClick={() => (usingSdk ? web.next() : nextTrack())} aria-label="Next track">
+            <IconNext />
+          </button>
+        </div>
       )}
 
       <button className="mini-btn mini-close" onClick={() => setCollapsed(true)} aria-label="Collapse player">

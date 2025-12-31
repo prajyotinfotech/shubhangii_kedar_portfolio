@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -26,6 +27,21 @@ function App() {
   const { content } = useContentContext()
   useScrollReveal([content])
   useScrollToExpandPlayer()
+
+  const [showJourney, setShowJourney] = useState(false)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Show button after scrolling past 80% of the viewport height
+      setShowJourney(window.scrollY > window.innerHeight * 0.8)
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll() // Check initial state
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -46,8 +62,24 @@ function App() {
                 <ContactBooking />
               </main>
               <Footer />
-              <MiniPlayer />
-              <a href="/journey" className="follow-journey-button follow-fab" aria-label="Follow My Journey">
+              <MiniPlayer style={{
+                opacity: showJourney ? 1 : 0,
+                pointerEvents: showJourney ? 'auto' : 'none',
+                transform: showJourney ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(20px)',
+                transition: 'all 0.3s ease'
+              }}
+              />
+              <a
+                href="/journey"
+                className="follow-journey-button follow-fab"
+                aria-label="Follow My Journey"
+                style={{
+                  opacity: showJourney ? 1 : 0,
+                  pointerEvents: showJourney ? 'auto' : 'none',
+                  transform: showJourney ? 'translateY(0)' : 'translateY(20px)',
+                  transition: 'all 0.3s ease'
+                }}
+              >
                 Follow My Journey
               </a>
             </div>
