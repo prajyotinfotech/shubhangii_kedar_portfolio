@@ -48,10 +48,38 @@ function getStaticContent(): ContentData {
                 description: 'A personally designed musical experience.'
             },
             performanceBanner: {
-                cities: '25+ CITIES',
-                footfall: '30,000+ FOOTFALL'
+                cities: '50+',
+                footfall: '1M+'
             },
-            metrics: [],
+            metrics: [
+                {
+                    id: 'youtube-subs',
+                    category: 'YouTube',
+                    label: 'Subscribers',
+                    value: 408000,
+                    display: '408K+',
+                    accent: '#FF0033',
+                    icon: 'youtube'
+                },
+                {
+                    id: 'spotify-streams',
+                    category: 'Spotify',
+                    label: 'Streams',
+                    value: 65000000,
+                    display: '65M+',
+                    accent: '#1DB954',
+                    icon: 'spotify'
+                },
+                {
+                    id: 'instagram-followers',
+                    category: 'Instagram',
+                    label: 'Followers',
+                    value: 120000,
+                    display: '120K+',
+                    accent: '#E1306C',
+                    icon: 'instagram'
+                }
+            ],
             achievements: []
         },
         featureStats: staticContent.featureStats || [],

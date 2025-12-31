@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import CountUp from './CountUp'
-import youtubeIcon from '../assets/icons/youtube.svg'
-import instagramIcon from '../assets/icons/instagram.svg'
-import spotifyIcon from '../assets/icons/spotify.svg'
+import { CountUp } from './CountUp'
 import slidePrimary from '../assets/3.png'
 import slideStudio from '../assets/6.png'
 import slideLive from '../assets/backofthelatestR.png'
 import slidePrimaryMobile from '../assets/mobile1stslide.png'
+import youtubeIcon from '../assets/icons/youtube.svg'
+import instagramIcon from '../assets/icons/instagram.svg'
+import spotifyIcon from '../assets/icons/spotify.svg'
 import { useContentContext } from '../contexts/ContentContext'
 
 const HERO_VIDEO = '' // Provide a video URL if available
@@ -31,9 +31,9 @@ type PillKind = 'youtube' | 'tracks' | 'instagram'
 type PillStat = { kind: PillKind; top?: string; sub?: string; value: number; color: string; delta?: string }
 
 const STATIC_PILLS: PillStat[] = [
-  { kind: 'instagram', top: 'Instagram', sub: 'followers', value: 480_000, color: '#B84DFF' },
-  { kind: 'youtube', top: 'YouTube', sub: 'Views', value: 540_000_000, color: '#FF0000' },
-  { kind: 'tracks', top: 'Streaming', sub: 'Views', value: 65_000_000, color: '#1DB954' },
+  { kind: 'instagram', top: 'Instagram', sub: 'followers', value: 480000, color: '#ffffff' },
+  { kind: 'youtube', top: 'YouTube', sub: 'Views', value: 540000000, color: '#ffffff' },
+  { kind: 'tracks', top: 'Streaming', sub: 'Views', value: 65000000, color: '#ffffff' },
 ]
 
 const staticHeroSlides: HeroSlide[] = [
@@ -65,7 +65,7 @@ export const Hero: React.FC = () => {
   const { content } = useContentContext()
   const [activeSlide, setActiveSlide] = useState(0)
 
-  const heroSlides = content?.hero?.slides?.length ? content.hero.slides.map(s => ({
+  const heroSlides = content?.hero?.slides?.length ? content.hero.slides.map((s: any) => ({
     ...s,
     // Use local assets if the image path matches what we expect, or the path itself
     image: s.image.includes('/assets/') ? s.image : s.image,
@@ -203,44 +203,55 @@ export const Hero: React.FC = () => {
       <div className="hero-content">
         <div className="hero-text">
           <h1 className="hero-title">
-            {currentSlide.heading.map((line) => (
-              <span className="line" key={line}>
-                {line}
-              </span>
+            {currentSlide.heading.map((line: string, i: number) => (
+              <span
+                className="line"
+                key={i}
+                dangerouslySetInnerHTML={{ __html: line }}
+              />
             ))}
           </h1>
-          <p
-            className={`hero-subtitle${subtitleVisible ? ' is-visible' : ''}${subtitleComplete ? ' is-complete' : ''
-              }`}
-            aria-live="polite"
-          >
-            {typedSubtitle}
-            <span className="typing-caret" aria-hidden="true" />
-          </p>
+
+          {/* If subtitle has HTML tags (rich text), render directly. Otherwise use typing effect */}
+          {currentSlide.subtitle?.includes('<') ? (
+            <div
+              className="hero-subtitle is-visible is-complete"
+              dangerouslySetInnerHTML={{ __html: currentSlide.subtitle }}
+            />
+          ) : (
+            <p
+              className={`hero-subtitle${subtitleVisible ? ' is-visible' : ''}${subtitleComplete ? ' is-complete' : ''
+                }`}
+              aria-live="polite"
+            >
+              {typedSubtitle}
+              <span className="typing-caret" aria-hidden="true" />
+            </p>
+          )}
+
           <div className="hero-pills">
-            {heroPills.map((p: PillStat, idx: number) => (
+            {heroPills.map((p, idx) => (
               <div className={`hero-pill ${p.kind}`} key={`${p.kind}-${idx}`}>
                 <span className="pill-icon" aria-hidden="true">
                   {p.kind === 'youtube' && <img src={youtubeIcon} alt="" />}
-                  {p.kind === 'tracks' && <img src={spotifyIcon} alt="" />}
                   {p.kind === 'instagram' && <img src={instagramIcon} alt="" />}
+                  {p.kind === 'tracks' && <img src={spotifyIcon} alt="" />}
                 </span>
-                <div className="pill-body">
-                  {p.top && <span className="pill-top">{p.top}</span>}
-                  <span className="pill-value" style={{ color: '#fff' }}>
-                    <CountUp value={p.value} duration={3000} />
+                <div className="pill-content">
+                  <span className="pill-label">{p.top}</span>
+                  <span className="pill-value" style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700 }}>
+                    <CountUp value={p.value} duration={2500} delay={500 + (idx * 200)} />
+                    {p.value > 1000 ? '+' : ''}
                   </span>
-                  {p.sub && <span className="pill-sub">{p.sub}</span>}
+                  <span className="pill-sub">{p.sub}</span>
                 </div>
-                {p.kind === 'instagram' && p.delta && (
-                  <span className="pill-delta">{p.delta}</span>
-                )}
               </div>
             ))}
           </div>
+
           {currentSlide.actions && (
             <div className="hero-buttons">
-              {currentSlide.actions.map((action) => (
+              {currentSlide.actions.map((action: HeroAction) => (
                 <a
                   key={`${currentSlide.id}-${action.label}`}
                   href={action.href}

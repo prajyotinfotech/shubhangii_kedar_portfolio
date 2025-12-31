@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useContentContext } from '../contexts/ContentContext'
 
 const links = [
   { href: '#home', label: 'Home' },
@@ -11,10 +12,13 @@ const links = [
 ]
 
 export const Navbar: React.FC = () => {
+  const { content } = useContentContext()
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [active, setActive] = useState('#home')
   const navRef = useRef<HTMLDivElement | null>(null)
+
+  const logoImage = content?.theme?.logoImage
 
   useEffect(() => {
     const onScroll = () => {
@@ -59,7 +63,13 @@ export const Navbar: React.FC = () => {
   return (
     <nav className={`navbar${scrolled ? ' scrolled' : ''}`} id="navbar">
       <div className="nav-container" ref={navRef}>
-        <div className="logo">Shubhangii Kedar</div>
+        {logoImage ? (
+          <a href="#home" className="logo logo-image">
+            <img src={logoImage} alt="Shubhangii Kedar" />
+          </a>
+        ) : (
+          <div className="logo">Shubhangii Kedar</div>
+        )}
         <ul className={`nav-menu${menuOpen ? ' active' : ''}`}>
           {links.map((link) => (
             <li key={link.href}>

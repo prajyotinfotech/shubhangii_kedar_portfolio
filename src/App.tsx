@@ -4,12 +4,14 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import HangingMic from './components/HangingMic'
 import About from './components/About'
+import StatsShowcase from './components/StatsShowcase'
+import TheShow from './components/TheShow'
 import Music from './components/Music'
 import Events from './components/Events'
 import Playlist from './components/Playlist'
 import Gallery from './components/Gallery'
-import Testimonials from './components/Testimonials'
-import Newsletter from './components/Newsletter'
+// import Testimonials from './components/Testimonials'
+// import Newsletter from './components/Newsletter'
 import ContactBooking from './components/ContactBooking'
 import Footer from './components/Footer'
 import MiniPlayer from './components/MiniPlayer'
@@ -53,12 +55,14 @@ function App() {
               <main>
                 <Hero />
                 <About />
+                <StatsShowcase />
+                <TheShow />
                 <Playlist />
                 <Music />
                 <Events />
                 <Gallery />
-                <Testimonials />
-                <Newsletter />
+                {/* <Testimonials />
+                <Newsletter /> */}
                 <ContactBooking />
               </main>
               <Footer />

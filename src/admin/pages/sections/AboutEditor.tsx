@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { fetchSection, updateSection } from '../../api/client';
+import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
 interface Metric {
@@ -139,14 +140,18 @@ export default function AboutEditor() {
                         <label>Section Title</label>
                         <input name="title" value={content.title} onChange={handleChange} />
                     </div>
-                    <div className="editor-field">
-                        <label>Bio Paragraph 1</label>
-                        <textarea name="description" value={content.description} onChange={handleChange} rows={4} />
-                    </div>
-                    <div className="editor-field">
-                        <label>Bio Paragraph 2</label>
-                        <textarea name="descriptionSecondary" value={content.descriptionSecondary} onChange={handleChange} rows={4} />
-                    </div>
+                    <RichTextField
+                        label="Bio Paragraph 1"
+                        value={content.description}
+                        onChange={(val: string) => handleChange({ target: { name: 'description', value: val } } as any)}
+                        rows={4}
+                    />
+                    <RichTextField
+                        label="Bio Paragraph 2"
+                        value={content.descriptionSecondary}
+                        onChange={(val: string) => handleChange({ target: { name: 'descriptionSecondary', value: val } } as any)}
+                        rows={4}
+                    />
                 </div>
 
                 <div className="editor-section">

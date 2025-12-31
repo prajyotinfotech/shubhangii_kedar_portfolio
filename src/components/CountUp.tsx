@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 interface CountUpProps {
   value: number
   duration?: number
+  delay?: number
   formatter?: (value: number) => string
   className?: string
 }
@@ -10,6 +11,7 @@ interface CountUpProps {
 export const CountUp = ({
   value,
   duration = 1600,
+  delay = 0,
   formatter,
   className,
 }: CountUpProps) => {
@@ -22,6 +24,7 @@ export const CountUp = ({
     if (!node) return
 
     let frame: number | null = null
+    let timeoutId: ReturnType<typeof setTimeout> | null = null
 
     const startAnimation = () => {
       let start: number | null = null
@@ -46,7 +49,11 @@ export const CountUp = ({
         entries.forEach((entry) => {
           if (entry.isIntersecting && !hasAnimatedRef.current) {
             hasAnimatedRef.current = true
-            startAnimation()
+            if (delay > 0) {
+              timeoutId = setTimeout(startAnimation, delay)
+            } else {
+              startAnimation()
+            }
           }
         })
       },
@@ -56,13 +63,14 @@ export const CountUp = ({
     observer.observe(node)
     return () => {
       if (frame) cancelAnimationFrame(frame)
+      if (timeoutId) clearTimeout(timeoutId)
       observer.disconnect()
     }
-  }, [duration, value])
+  }, [duration, value, delay])
 
   useEffect(() => {
-    hasAnimatedRef.current = false
-    setDisplay(0)
+    // Reset if value/duration changes significantly, though ideally we keep the animation state
+    // For this use case, we typically don't reset unless full re-render
   }, [value, duration])
 
   const formatted = formatter

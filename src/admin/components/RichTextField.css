@@ -1,0 +1,72 @@
+.rich-text-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+}
+
+.rich-text-field label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+
+.rich-input {
+    background: transparent;
+    border: none;
+    color: #fff;
+    resize: vertical;
+    min-height: 80px;
+    padding: 8px 0;
+    outline: none;
+    width: 100%;
+    margin-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.rich-input:focus {
+    border-bottom-color: #667eea;
+}
+
+.rich-toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.rich-toolbar select {
+    background: #1a1a2e;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 13px;
+    height: 32px;
+}
+
+.rich-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+    font-family: serif;
+}
+
+.rich-btn.active {
+    background: #667eea;
+    color: #fff;
+}
+
+.rich-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
