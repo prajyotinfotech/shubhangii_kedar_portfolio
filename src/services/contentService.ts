@@ -129,16 +129,33 @@ export async function fetchContent(): Promise<ContentData> {
         return contentCache;
     }
 
-    // DIRECT GIST FETCH (Zero Cost)
-    // We use the "Raw" URL to fetch content directly from GitHub's CDN.
-    // This bypasses the Vercel backend entirely for public visitors.
+    // HYBRID STRATEGY:
+    // PROD: Fetch from Gist (Serverless/Static behavior)
+    // DEV: Fetch from Local API (Instant updates from Admin Panel)
+    const useGist = import.meta.env.PROD || import.meta.env.VITE_USE_GIST === 'true';
     const GIST_RAW_URL = import.meta.env.VITE_GIST_RAW_URL || 'https://gist.githubusercontent.com/prajyotinfotech/9edd7314a8b2f69a855037af01072b7e/raw/content.json';
 
+    if (useGist) {
+        try {
+            const response = await fetch(GIST_RAW_URL);
+            if (!response.ok) throw new Error(`Gist fetch error: ${response.status}`);
+            const data = await response.json();
+            contentCache = data;
+            cacheTimestamp = now;
+            return data;
+        } catch (error) {
+            console.warn('Gist fetch failed, attempting fallback to API:', error);
+        }
+    }
+
+    // Fallback or Dev Mode: Use Local API
+    const contentUrl = `${API_URL}/api/content`;
+
     try {
-        const response = await fetch(GIST_RAW_URL);
+        const response = await fetch(contentUrl);
 
         if (!response.ok) {
-            throw new Error(`Gist fetch error: ${response.status}`);
+            throw new Error(`API fetch error: ${response.status}`);
         }
 
         const data = await response.json();
@@ -146,7 +163,7 @@ export async function fetchContent(): Promise<ContentData> {
         cacheTimestamp = now;
         return data;
     } catch (error) {
-        console.error('Failed to fetch content from API:', error);
+        console.error('Failed to fetch content:', error);
         // Return cached content if available, even if expired
         if (contentCache) {
             console.log('Using stale cache');
