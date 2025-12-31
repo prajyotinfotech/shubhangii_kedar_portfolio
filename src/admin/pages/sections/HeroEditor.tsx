@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSection, updateSection } from '../../api/client';
+import { fetchSection, updateSection, uploadImage } from '../../api/client';
 import '../styles/editor.css';
 
 interface Slide {
@@ -45,6 +45,22 @@ export default function HeroEditor() {
             setMessage({ type: 'error', text: 'Failed to load hero content' });
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number, field: 'image' | 'mobileImage') => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            handleSlideChange(index, field, result.data.url);
+            setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
+        } finally {
+            setSaving(false);
         }
     };
 
@@ -130,8 +146,44 @@ export default function HeroEditor() {
                                 <input value={slide.alt} onChange={(e) => handleSlideChange(idx, 'alt', e.target.value)} />
                             </div>
                             <div className="editor-field">
-                                <label>Image Path/URL</label>
-                                <input value={slide.image} onChange={(e) => handleSlideChange(idx, 'image', e.target.value)} />
+                                <label>Image (Desktop)</label>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, idx, 'image')}
+                                        disabled={saving}
+                                        style={{ width: 'auto' }}
+                                    />
+                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                    <input
+                                        value={slide.image}
+                                        onChange={(e) => handleSlideChange(idx, 'image', e.target.value)}
+                                        placeholder="Image URL"
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+                                {slide.image && <img src={slide.image} alt="Preview" style={{ height: '60px', objectFit: 'cover', borderRadius: '4px', marginTop: '5px' }} />}
+                            </div>
+                            <div className="editor-field">
+                                <label>Mobile Image (Optional)</label>
+                                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageUpload(e, idx, 'mobileImage')}
+                                        disabled={saving}
+                                        style={{ width: 'auto' }}
+                                    />
+                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                    <input
+                                        value={slide.mobileImage || ''}
+                                        onChange={(e) => handleSlideChange(idx, 'mobileImage', e.target.value)}
+                                        placeholder="Mobile Image URL"
+                                        style={{ flex: 1 }}
+                                    />
+                                </div>
+                                {slide.mobileImage && <img src={slide.mobileImage} alt="Mobile Preview" style={{ height: '60px', objectFit: 'cover', borderRadius: '4px', marginTop: '5px' }} />}
                             </div>
                             <div className="editor-field">
                                 <label>Heading Lines</label>

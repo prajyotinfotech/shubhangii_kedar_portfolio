@@ -1,26 +1,25 @@
 /**
- * File Service - Gist Storage Implementation
+ * File Service - Strict Gist Storage Implementation
  * 
  * STRATEGY:
- * instead of saving to a local JSON file (which gets deleted on free hosting),
- * we use GitHub Gist as a "Cloud Database".
+ * We use GitHub Gist as the PRIMARY Database.
+ * No reliance on local storage for persistence.
  * 
  * HOW IT WORKS:
- * 1. READ: We fetch the raw JSON from your private Gist URL.
+ * 1. READ: We fetch the raw JSON from your private Gist URL (or API).
  * 2. WRITE: We use the GitHub API to update that Gist.
- * 3. CACHE: To make it fast, we remember the last fetch for 30 seconds.
+ * 3. CACHE: To make it fast/avoid rate limits, we remember the last fetch for 30 seconds.
  * 
  * REQUIRED ENV VARS:
- * - GIST_ID: The ID of your secret gist
- * - GITHUB_TOKEN: Your Personal Access Token
+ * - GIST_ID: 9edd7314a8b2f69a855037af01072b7e
+ * - GITHUB_TOKEN: ghp_...
  */
 const config = require('../config');
 
 // Simple in-memory cache to prevent hitting GitHub Rate Limits
-// We keep data in memory for 30 seconds.
 let memoryCache = null;
 let lastFetch = 0;
-const CACHE_TTL = 30000; // 30 seconds
+const CACHE_TTL = 30000; // 30 seconds cache
 
 /**
  * Get headers for GitHub API
@@ -38,8 +37,8 @@ function getHeaders() {
  * @returns {Promise<Object>} Parsed content object
  */
 async function readContent() {
-    // Return cache if valid
     const now = Date.now();
+    // Use cache if fresh
     if (memoryCache && (now - lastFetch) < CACHE_TTL) {
         return memoryCache;
     }
@@ -47,10 +46,11 @@ async function readContent() {
     try {
         const gistId = process.env.GIST_ID;
         if (!gistId || !process.env.GITHUB_TOKEN) {
-            console.warn('GIST_ID or GITHUB_TOKEN not set, using default content');
-            return getDefaultContent();
+            console.error('CRITICAL: GIST_ID or GITHUB_TOKEN not set');
+            throw new Error('GIST_ID or GITHUB_TOKEN not set');
         }
 
+        console.log(`Fetching Gist: ${gistId}...`);
         const response = await fetch(`https://api.github.com/gists/${gistId}`, {
             headers: getHeaders()
         });
@@ -66,18 +66,30 @@ async function readContent() {
             throw new Error('content.json not found in Gist');
         }
 
-        const content = JSON.parse(file.content);
+        let content;
+        try {
+            content = JSON.parse(file.content);
+        } catch (e) {
+            // If gist file is truncated or raw url needed
+            if (file.truncated) {
+                const rawResp = await fetch(file.raw_url);
+                content = await rawResp.json();
+            } else {
+                throw e;
+            }
+        }
 
         // Update cache
         memoryCache = content;
         lastFetch = now;
+        console.log('Gist fetched successfully');
 
         return content;
     } catch (error) {
         console.error('Failed to read from Gist:', error);
-        // Fallback to cache if available even if stale
+        // Fallback to cache if available
         if (memoryCache) return memoryCache;
-        return getDefaultContent();
+        throw error;
     }
 }
 
@@ -92,6 +104,7 @@ async function writeContent(content) {
             throw new Error('GIST_ID or GITHUB_TOKEN not set');
         }
 
+        console.log('Writing to Gist...');
         const response = await fetch(`https://api.github.com/gists/${gistId}`, {
             method: 'PATCH',
             headers: {
@@ -124,7 +137,7 @@ async function writeContent(content) {
 }
 
 /**
- * Update a specific section of content
+ * Update a specific section
  */
 async function updateSection(section, data) {
     const content = await readContent();
@@ -141,7 +154,7 @@ async function addItem(section, item) {
     const content = await readContent();
 
     if (!Array.isArray(content[section])) {
-        throw new Error(`Section "${section}" is not an array`);
+        content[section] = [];
     }
 
     if (!item.id) {
@@ -193,42 +206,9 @@ async function deleteItem(section, itemId) {
     return content;
 }
 
-/**
- * Get default content structure (Fallback)
- */
-function getDefaultContent() {
-    return {
-        hero: {
-            title: 'Shubhangii Kedar',
-            subtitle: 'Singer | Performer | Playback Artist',
-            backgroundImage: '',
-            ctaText: 'Listen Now',
-            ctaLink: '#music'
-        },
-        about: {
-            title: 'About Me',
-            description: '',
-            image: '',
-            stats: []
-        },
-        featureStats: [],
-        musicReleases: [],
-        events: [],
-        gallery: [],
-        testimonials: [],
-        contact: {
-            email: '',
-            phone: '',
-            location: ''
-        },
-        socialLinks: [],
-        journeyMilestones: []
-    };
-}
-
-// No-op for Gist implementation
+// Initialize content (optional prompt)
 async function initializeContent() {
-    console.log('Gist storage initialized');
+    console.log('Gist storage mode active');
 }
 
 module.exports = {
@@ -238,6 +218,5 @@ module.exports = {
     addItem,
     updateItem,
     deleteItem,
-    initializeContent,
-    getDefaultContent
+    initializeContent
 };

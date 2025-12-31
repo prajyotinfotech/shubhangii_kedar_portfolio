@@ -3,8 +3,8 @@ import { useSpotify } from '../contexts/SpotifyContext'
 import { useAuth } from '../contexts/AuthContext'
 import { useWebPlayback } from '../contexts/SpotifyWebPlaybackContext'
 import { formatDuration } from '../utils/formatDuration'
-import coverA from '../assets/3.png'
-import coverB from '../assets/6.png'
+import coverA from '../assets/3a.png'
+import coverB from '../assets/6a.png'
 import coverC from '../assets/1.png'
 
 export const Playlist: React.FC = () => {
