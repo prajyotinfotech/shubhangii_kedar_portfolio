@@ -107,6 +107,23 @@ const navItems: NavItem[] = [
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
             </svg>
         )
+    },
+    {
+        path: '/admin/theme',
+        label: 'Theme',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="13.5" cy="6.5" r=".5" />
+                <circle cx="17.5" cy="10.5" r=".5" />
+                <circle cx="8.5" cy="7.5" r=".5" />
+                <circle cx="6.5" cy="12.5" r=".5" />
+                <path d="m14 2-2 2 2 2 2-2z" />
+                <path d="M3 9a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8a.5.5 0 0 0 0-1l-7.5-7.5A.5.5 0 0 0 13 0a9 9 0 0 0-9 9Z" />
+                <path d="M3 21a9 9 0 0 1 9-9" />
+                <path d="M20.5 2v3.5a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5V2a.5.5 0 0 0-.5-.5.5.5 0 0 0-.5.5Z" />
+                <path d="M22 5.5a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 0 0 1h.5a.5.5 0 0 0 .5.5.5.5 0 0 0 .5-.5.5.5 0 0 0 .5-.5Z" />
+            </svg>
+        )
     }
 ];
 

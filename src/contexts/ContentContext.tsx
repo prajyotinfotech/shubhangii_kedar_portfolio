@@ -134,7 +134,13 @@ function getStaticContent(): ContentData {
             ...m,
             image: typeof m.image === 'string' ? m.image : '',
             side: m.side as 'left' | 'right'
-        }))
+        })),
+        theme: {
+            logoImage: '',
+            logoSize: 48,
+            logoPosition: -20,
+            primaryColor: '#1DB954'
+        }
     };
 }
 

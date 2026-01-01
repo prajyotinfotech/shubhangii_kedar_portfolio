@@ -358,17 +358,12 @@ a {
 }
 
 .logo.logo-image img {
-    height: 40px;
     width: auto;
     object-fit: contain;
 }
 
 .navbar.scrolled .logo {
     font-size: 24px;
-}
-
-.navbar.scrolled .logo.logo-image img {
-    height: 32px;
 }
 
 .nav-menu {
@@ -2088,6 +2083,11 @@ html.is-playing .disc {
 
 .gallery-item.tall {
     aspect-ratio: 4/5;
+}
+
+.gallery-item.extra-tall {
+    aspect-ratio: 9/16;
+    /* Larger height for Instagram posts with comments */
 }
 
 .gallery-item.wide {

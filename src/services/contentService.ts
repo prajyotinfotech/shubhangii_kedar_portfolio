@@ -3,7 +3,7 @@
  * Fetches content from backend API with fallback to static data
  */
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5173';
 
 export interface ContentData {
     hero: {
@@ -75,8 +75,12 @@ export interface ContentData {
         title: string;
         description: string;
         image: string;
+        videoUrl?: string;
+        embedCode?: string;
+        platform?: 'instagram' | 'youtube';
         gradient: [string, string];
         aspect: 'tall' | 'wide' | 'square';
+        type?: 'image' | 'video';
     }[];
     testimonials: {
         id: string;
@@ -113,6 +117,9 @@ export interface ContentData {
     }[];
     theme?: {
         logoImage?: string;
+        logoSize?: number;
+        logoPosition?: number;
+        primaryColor?: string;
         fonts?: {
             heading?: { family: string; size?: string; weight?: number; style?: string };
             body?: { family: string; size?: string; weight?: number; style?: string };
@@ -127,6 +134,91 @@ export interface ContentData {
         };
     };
 }
+
+// Professional Color Presets
+export const COLOR_PRESETS = [
+    {
+        id: 'vibrant-gradient',
+        name: 'Vibrant Gradient',
+        value: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        isGradient: true,
+        category: 'gradient',
+        preview: ['#667eea', '#764ba2']
+    },
+    {
+        id: 'sunset-gradient',
+        name: 'Sunset Gradient',
+        value: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+        isGradient: true,
+        category: 'gradient',
+        preview: ['#f093fb', '#f5576c']
+    },
+    {
+        id: 'ocean-gradient',
+        name: 'Ocean Gradient',
+        value: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+        isGradient: true,
+        category: 'gradient',
+        preview: ['#4facfe', '#00f2fe']
+    },
+    {
+        id: 'soft-pink',
+        name: 'Soft Pink',
+        value: '#ffc1cc',
+        isGradient: false,
+        category: 'pastel',
+        preview: ['#ffc1cc']
+    },
+    {
+        id: 'mint-pastel',
+        name: 'Mint Green',
+        value: '#b5ead7',
+        isGradient: false,
+        category: 'pastel',
+        preview: ['#b5ead7']
+    },
+    {
+        id: 'lavender-pastel',
+        name: 'Lavender',
+        value: '#c7ceea',
+        isGradient: false,
+        category: 'pastel',
+        preview: ['#c7ceea']
+    },
+    {
+        id: 'cyber-neon',
+        name: 'Cyber Neon',
+        value: '#00ff88',
+        isGradient: false,
+        category: 'neon',
+        preview: ['#00ff88']
+    },
+    {
+        id: 'electric-neon',
+        name: 'Electric Magenta',
+        value: '#ff00ff',
+        isGradient: false,
+        category: 'neon',
+        preview: ['#ff00ff']
+    },
+    {
+        id: 'corporate-blue',
+        name: 'Corporate Blue',
+        value: '#2563eb',
+        isGradient: false,
+        category: 'professional',
+        preview: ['#2563eb']
+    },
+    {
+        id: 'elegant-purple',
+        name: 'Elegant Purple',
+        value: '#7c3aed',
+        isGradient: false,
+        category: 'professional',
+        preview: ['#7c3aed']
+    }
+] as const;
+
 
 // Cache for content
 let contentCache: ContentData | null = null;
