@@ -57,7 +57,8 @@ export default function AdminDashboard() {
         { label: 'Update About Info', path: '/admin/about', icon: '👤' },
         { label: 'Manage Events', path: '/admin/events', icon: '📅' },
         { label: 'Update Gallery', path: '/admin/gallery', icon: '🖼️' },
-        { label: 'Edit Contact Info', path: '/admin/contact', icon: '📧' }
+        { label: 'Edit Contact Info', path: '/admin/contact', icon: '📧' },
+        { label: 'Manage Theme', path: '/admin/theme', icon: '🎨' }
     ];
 
     return (

@@ -86,10 +86,25 @@ export async function updateItem(section: string, itemId: string, updates: unkno
  * Delete item from array section
  */
 export async function deleteItem(section: string, itemId: string) {
-    const response = await fetch(`${API_URL}/api/content/${section}/items/${itemId}`, {
+    const url = `${API_URL}/api/content/${section}/items/${itemId}`;
+    const headers = getAuthHeaders();
+    
+    console.log('DELETE Request Details:');
+    console.log('   URL:', url);
+    console.log('   Section:', section);
+    console.log('   Item ID:', itemId);
+    console.log('   Headers:', headers);
+    
+    const response = await fetch(url, {
         method: 'DELETE',
-        headers: getAuthHeaders()
+        headers: headers
     });
+    
+    console.log('DELETE Response:');
+    console.log('   Status:', response.status);
+    console.log('   Status Text:', response.statusText);
+    console.log('   OK:', response.ok);
+    
     return handleResponse(response);
 }
 

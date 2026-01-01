@@ -143,10 +143,13 @@ router.put('/:section/items/:itemId', authenticateToken, async (req, res, next) 
  * Delete item from array section (protected)
  */
 router.delete('/:section/items/:itemId', authenticateToken, async (req, res, next) => {
+    let { section, itemId } = req.params; // Declare with let to ensure it's accessible in catch
     try {
-        const { section, itemId } = req.params;
+        console.log(`DELETE request received: section="${section}", itemId="${itemId}"`);
+        console.log('User authenticated:', req.user?.email);
 
         const content = await fileService.deleteItem(section, itemId);
+        console.log(`Item "${itemId}" deleted from "${section}" successfully`);
 
         res.json({
             success: true,
@@ -154,6 +157,7 @@ router.delete('/:section/items/:itemId', authenticateToken, async (req, res, nex
             data: content[section]
         });
     } catch (error) {
+        console.error(`Delete failed for "${itemId}":`, error.message);
         if (error.message.includes('not found') || error.message.includes('not an array')) {
             return res.status(404).json({
                 error: 'Not found',

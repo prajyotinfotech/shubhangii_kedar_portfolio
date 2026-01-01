@@ -33,13 +33,38 @@ function App() {
   const [showJourney, setShowJourney] = useState(false)
 
   useEffect(() => {
+    if (content?.theme?.primaryColor) {
+      const root = document.documentElement
+      const color = content.theme.primaryColor
+      root.style.setProperty('--primary-color', color)
+      root.style.setProperty('--secondary-color', color)
+      root.style.setProperty('--accent-color', color)
+      root.style.setProperty('--spotify-green', color)
+
+      const hexToRgb = (hex: string) => {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+        return result ? {
+          r: parseInt(result[1], 16),
+          g: parseInt(result[2], 16),
+          b: parseInt(result[3], 16)
+        } : null
+      }
+
+      const rgb = hexToRgb(color)
+      if (rgb) {
+        root.style.setProperty('--ring', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.5)`)
+        root.style.setProperty('--ring-strong', `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.7)`)
+      }
+    }
+  }, [content?.theme?.primaryColor])
+
+  useEffect(() => {
     const handleScroll = () => {
-      // Show button after scrolling past 80% of the viewport height
       setShowJourney(window.scrollY > window.innerHeight * 0.8)
     }
 
     window.addEventListener('scroll', handleScroll)
-    handleScroll() // Check initial state
+    handleScroll()
 
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])

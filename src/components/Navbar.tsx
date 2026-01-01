@@ -19,6 +19,8 @@ export const Navbar: React.FC = () => {
   const navRef = useRef<HTMLDivElement | null>(null)
 
   const logoImage = content?.theme?.logoImage
+  const logoSize = content?.theme?.logoSize || 48
+  const logoPosition = content?.theme?.logoPosition ?? -20
 
   useEffect(() => {
     const onScroll = () => {
@@ -64,9 +66,15 @@ export const Navbar: React.FC = () => {
     <nav className={`navbar${scrolled ? ' scrolled' : ''}`} id="navbar">
       <div className="nav-container" ref={navRef}>
         {logoImage ? (
-          <a href="#home" className="logo logo-image">
-            <img src={logoImage} alt="Shubhangii Kedar" />
-          </a>
+          <div className="logo logo-image" style={{ paddingLeft: `${logoPosition}px` }}>
+            <a href="#home">
+              <img
+                src={logoImage}
+                alt="Shubhangii Kedar"
+                style={{ height: `${logoSize}px` }}
+              />
+            </a>
+          </div>
         ) : (
           <div className="logo">Shubhangii Kedar</div>
         )}

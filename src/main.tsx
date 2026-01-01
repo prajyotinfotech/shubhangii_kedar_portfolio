@@ -21,6 +21,7 @@ const TestimonialsManager = lazy(() => import('./admin/pages/sections/Testimonia
 const ContactEditor = lazy(() => import('./admin/pages/sections/ContactEditor'))
 const SocialLinksEditor = lazy(() => import('./admin/pages/sections/SocialLinksEditor'))
 const JourneyManager = lazy(() => import('./admin/pages/sections/JourneyManager'))
+const ThemeManager = lazy(() => import('./admin/pages/sections/ThemeManager'))
 
 const AdminLoadingFallback = () => (
   <div style={{
@@ -106,6 +107,11 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/journey" element={
                 <Suspense fallback={<AdminLoadingFallback />}>
                   <JourneyManager />
+                </Suspense>
+              } />
+              <Route path="/admin/theme" element={
+                <Suspense fallback={<AdminLoadingFallback />}>
+                  <ThemeManager />
                 </Suspense>
               } />
             </Route>
