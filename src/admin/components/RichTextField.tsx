@@ -6,6 +6,7 @@ interface RichTextFieldProps {
     onChange: (value: string) => void;
     label: string;
     rows?: number;
+    defaultStyles?: React.CSSProperties;
 }
 
 const FONTS = [
@@ -31,13 +32,14 @@ const SIZES = [
 ];
 
 const WEIGHTS = [
+    { label: 'Default', value: '' },
     { label: 'Normal', value: '400' },
     { label: 'Medium', value: '500' },
     { label: 'Semi Bold', value: '600' },
     { label: 'Bold', value: '700' },
 ];
 
-export default function RichTextField({ value, onChange, label, rows = 3 }: RichTextFieldProps) {
+export default function RichTextField({ value, onChange, label, rows = 3, defaultStyles = {} }: RichTextFieldProps) {
     // Basic rich text simulation: we wrap content in a span if it has styles
     // Or we just store the metadata if it's a specialized field?
     // User asked for "custom font option... below every text field"
@@ -77,20 +79,27 @@ export default function RichTextField({ value, onChange, label, rows = 3 }: Rich
         if (!value.startsWith('<span')) {
             setText(value);
         }
-    }, []);
+    }, [value]);
 
     const handleChange = (newText: string, newStyles: typeof styles) => {
         setText(newText);
         setStyles(newStyles);
 
         // Construct output
-        // If all styles are default, just return text
-        const hasStyles = newStyles.fontFamily || newStyles.fontSize || newStyles.fontWeight || newStyles.fontStyle;
+        // We merged user selection with defaults for the OUTPUT string as requested
+        const effectiveStyles = {
+            fontFamily: newStyles.fontFamily || (defaultStyles.fontFamily ? String(defaultStyles.fontFamily) : ''),
+            fontSize: newStyles.fontSize || (defaultStyles.fontSize ? String(defaultStyles.fontSize) : ''),
+            fontWeight: newStyles.fontWeight || (defaultStyles.fontWeight ? String(defaultStyles.fontWeight) : ''),
+            fontStyle: newStyles.fontStyle || (defaultStyles.fontStyle ? String(defaultStyles.fontStyle) : '')
+        };
+
+        const hasStyles = effectiveStyles.fontFamily || effectiveStyles.fontSize || effectiveStyles.fontWeight || effectiveStyles.fontStyle;
 
         if (!hasStyles) {
             onChange(newText);
         } else {
-            const styleString = Object.entries(newStyles)
+            const styleString = Object.entries(effectiveStyles)
                 .filter(([_, v]) => v) // only include set values
                 .map(([k, v]) => {
                     const cssKey = k.replace(/[A-Z]/g, m => `-${m.toLowerCase()}`);
@@ -111,10 +120,11 @@ export default function RichTextField({ value, onChange, label, rows = 3 }: Rich
                 rows={rows}
                 className="rich-input"
                 style={{
-                    fontFamily: styles.fontFamily,
-                    fontSize: styles.fontSize,
-                    fontWeight: styles.fontWeight,
-                    fontStyle: styles.fontStyle
+                    fontFamily: styles.fontFamily || defaultStyles.fontFamily,
+                    fontSize: styles.fontSize || defaultStyles.fontSize,
+                    fontWeight: styles.fontWeight || defaultStyles.fontWeight,
+                    fontStyle: styles.fontStyle || defaultStyles.fontStyle,
+                    ...(!styles.fontFamily && !styles.fontSize && !styles.fontWeight && !styles.fontStyle ? defaultStyles : {})
                 }}
             />
 
