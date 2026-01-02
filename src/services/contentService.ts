@@ -23,6 +23,8 @@ export interface ContentData {
             value: number;
             color: string;
             delta?: string;
+            desktopSize?: string;
+            mobileSize?: string;
         }[];
     };
     about: {
@@ -236,47 +238,40 @@ export async function fetchContent(): Promise<ContentData> {
         return contentCache;
     }
 
-    // HYBRID STRATEGY:
-    // PROD: Fetch from Gist (Serverless/Static behavior)
-    // DEV: Fetch from Local API (Instant updates from Admin Panel)
-    const useGist = import.meta.env.PROD || import.meta.env.VITE_USE_GIST === 'true';
+    // FORCE GIST STRATEGY as requested:
+    // "frontend is not fetching data from gist file it should always fetch data from gist file"
     const GIST_RAW_URL = import.meta.env.VITE_GIST_RAW_URL || 'https://gist.githubusercontent.com/prajyotinfotech/9edd7314a8b2f69a855037af01072b7e/raw/content.json';
 
-    if (useGist) {
-        try {
-            const response = await fetch(GIST_RAW_URL);
-            if (!response.ok) throw new Error(`Gist fetch error: ${response.status}`);
-            const data = await response.json();
-            contentCache = data;
-            cacheTimestamp = now;
-            return data;
-        } catch (error) {
-            console.warn('Gist fetch failed, attempting fallback to API:', error);
-        }
-    }
-
-    // Fallback or Dev Mode: Use Local API
-    const contentUrl = `${API_URL}/api/content`;
-
     try {
-        const response = await fetch(contentUrl);
+        const timestamp = new Date().getTime();
+        const urlWithCacheBuster = `${GIST_RAW_URL}?t=${timestamp}`;
+        console.log('Fetching content from Gist:', urlWithCacheBuster);
+        const response = await fetch(urlWithCacheBuster, { cache: 'no-store' }); // Ensure fresh content
 
         if (!response.ok) {
-            throw new Error(`API fetch error: ${response.status}`);
+            throw new Error(`Gist fetch error: ${response.status} ${response.statusText}`);
         }
 
         const data = await response.json();
+
+        // Basic validation to ensure it's not empty
+        if (!data || Object.keys(data).length === 0) {
+            throw new Error('Gist content is empty or invalid');
+        }
+
         contentCache = data;
         cacheTimestamp = now;
         return data;
+
     } catch (error) {
-        console.error('Failed to fetch content:', error);
-        // Return cached content if available, even if expired
-        if (contentCache) {
-            console.log('Using stale cache');
-            return contentCache;
-        }
-        throw error;
+        console.error('CRITICAL: Failed to fetch content from Gist:', error);
+
+        // If we want to try the local API as a backup *only if* Gist fails, we could do it here.
+        // But the user said: "it should not be rely on any local harcoded content file"
+        // and "if it is not able to fetch from gist file it should show a decent massage".
+        // So we will throw the error to be caught by ContentContext.
+
+        throw new Error(`Unable to load content from Gist. Please check your internet connection or Gist configuration. (${error instanceof Error ? error.message : String(error)})`);
     }
 }
 

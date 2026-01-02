@@ -26,11 +26,21 @@ import { SpotifyWebPlaybackProvider } from './contexts/SpotifyWebPlaybackContext
 import { useContentContext } from './contexts/ContentContext'
 
 function App() {
-  const { content } = useContentContext()
+  const { content, error, refetch, loading } = useContentContext()
   useScrollReveal([content])
   useScrollToExpandPlayer()
 
   const [showJourney, setShowJourney] = useState(false)
+
+  /* Hook Order Check:
+     1. useContentContext (Context)
+     2. useScrollReveal (Effect)
+     3. useScrollToExpandPlayer (Effect)
+     4. useState (State)
+     5. useEffect (Theme)
+     6. useEffect (Scroll)
+     -- ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURN --
+  */
 
   useEffect(() => {
     if (content?.theme?.primaryColor) {
@@ -69,6 +79,56 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  if (error) {
+    return (
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#121212',
+        color: '#fff',
+        padding: '2rem',
+        textAlign: 'center'
+      }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: '#ff4444' }}>Unable to Load Content</h2>
+        <p style={{ marginBottom: '2rem', color: '#aaa', maxWidth: '500px' }}>
+          {error}
+        </p>
+        <button
+          onClick={refetch}
+          style={{
+            padding: '12px 30px',
+            borderRadius: '50px',
+            background: 'var(--spotify-green, #1DB954)',
+            color: '#000',
+            border: 'none',
+            fontSize: '1rem',
+            fontWeight: 600,
+            cursor: 'pointer'
+          }}
+        >
+          Try Again
+        </button>
+      </div>
+    )
+  }
+
+  if (loading || !content) {
+    return (
+      <div style={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#121212'
+      }}>
+        <div className="loader"></div>
+      </div>
+    )
+  }
+
   return (
     <ErrorBoundary>
       <AuthProvider>
@@ -92,11 +152,10 @@ function App() {
               </main>
               <Footer />
               <MiniPlayer style={{
-                opacity: showJourney ? 1 : 0,
-                pointerEvents: showJourney ? 'auto' : 'none',
-                transform: showJourney ? 'translateX(-50%) translateY(0)' : 'translateX(-50%) translateY(20px)',
-                transition: 'all 0.3s ease'
-              }}
+                '--player-opacity': showJourney ? 1 : 0,
+                '--player-pointer-events': showJourney ? 'auto' : 'none',
+                '--player-y-offset': showJourney ? '0px' : '20px',
+              } as React.CSSProperties}
               />
               <a
                 href="/journey"

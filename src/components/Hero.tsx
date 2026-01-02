@@ -28,7 +28,7 @@ type HeroSlide = {
 }
 
 type PillKind = 'youtube' | 'tracks' | 'instagram'
-type PillStat = { kind: PillKind; top?: string; sub?: string; value: number; color: string; delta?: string }
+type PillStat = { kind: PillKind; top?: string; sub?: string; value: number; color: string; delta?: string; desktopSize?: string; mobileSize?: string }
 
 const STATIC_PILLS: PillStat[] = [
   { kind: 'instagram', top: 'Instagram', sub: 'followers', value: 480000, color: '#ffffff' },
@@ -239,7 +239,12 @@ export const Hero: React.FC = () => {
                 </span>
                 <div className="pill-content">
                   <span className="pill-label">{p.top}</span>
-                  <span className="pill-value" style={{ color: '#ffffff', fontSize: '2rem', fontWeight: 700 }}>
+                  <span className="pill-value" style={{
+                    color: '#ffffff',
+                    fontWeight: 700,
+                    ['--pill-desktop-size' as string]: p.desktopSize || '2rem',
+                    ['--pill-mobile-size' as string]: p.mobileSize || '1.5rem'
+                  } as React.CSSProperties}>
                     <CountUp value={p.value} duration={2500} delay={500 + (idx * 200)} />
                     {p.value > 1000 ? '+' : ''}
                   </span>

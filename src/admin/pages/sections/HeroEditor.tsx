@@ -18,6 +18,8 @@ interface PillStat {
     sub?: string;
     value: number;
     color: string;
+    desktopSize?: string;
+    mobileSize?: string;
 }
 
 interface HeroContent {
@@ -215,6 +217,11 @@ export default function HeroEditor() {
                                                         value={line}
                                                         onChange={(val) => handleHeadingChange(idx, lIdx, val)}
                                                         rows={2}
+                                                        defaultStyles={{
+                                                            fontFamily: "'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif",
+                                                            fontSize: '60px',
+                                                            fontWeight: '700'
+                                                        }}
                                                     />
                                                     <button
                                                         type="button"
@@ -274,6 +281,16 @@ export default function HeroEditor() {
                                 <div className="editor-field">
                                     <label>Value</label>
                                     <input type="number" value={pill.value} onChange={(e) => handlePillChange(idx, 'value', parseInt(e.target.value))} />
+                                </div>
+                            </div>
+                            <div className="editor-row">
+                                <div className="editor-field">
+                                    <label>Desktop Font Size (e.g. 2rem)</label>
+                                    <input value={pill.desktopSize || ''} onChange={(e) => handlePillChange(idx, 'desktopSize', e.target.value)} placeholder="Default: 2rem" />
+                                </div>
+                                <div className="editor-field">
+                                    <label>Mobile Font Size (e.g. 1.5rem)</label>
+                                    <input value={pill.mobileSize || ''} onChange={(e) => handlePillChange(idx, 'mobileSize', e.target.value)} placeholder="Default: 1.5rem" />
                                 </div>
                             </div>
                             <div className="editor-row">
