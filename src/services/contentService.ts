@@ -50,6 +50,8 @@ export interface ContentData {
         performanceBanner: {
             cities: string;
             footfall: string;
+            fontSize?: string;
+            fontFamily?: string;
         };
     };
     featureStats: { label: string; value: number }[];
