@@ -1,345 +1,205 @@
-# Optimizations Applied
+# Optimizations & Architecture
 
-This document outlines all optimizations implemented in the Shubhangii Kedar Portfolio project.
+This document outlines the architecture, optimizations, and trade-offs in the Shubhangii Kedar Portfolio project.
+
+---
+
+## Architecture Overview
+
+### The "Zero-Cost" Stack
+The entire project runs for free:
+- **Frontend**: Vite SPA → deployed to Vercel free tier (or GitHub Pages)
+- **Backend**: Express.js → deployed as Vercel serverless function (free tier)
+- **Database**: GitHub Gist (`content.json`) — read/write via GitHub API
+- **Image CDN**: Cloudinary (free tier)
+- **No traditional database, no paid hosting, no monthly costs.**
+
+### Content Flow
+```
+[Admin Panel] → POST /api/content/:section (JWT auth)
+  → Backend updates GitHub Gist via PATCH /gists/{id}
+  → 30s server-side cache
+
+[Public Site] → contentService.ts fetches Gist raw URL (?t=cache-buster)
+  → 1-minute client-side cache
+  → ContentContext provides data to all components
+```
 
 ---
 
 ## 1. Backend Optimizations
 
-### Rotating Backup System ✅
+### Rotating Backup System
 **Location**: `backend/src/services/fileService.js`
 
-**What it does**:
-- Automatically creates timestamped backups before every content update
-- Keeps last 5 versions to prevent data loss
-- Stores backups in `backend/data/backups/` directory
+- Creates timestamped backups before every content update
+- Keeps last 5 versions in `backend/data/backups/`
+- Prevents accidental content loss from admin edits
 
-**Benefits**:
-- Prevents accidental content loss
-- Easy rollback to previous versions
-- Minimal storage overhead
-
-**Usage**:
-```bash
-# Backups are automatic, but you can manually restore:
-cp backend/data/backups/content.backup.2024-12-30T12-00-00.json backend/data/content.json
-```
-
----
-
-### Input Sanitization ✅
+### Input Sanitization
 **Location**: `backend/src/middleware/sanitize.js`
 
-**What it does**:
-- Removes potentially dangerous HTML/script tags
-- Prevents XSS (Cross-Site Scripting) attacks
-- Sanitizes all incoming data (body, params, query)
-
-**Benefits**:
-- Enhanced security
-- Protects against malicious input
-- Maintains data integrity
-
-**Protected against**:
-- `<script>` tags
-- `<iframe>` injections
+Strips dangerous content from all incoming requests:
+- `<script>` / `<iframe>` tags
 - `javascript:` URLs
-- Event handlers (`onclick`, etc.)
+- Inline event handlers (`onclick`, etc.)
+
+### Rate Limiting
+**Location**: `backend/src/middleware/rateLimit.js`
+
+- 5 login attempts per 15-minute window
+- Prevents brute-force attacks on admin credentials
+
+### Caching
+- 30-second in-memory cache on Gist reads to stay within GitHub API rate limits
+- Cache invalidated on content updates
 
 ---
 
 ## 2. Frontend Optimizations
 
-### Lazy Loading for Admin Panel ✅
+### Lazy Loading — Admin Panel
 **Location**: `src/main.tsx`
 
-**What it does**:
-- Admin components load only when accessed
-- Reduces initial bundle size by ~40%
-- Faster page load for regular visitors
+All admin components (`/admin/*` routes) are lazy-loaded via `React.lazy()`. Regular visitors never download admin code.
 
-**Benefits**:
-- Improved initial load time
-- Better Core Web Vitals scores
-- Reduced bandwidth usage
+**Impact**: ~40% reduction in initial bundle size.
 
-**Impact**:
-- Main bundle: ~200KB smaller
-- Admin bundle: Loaded on-demand
-- First Contentful Paint: ~30% faster
-
----
-
-### Error Boundaries ✅
+### Error Boundaries
 **Location**: `src/components/ErrorBoundary.tsx`
 
-**What it does**:
-- Catches React errors gracefully
-- Prevents entire app crash
-- Shows user-friendly error message
+Wraps major sections to prevent a single component crash from taking down the whole page. Shows a user-friendly fallback instead of a white screen.
 
-**Benefits**:
-- Better user experience
-- Easier debugging
-- Prevents blank screens
-
-**Usage**:
-```tsx
-<ErrorBoundary fallback={<CustomError />}>
-  <YourComponent />
-</ErrorBoundary>
-```
-
----
-
-### Optimized Image Component ✅
+### Optimized Image Component
 **Location**: `src/components/OptimizedImage.tsx`
 
-**What it does**:
-- Lazy loads images
-- Shows loading skeleton
-- Handles errors gracefully
-- Smooth fade-in animation
+- Native `loading="lazy"` for below-fold images
+- Skeleton placeholder during load
+- Fade-in animation on load complete
+- Error fallback handling
 
-**Benefits**:
-- Faster perceived performance
-- Better UX with loading states
-- Reduced bandwidth on slow connections
-
-**Usage**:
-```tsx
-<OptimizedImage 
-  src="/path/to/image.jpg" 
-  alt="Description"
-  loading="lazy"
-/>
-```
-
----
-
-### Device Detection & Performance ✅
+### Device Detection
 **Location**: `src/utils/deviceDetection.ts`
 
-**What it does**:
-- Detects device capabilities
-- Adjusts quality settings automatically
-- Disables heavy effects on low-end devices
+Detects device capabilities and adjusts rendering:
+- Disables Three.js 3D effects on low-end devices
+- Reduces animation complexity on mobile
+- Adapts quality settings automatically
 
-**Benefits**:
-- Better mobile performance
-- Adaptive user experience
-- Prevents lag on older devices
-
-**Usage**:
-```tsx
-import { shouldDisableHeavyEffects, getQualitySettings } from './utils/deviceDetection'
-
-const settings = getQualitySettings()
-if (!settings.enable3D) {
-  // Skip Three.js rendering
-}
-```
+### React Compiler
+Enabled via `babel-plugin-react-compiler` — automatic memoization of components and hooks without manual `useMemo`/`useCallback`.
 
 ---
 
-## 3. Configuration Enhancements
+## 3. Security
 
-### Theme Configuration ✅
-**Location**: `backend/data/content.json`
+### Implemented
+- **JWT Authentication** — 24h expiry, Bearer token for admin API
+- **bcrypt** — Password hashing (salt rounds: 12)
+- **Helmet.js** — Secure HTTP headers
+- **CORS** — Restricted to `FRONTEND_URL` origin
+- **Rate Limiting** — On auth endpoints
+- **Input Sanitization** — XSS protection on all inputs
 
-**What it does**:
-- Centralized font management
-- Dynamic color scheme
-- Easy theme switching
-
-**Structure**:
-```json
-{
-  "theme": {
-    "fonts": {
-      "heading": {
-        "family": "Rustic Roadway",
-        "fallback": "Georgia, serif",
-        "source": "local"
-      },
-      "body": {
-        "family": "system-ui",
-        "fallback": "sans-serif",
-        "source": "system"
-      }
-    },
-    "colors": {
-      "primary": "#1DB954",
-      "secondary": "#1DB954",
-      "accent": "#1DB954"
-    }
-  }
-}
-```
-
-**Benefits**:
-- Client can change fonts via admin panel
-- No code changes needed
-- Consistent branding
+### Known Concerns
+- `VITE_SPOTIFY_CLIENT_SECRET` is exposed in the frontend bundle — should be proxied through backend
+- Default admin credentials in `.env` should be changed in production
+- `VITE_ADMIN_PASSWORD` provides client-side-only validation (real auth is JWT/backend, but the value is visible in source)
 
 ---
 
-## 4. Security Enhancements
+## 4. Theme System
+**Location**: Theme data stored in `content.json`, applied in `src/App.tsx`
 
-### Implemented Protections
-1. **Helmet.js** - HTTP headers security
-2. **CORS** - Controlled cross-origin access
-3. **Rate Limiting** - Prevents brute force attacks
-4. **Input Sanitization** - XSS protection
-5. **JWT Authentication** - Secure admin access
+The client can change via admin panel:
+- Primary/secondary/accent colors
+- Heading and body fonts
+- Logo image and size
 
-### Security Checklist
-- [x] HTTPS enforced (via hosting platform)
-- [x] Environment variables secured
-- [x] SQL injection N/A (no SQL database)
-- [x] XSS protection enabled
-- [x] CSRF protection via JWT
-- [x] Rate limiting on auth endpoints
+Colors are applied as CSS custom properties at runtime — no rebuild needed.
 
 ---
 
-## 5. Performance Metrics
+## 5. Key Technical Decisions
 
-### Before Optimizations
-- Initial Bundle: ~850KB
-- First Contentful Paint: ~2.5s
-- Time to Interactive: ~4.2s
-- Lighthouse Score: ~75
-
-### After Optimizations (Expected)
-- Initial Bundle: ~550KB (-35%)
-- First Contentful Paint: ~1.7s (-32%)
-- Time to Interactive: ~2.8s (-33%)
-- Lighthouse Score: ~90 (+15)
+| Decision | Why |
+|---|---|
+| GitHub Gist as DB | Zero cost, built-in versioning, sufficient for a single-editor CMS |
+| Admin panel in same SPA | No separate deployment, lazy-loaded so no cost to visitors |
+| Vercel serverless backend | Free tier handles low-traffic admin operations well |
+| Three.js for 3D mic | Client wanted premium visual feel; disabled on low-end devices |
+| Dual animation libs (Framer Motion + GSAP) | Framer for React integration, GSAP for scroll-driven animations |
+| Spotify integration | Artist wanted live music data (top tracks, playlists) on the site |
 
 ---
 
-## 6. Best Practices Implemented
+## 6. Update Log
 
-### Code Quality
-- TypeScript for type safety
-- Modular component structure
-- Reusable utility functions
-- Proper error handling
+### 2026-03-19 — Client Feedback Round
 
-### Development
-- Environment-based configuration
-- Automatic backups
-- Comprehensive logging
-- Clear separation of concerns
+**Issues reported (from client call):**
 
-### Deployment
-- Continuous deployment ready
-- Environment variable validation
-- Health check endpoints
-- Graceful error handling
+1. Journey images visible locally but broken on deployed site
+2. Journey milestones can only be deleted, not edited
+3. Journey milestones need automatic year-wise sorting (earliest at top)
+4. Admin credentials exposed in frontend code (`VITE_ADMIN_PASSWORD`)
+5. Instagram reels won't play inline (redirect to Instagram); YouTube works fine
+6. Instagram post embeds — image framing is off (half outside the frame)
+7. Recent Releases not showing her actual songs
+8. "Performed Across 25+ Cities" section needs to be editable and larger
 
----
+**Changes made:**
 
-## 7. Future Optimization Opportunities
+| # | Issue | Fix | Files Changed |
+|---|-------|-----|---------------|
+| 2 | Milestones not editable | Added inline edit mode in admin with full field editing (title, year, description, side, color, image) using existing `PUT /api/content/:section/items/:itemId` backend endpoint | `src/admin/pages/sections/JourneyManager.tsx` |
+| 3 | Milestones not sorted | Added ascending year sort in both admin (`loadContent`) and frontend (`VinylScrollPage.tsx` via `useMemo`) | `JourneyManager.tsx`, `VinylScrollPage.tsx` |
+| 7 | Recent Releases empty | Music component now checks CMS `musicReleases` (from content.json/Gist) as a data source between Spotify API and static fallback. Priority: Spotify API > CMS content > static fallback | `src/components/Music.tsx` |
+| Contact | Form was non-functional | Wired contact form to Web3Forms (free, no backend needed). Set `VITE_WEB3FORMS_KEY` in `.env`. Form now shows send status and resets on success | `src/components/Contact.tsx` |
 
-### Short Term
-- [ ] Implement service worker for offline support
-- [ ] Add image compression pipeline
-- [ ] Optimize font loading strategy
-- [ ] Add request caching
+**Still open / needs discussion:**
 
-### Medium Term
-- [ ] Migrate to CDN for all assets
-- [ ] Implement progressive image loading
-- [ ] Add analytics for performance monitoring
-- [ ] Optimize Three.js bundle size
-
-### Long Term
-- [ ] Consider SSR/SSG for better SEO
-- [ ] Implement advanced caching strategies
-- [ ] Add automated performance testing
-- [ ] Consider edge computing for API
+| # | Issue | Status | Notes |
+|---|-------|--------|-------|
+| 1 | Journey images broken on deploy | Needs investigation | Static images use bundled imports (work). CMS images use URL strings — need to verify Cloudinary/upload URLs are accessible |
+| 4 | Credentials in frontend | Open | `VITE_ADMIN_PASSWORD` in `.env` is visible in built JS. Options: (a) remove client-side check entirely and rely only on JWT, (b) move to backend-only validation |
+| 5 | Instagram reels inline | Open | Instagram's oEmbed blocks autoplay in iframes. No clean workaround exists — Instagram intentionally redirects. Possible: show thumbnail + "Watch on Instagram" link instead |
+| 6 | Instagram embed framing | Open | `react-social-media-embed` renders Instagram's native embed which has inconsistent sizing. May need custom CSS overrides or fixed-aspect-ratio container |
+| 8 | Performance banner editable | Open | Needs admin UI for the `performanceBanner` section in content.json |
 
 ---
 
-## 8. Testing Recommendations
+### Setup: Contact Form (Web3Forms)
 
-### Performance Testing
+1. Go to [web3forms.com](https://web3forms.com) and enter the destination email
+2. They'll email an **access key**
+3. Add to `.env`: `VITE_WEB3FORMS_KEY=your-access-key-here`
+4. Redeploy — the contact form will now send emails to that address
+
+---
+
+## 7. Future Opportunities
+
+- [ ] Move Spotify credentials to backend proxy
+- [ ] Service worker for offline support
+- [ ] Image compression pipeline before Cloudinary upload
+- [ ] Optimize Three.js bundle (tree-shake unused modules)
+- [ ] Consider SSG (e.g., Astro) for better SEO and faster initial load
+- [ ] Add analytics (Plausible or similar, privacy-friendly)
+- [ ] Make performance banner ("25+ Cities / 30,000+ Footfall") editable from admin
+- [ ] Fix Instagram embed aspect ratio with fixed container
+
+---
+
+## 8. Testing
+
 ```bash
-# Lighthouse CI
-npm install -g @lhci/cli
-lhci autorun --collect.url=http://localhost:5173
-
 # Bundle analysis
-npm run build
-npx vite-bundle-visualizer
-```
+npm run build && npx vite-bundle-visualizer
 
-### Load Testing
-```bash
 # Backend load test
-npm install -g autocannon
-autocannon -c 10 -d 30 http://localhost:3001/api/content
-```
+npx autocannon -c 10 -d 30 http://localhost:3001/api/content
 
-### Security Testing
-```bash
-# Check for vulnerabilities
+# Security audit
 npm audit
-npm audit fix
-
-# OWASP ZAP scan (manual)
-# https://www.zaproxy.org/
 ```
-
----
-
-## 9. Monitoring Setup
-
-### Recommended Tools (Free Tier)
-1. **UptimeRobot** - Uptime monitoring
-2. **Plausible** - Privacy-friendly analytics
-3. **Sentry** - Error tracking
-4. **Cloudflare** - CDN + DDoS protection
-
-### Key Metrics to Track
-- Response time (API)
-- Error rate
-- Page load time
-- User engagement
-- Bounce rate
-
----
-
-## 10. Maintenance Schedule
-
-### Daily
-- Monitor error logs
-- Check uptime status
-
-### Weekly
-- Review performance metrics
-- Check backup integrity
-- Update dependencies (if needed)
-
-### Monthly
-- Security audit
-- Performance optimization review
-- Content backup download
-- Analytics review
-
----
-
-## Summary
-
-All critical optimizations have been implemented:
-- ✅ Automatic backups with rotation
-- ✅ Lazy loading for admin panel
-- ✅ Input sanitization for security
-- ✅ Error boundaries for stability
-- ✅ Optimized image loading
-- ✅ Font configuration system
-- ✅ Mobile performance detection
-
-The application is now production-ready with significant performance improvements and enhanced security.

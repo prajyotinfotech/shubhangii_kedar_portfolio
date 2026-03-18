@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchSection, updateSection, addItem, deleteItem } from '../../api/client';
+import { fetchSection, updateSection, addItem, updateItem, deleteItem, uploadImage } from '../../api/client';
 import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
@@ -26,6 +26,10 @@ export default function JourneyManager() {
     const [steps, setSteps] = useState<JourneyStep[]>([]);
     const [milestones, setMilestones] = useState<JourneyMilestone[]>([]);
     const [isAddingMilestone, setIsAddingMilestone] = useState(false);
+    const [editingMilestoneId, setEditingMilestoneId] = useState<number | null>(null);
+    const [editMilestone, setEditMilestone] = useState<Omit<JourneyMilestone, 'id'>>({
+        title: '', description: '', year: '', side: 'left', color: '#667eea', image: ''
+    });
     const [newMilestone, setNewMilestone] = useState({
         title: '',
         description: '',
@@ -47,7 +51,13 @@ export default function JourneyManager() {
             const stepsData = await fetchSection('journeySteps');
             const milestonesData = await fetchSection('journeyMilestones');
             setSteps(stepsData || []);
-            setMilestones(milestonesData || []);
+            // Sort milestones by year ascending (earliest first)
+            const sorted = (milestonesData || []).sort((a: JourneyMilestone, b: JourneyMilestone) => {
+                const yearA = parseInt(a.year) || 0;
+                const yearB = parseInt(b.year) || 0;
+                return yearA - yearB;
+            });
+            setMilestones(sorted);
         } catch (err) {
             setMessage({ type: 'error', text: 'Failed to load journey content' });
         } finally {
@@ -107,6 +117,57 @@ export default function JourneyManager() {
             setMessage({ type: 'success', text: 'Milestone added!' });
         } catch (err) {
             setMessage({ type: 'error', text: 'Failed to add milestone' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const startEditMilestone = (m: JourneyMilestone) => {
+        setEditingMilestoneId(m.id);
+        setEditMilestone({
+            title: m.title,
+            description: m.description,
+            year: m.year,
+            side: m.side,
+            color: m.color,
+            image: m.image
+        });
+    };
+
+    const handleSaveEditMilestone = async () => {
+        if (editingMilestoneId === null) return;
+        if (!editMilestone.title || !editMilestone.year) {
+            setMessage({ type: 'error', text: 'Title and year are required' });
+            return;
+        }
+        setSaving(true);
+        try {
+            await updateItem('journeyMilestones', editingMilestoneId.toString(), editMilestone);
+            setEditingMilestoneId(null);
+            await loadContent();
+            setMessage({ type: 'success', text: 'Milestone updated!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to update milestone' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, target: 'new' | 'edit') => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            const url = result.data.url;
+            if (target === 'new') {
+                setNewMilestone(prev => ({ ...prev, image: url }));
+            } else {
+                setEditMilestone(prev => ({ ...prev, image: url }));
+            }
+            setMessage({ type: 'success', text: 'Image uploaded!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
         } finally {
             setSaving(false);
         }
@@ -179,7 +240,7 @@ export default function JourneyManager() {
                                         {step.highlights.map((h, hIdx) => (
                                             <div key={hIdx} className="editor-row" style={{ gridTemplateColumns: '1fr auto', gap: '8px' }}>
                                                 <input value={h} onChange={(e) => handleHighlightChange(idx, hIdx, e.target.value)} />
-                                                <button type="button" className="editor-button editor-button--danger editor-button--small" onClick={() => removeHighlight(idx, hIdx)}>×</button>
+                                                <button type="button" className="editor-button editor-button--danger editor-button--small" onClick={() => removeHighlight(idx, hIdx)}>x</button>
                                             </div>
                                         ))}
                                     </div>
@@ -199,6 +260,7 @@ export default function JourneyManager() {
             <div className="editor-section" style={{ marginTop: '3rem' }}>
                 <div className="editor-header">
                     <h2>Detailed Career Milestones (Vinyl Page)</h2>
+                    <p style={{ opacity: 0.7, fontSize: '0.85rem', margin: '0.25rem 0 0' }}>Milestones are automatically sorted by year (earliest first).</p>
                     <button className="editor-button editor-button--primary" onClick={() => setIsAddingMilestone(true)}>+ Add Milestone</button>
                 </div>
 
@@ -219,7 +281,12 @@ export default function JourneyManager() {
                             <div className="editor-row">
                                 <div className="editor-field"><label>Side</label><select value={newMilestone.side} onChange={(e) => setNewMilestone({ ...newMilestone, side: e.target.value as any })}><option value="left">Left</option><option value="right">Right</option></select></div>
                                 <div className="editor-field"><label>Color</label><input type="color" value={newMilestone.color} onChange={(e) => setNewMilestone({ ...newMilestone, color: e.target.value })} /></div>
-                                <div className="editor-field"><label>Image URL</label><input value={newMilestone.image} onChange={(e) => setNewMilestone({ ...newMilestone, image: e.target.value })} /></div>
+                                <div className="editor-field">
+                                    <label>Image</label>
+                                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'new')} disabled={saving} style={{ marginBottom: '0.5rem' }} />
+                                    <input value={newMilestone.image} onChange={(e) => setNewMilestone({ ...newMilestone, image: e.target.value })} placeholder="Or paste URL" />
+                                    {newMilestone.image && <img src={newMilestone.image} alt="preview" style={{ width: 80, height: 56, objectFit: 'cover', borderRadius: 6, marginTop: 4 }} />}
+                                </div>
                             </div>
                             <div className="editor-actions">
                                 <button className="editor-button editor-button--primary" onClick={handleAddMilestone} disabled={saving}>Add</button>
@@ -231,17 +298,53 @@ export default function JourneyManager() {
 
                 <div className="editor-list">
                     {milestones.map((m) => (
-                        <div key={m.id} className="editor-list-item">
-                            <div className="editor-list-item__content">
-                                <div style={{ width: 40, height: 40, borderRadius: '50%', background: m.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold' }}>{m.year}</div>
-                                <div className="editor-list-item__info">
-                                    <h4>{m.title}</h4>
-                                    <p>{m.description?.slice(0, 100)}...</p>
+                        <div key={m.id} className="editor-card" style={{ marginBottom: '1rem' }}>
+                            {editingMilestoneId === m.id ? (
+                                /* ---- Edit Mode ---- */
+                                <div className="editor-form">
+                                    <h3 style={{ marginBottom: '1rem' }}>Editing: {m.title}</h3>
+                                    <div className="editor-row">
+                                        <div className="editor-field"><label>Title*</label><input value={editMilestone.title} onChange={(e) => setEditMilestone({ ...editMilestone, title: e.target.value })} /></div>
+                                        <div className="editor-field"><label>Year*</label><input value={editMilestone.year} onChange={(e) => setEditMilestone({ ...editMilestone, year: e.target.value })} /></div>
+                                    </div>
+                                    <RichTextField
+                                        label="Description"
+                                        value={editMilestone.description}
+                                        onChange={(val) => setEditMilestone({ ...editMilestone, description: val })}
+                                        rows={3}
+                                    />
+                                    <div className="editor-row">
+                                        <div className="editor-field"><label>Side</label><select value={editMilestone.side} onChange={(e) => setEditMilestone({ ...editMilestone, side: e.target.value as any })}><option value="left">Left</option><option value="right">Right</option></select></div>
+                                        <div className="editor-field"><label>Color</label><input type="color" value={editMilestone.color} onChange={(e) => setEditMilestone({ ...editMilestone, color: e.target.value })} /></div>
+                                        <div className="editor-field">
+                                            <label>Image</label>
+                                            <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, 'edit')} disabled={saving} style={{ marginBottom: '0.5rem' }} />
+                                            <input value={editMilestone.image} onChange={(e) => setEditMilestone({ ...editMilestone, image: e.target.value })} placeholder="Or paste URL" />
+                                            {editMilestone.image && <img src={editMilestone.image} alt="preview" style={{ width: 120, height: 80, objectFit: 'cover', borderRadius: 8, marginTop: 4 }} />}
+                                        </div>
+                                    </div>
+                                    <div className="editor-actions">
+                                        <button className="editor-button editor-button--primary" onClick={handleSaveEditMilestone} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+                                        <button className="editor-button" onClick={() => setEditingMilestoneId(null)}>Cancel</button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="editor-list-item__actions">
-                                <button className="editor-button editor-button--small editor-button--danger" onClick={() => handleDeleteMilestone(m.id)}>Delete</button>
-                            </div>
+                            ) : (
+                                /* ---- View Mode ---- */
+                                <div className="editor-list-item" style={{ border: 'none', padding: 0 }}>
+                                    <div className="editor-list-item__content">
+                                        <div style={{ width: 40, height: 40, borderRadius: '50%', background: m.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '0.75rem', fontWeight: 'bold', flexShrink: 0 }}>{m.year}</div>
+                                        {m.image && <img src={m.image} alt={m.title} style={{ width: 60, height: 40, objectFit: 'cover', borderRadius: 6 }} />}
+                                        <div className="editor-list-item__info">
+                                            <h4>{m.title}</h4>
+                                            <p>{m.description?.slice(0, 100)}...</p>
+                                        </div>
+                                    </div>
+                                    <div className="editor-list-item__actions">
+                                        <button className="editor-button editor-button--small" onClick={() => startEditMilestone(m)}>Edit</button>
+                                        <button className="editor-button editor-button--small editor-button--danger" onClick={() => handleDeleteMilestone(m.id)}>Delete</button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ))}
                 </div>
@@ -249,4 +352,3 @@ export default function JourneyManager() {
         </div>
     );
 }
-

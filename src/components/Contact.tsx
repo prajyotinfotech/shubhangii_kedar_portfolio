@@ -1,10 +1,15 @@
+import { useState } from 'react'
 import { useContentContext } from '../contexts/ContentContext'
 import { contactItems as staticContactItems, socialLinks as staticSocialLinks } from '../data/content'
 import type { IconName } from '../data/content'
 import Icon from './Icon'
 
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || ''
+
 export const Contact: React.FC = () => {
   const { content } = useContentContext()
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle')
+  const [statusMsg, setStatusMsg] = useState('')
 
   // Transform API contact content to match expected format
   const contactItems = content?.contact ? [
@@ -17,6 +22,40 @@ export const Contact: React.FC = () => {
     ...link,
     icon: link.icon as IconName
   })) || staticSocialLinks
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    if (!WEB3FORMS_ACCESS_KEY) {
+      setStatus('error')
+      setStatusMsg('Contact form is not configured yet. Please email directly.')
+      return
+    }
+
+    formData.append('access_key', WEB3FORMS_ACCESS_KEY)
+
+    setStatus('sending')
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData,
+      })
+      const data = await res.json()
+      if (data.success) {
+        setStatus('success')
+        setStatusMsg('Message sent successfully! We\'ll get back to you soon.')
+        form.reset()
+      } else {
+        setStatus('error')
+        setStatusMsg(data.message || 'Something went wrong. Please try again.')
+      }
+    } catch {
+      setStatus('error')
+      setStatusMsg('Failed to send message. Please try again later.')
+    }
+  }
 
   return (
     <section id="contact" className="contact">
@@ -57,21 +96,30 @@ export const Contact: React.FC = () => {
             </div>
           </div>
           <div className="contact-form-wrapper reveal-right">
-            <form className="contact-form">
+            <form className="contact-form" onSubmit={handleSubmit}>
               <div className="form-group">
-                <input type="text" placeholder="Your Name" required />
+                <input type="text" name="name" placeholder="Your Name" required />
               </div>
               <div className="form-group">
-                <input type="email" placeholder="Your Email" required />
+                <input type="email" name="email" placeholder="Your Email" required />
               </div>
               <div className="form-group">
-                <input type="text" placeholder="Subject" />
+                <input type="text" name="subject" placeholder="Subject" />
               </div>
               <div className="form-group">
-                <textarea placeholder="Your Message" rows={5} required></textarea>
+                <textarea name="message" placeholder="Your Message" rows={5} required></textarea>
               </div>
-              <button type="submit" className="btn btn-primary">
-                Send Message
+              {statusMsg && (
+                <p style={{
+                  color: status === 'success' ? '#00ff99' : status === 'error' ? '#ff4444' : '#fff',
+                  fontSize: '0.9rem',
+                  marginBottom: '0.5rem'
+                }}>
+                  {statusMsg}
+                </p>
+              )}
+              <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending...' : 'Send Message'}
               </button>
             </form>
           </div>
@@ -82,4 +130,3 @@ export const Contact: React.FC = () => {
 }
 
 export default Contact
-

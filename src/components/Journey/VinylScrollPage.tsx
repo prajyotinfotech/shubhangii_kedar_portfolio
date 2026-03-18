@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './VinylScrollPage.css'
 import { Link } from 'react-router-dom'
 import { journeyMilestones as STATIC_MILESTONES } from '../../data/content'
@@ -9,7 +9,12 @@ export default function VinylScrollPage() {
     const containerRef = useRef<HTMLDivElement>(null)
     const [currentIndex, setCurrentIndex] = useState(0)
 
-    const journeyMilestones = content?.journeyMilestones?.length ? content.journeyMilestones : STATIC_MILESTONES
+    const raw = content?.journeyMilestones?.length ? content.journeyMilestones : STATIC_MILESTONES
+    // Sort milestones by year ascending (earliest at top)
+    const journeyMilestones = useMemo(
+        () => [...raw].sort((a, b) => (parseInt(a.year) || 0) - (parseInt(b.year) || 0)),
+        [raw]
+    )
 
     useEffect(() => {
         const handleScroll = () => {

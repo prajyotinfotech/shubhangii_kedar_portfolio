@@ -3,6 +3,7 @@ import { musicReleases } from '../data/content'
 import { fetchPlaylistTracks } from '../services/spotifyService'
 import { SPOTIFY_LATEST_RELEASE_PLAYLIST_ID } from '../config/spotify'
 import { useSpotify } from '../contexts/SpotifyContext'
+import { useContentContext } from '../contexts/ContentContext'
 
 const AlbumArt: React.FC<{ gradient: [string, string] }> = ({ gradient }) => (
   <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
@@ -37,6 +38,7 @@ const formatReleaseDate = (value?: string) => {
 
 export const Music: React.FC = () => {
   const { topTracks } = useSpotify()
+  const { content } = useContentContext()
   const [releases, setReleases] = useState<ReleaseCard[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -60,7 +62,22 @@ export const Music: React.FC = () => {
       .slice(0, 5)
   }, [topTracks])
 
-  // 2) If context empty, try playlist fetch
+  // 2) CMS releases from admin panel (content.json / Gist)
+  const cmsReleases = useMemo<ReleaseCard[]>(() => {
+    const cms = content?.musicReleases
+    if (!cms || !Array.isArray(cms) || cms.length === 0) return []
+    return cms.map((release: any, idx: number) => ({
+      id: release.id || `cms-${release.title}-${idx}`,
+      title: release.title,
+      artists: release.meta || '',
+      releaseDateLabel: release.meta || '',
+      spotifyUrl: (release.links || []).find((l: any) => l.label?.toLowerCase() === 'spotify')?.href,
+      imageUrl: release.coverImage || undefined,
+      gradient: release.gradient,
+    }))
+  }, [content?.musicReleases])
+
+  // 3) If Spotify context empty, try playlist fetch
   useEffect(() => {
     let cancelled = false
     const maybeFetch = async () => {
@@ -109,6 +126,7 @@ export const Music: React.FC = () => {
     }
   }, [contextReleases])
 
+  // 4) Static fallback from code
   const fallbackReleases = useMemo<ReleaseCard[]>(
     () =>
       musicReleases.map((release, idx) => ({
@@ -122,7 +140,13 @@ export const Music: React.FC = () => {
     []
   )
 
-  const data = (releases.length > 0 ? releases : (contextReleases.length > 0 ? contextReleases : fallbackReleases)).slice(0, 4)
+  // Priority: Spotify API > CMS content > static fallback
+  const data = (
+    releases.length > 0 ? releases
+    : contextReleases.length > 0 ? contextReleases
+    : cmsReleases.length > 0 ? cmsReleases
+    : fallbackReleases
+  ).slice(0, 4)
 
   return (
     <section id="music" className="music">
