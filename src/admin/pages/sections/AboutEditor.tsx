@@ -26,6 +26,8 @@ interface AboutContent {
     performanceBanner: {
         cities: string;
         footfall: string;
+        fontSize?: string;
+        fontFamily?: string;
     };
     metrics: Metric[];
     achievements: string[];
@@ -39,7 +41,7 @@ export default function AboutEditor() {
         image: '',
         stats: [],
         show: { title: '', description: '' },
-        performanceBanner: { cities: '', footfall: '' },
+        performanceBanner: { cities: '', footfall: '', fontSize: '1.4rem', fontFamily: '' },
         metrics: [],
         achievements: []
     });
@@ -159,13 +161,48 @@ export default function AboutEditor() {
                     <div className="editor-row">
                         <div className="editor-field">
                             <label>Cities Text</label>
-                            <input name="performanceBanner.cities" value={content.performanceBanner.cities} onChange={handleChange} />
+                            <input name="performanceBanner.cities" value={content.performanceBanner.cities} onChange={handleChange} placeholder="e.g. 25+ CITIES" />
                         </div>
                         <div className="editor-field">
                             <label>Footfall Text</label>
-                            <input name="performanceBanner.footfall" value={content.performanceBanner.footfall} onChange={handleChange} />
+                            <input name="performanceBanner.footfall" value={content.performanceBanner.footfall} onChange={handleChange} placeholder="e.g. 30,000+ FOOTFALL" />
                         </div>
                     </div>
+                    <div className="editor-row">
+                        <div className="editor-field">
+                            <label>Font Size</label>
+                            <select name="performanceBanner.fontSize" value={content.performanceBanner.fontSize || '1.4rem'} onChange={handleChange as any}>
+                                <option value="1rem">Small (1rem)</option>
+                                <option value="1.2rem">Medium (1.2rem)</option>
+                                <option value="1.4rem">Large (1.4rem)</option>
+                                <option value="1.8rem">X-Large (1.8rem)</option>
+                                <option value="2.2rem">XX-Large (2.2rem)</option>
+                                <option value="2.8rem">Huge (2.8rem)</option>
+                            </select>
+                        </div>
+                        <div className="editor-field">
+                            <label>Font Family</label>
+                            <select name="performanceBanner.fontFamily" value={content.performanceBanner.fontFamily || ''} onChange={handleChange as any}>
+                                <option value="">Default (inherit)</option>
+                                <option value="'Georgia', serif">Georgia (Serif)</option>
+                                <option value="'Playfair Display', serif">Playfair Display</option>
+                                <option value="'Oswald', sans-serif">Oswald</option>
+                                <option value="'Bebas Neue', sans-serif">Bebas Neue</option>
+                                <option value="'Montserrat', sans-serif">Montserrat</option>
+                                <option value="'Poppins', sans-serif">Poppins</option>
+                            </select>
+                        </div>
+                    </div>
+                    {content.performanceBanner.cities && (
+                        <div style={{ marginTop: '1rem', padding: '16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>
+                            <label style={{ fontSize: '0.75rem', opacity: 0.5, display: 'block', marginBottom: 8 }}>Preview</label>
+                            <p style={{ fontSize: content.performanceBanner.fontSize || '1.4rem', fontFamily: content.performanceBanner.fontFamily || 'inherit', margin: 0 }}>
+                                <strong>PERFORMED ACROSS <span style={{ color: '#1DB954' }}>{content.performanceBanner.cities}</span> WITH</strong>
+                                <br />
+                                <strong style={{ color: '#1DB954' }}>{content.performanceBanner.footfall}</strong>
+                            </p>
+                        </div>
+                    )}
                 </div>
 
                 <div className="editor-section">

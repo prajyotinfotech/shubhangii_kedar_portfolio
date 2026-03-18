@@ -40,7 +40,10 @@ export const About: React.FC = () => {
 
         {/* Performance banner */}
         {about.performanceBanner?.cities && (
-          <div className="about-banner reveal-scale">
+          <div className="about-banner reveal-scale" style={{
+            fontSize: about.performanceBanner.fontSize || undefined,
+            fontFamily: about.performanceBanner.fontFamily || undefined,
+          }}>
             <p>
               <strong>PERFORMED ACROSS <span className="accent">{about.performanceBanner.cities}</span> WITH</strong>
               <br />
