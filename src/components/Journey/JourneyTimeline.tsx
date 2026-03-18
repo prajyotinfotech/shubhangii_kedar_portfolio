@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './JourneyTimeline.css'
 import { Link } from 'react-router-dom'
 import { useContentContext } from '../../contexts/ContentContext'
@@ -9,7 +9,11 @@ export default function JourneyTimeline() {
     const containerRef = useRef<HTMLDivElement>(null)
     const [progressHeight, setProgressHeight] = useState(0)
 
-    const milestones = content?.journeyMilestones?.length ? content.journeyMilestones : STATIC_MILESTONES
+    const raw = content?.journeyMilestones?.length ? content.journeyMilestones : STATIC_MILESTONES
+    const milestones = useMemo(
+        () => [...raw].sort((a, b) => (parseInt(a.year) || 0) - (parseInt(b.year) || 0)),
+        [raw]
+    )
 
     useEffect(() => {
         const handleScroll = () => {

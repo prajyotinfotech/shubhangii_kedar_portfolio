@@ -176,7 +176,7 @@ async function updateItem(section, itemId, updates) {
         throw new Error(`Section "${section}" is not an array`);
     }
 
-    const index = content[section].findIndex(item => item.id === itemId);
+    const index = content[section].findIndex(item => String(item.id) === String(itemId));
     if (index === -1) {
         throw new Error(`Item with id "${itemId}" not found in "${section}"`);
     }
@@ -196,7 +196,7 @@ async function deleteItem(section, itemId) {
         throw new Error(`Section "${section}" is not an array`);
     }
 
-    const index = content[section].findIndex(item => item.id === itemId);
+    const index = content[section].findIndex(item => String(item.id) === String(itemId));
     if (index === -1) {
         throw new Error(`Item with id "${itemId}" not found in "${section}"`);
     }
