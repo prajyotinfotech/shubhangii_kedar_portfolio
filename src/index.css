@@ -2124,6 +2124,133 @@ html.is-playing .disc {
     font-weight: 500;
 }
 
+/* Song List */
+.songlist {
+    padding: 100px 0;
+    background: var(--dark-100);
+}
+
+.songlist-table {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.songlist-row {
+    display: grid;
+    grid-template-columns: 32px 48px 1fr auto;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: background 0.2s ease;
+    cursor: default;
+}
+
+.songlist-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.songlist-index {
+    color: var(--text-light);
+    font-size: 14px;
+    text-align: center;
+}
+
+.songlist-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+.songlist-thumb--placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.06);
+    color: var(--text-light);
+    font-size: 1.2rem;
+    border-radius: 6px;
+}
+
+.songlist-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.songlist-title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.songlist-artist {
+    color: var(--text-light);
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.songlist-links {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.songlist-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    color: #fff;
+}
+
+.songlist-link:hover {
+    opacity: 1;
+    transform: scale(1.15);
+}
+
+.songlist-link--spotify { color: #1DB954; }
+.songlist-link--youtube { color: #FF0000; }
+.songlist-link--insta   { color: #E1306C; }
+
+@media (max-width: 640px) {
+    .songlist {
+        padding: 64px 0;
+    }
+
+    .songlist-table {
+        margin-top: 28px;
+    }
+
+    .songlist-row {
+        grid-template-columns: 24px 40px 1fr auto;
+        gap: 10px;
+        padding: 8px 10px;
+    }
+
+    .songlist-thumb {
+        width: 40px;
+        height: 40px;
+    }
+
+    .songlist-title {
+        font-size: 14px;
+    }
+}
+
 /* Testimonials */
 .testimonials {
     padding: 100px 0;

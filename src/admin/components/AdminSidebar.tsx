@@ -71,6 +71,31 @@ const navItems: NavItem[] = [
         )
     },
     {
+        path: '/admin/music',
+        label: 'Music Releases',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 9V3M12 21v-6M3 12H9M21 12h-6" />
+            </svg>
+        )
+    },
+    {
+        path: '/admin/songlist',
+        label: 'Song List',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="8" y1="6" x2="21" y2="6" />
+                <line x1="8" y1="12" x2="21" y2="12" />
+                <line x1="8" y1="18" x2="21" y2="18" />
+                <circle cx="3" cy="6" r="1" />
+                <circle cx="3" cy="12" r="1" />
+                <circle cx="3" cy="18" r="1" />
+            </svg>
+        )
+    },
+    {
         path: '/admin/testimonials',
         label: 'Testimonials',
         icon: (

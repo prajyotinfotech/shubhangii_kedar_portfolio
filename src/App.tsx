@@ -10,7 +10,8 @@ import Music from './components/Music'
 import Events from './components/Events'
 import Playlist from './components/Playlist'
 import Gallery from './components/Gallery'
-// import Testimonials from './components/Testimonials'
+import Testimonials from './components/Testimonials'
+import SongList from './components/SongList'
 // import Newsletter from './components/Newsletter'
 import ContactBooking from './components/ContactBooking'
 import Footer from './components/Footer'
@@ -144,10 +145,11 @@ function App() {
                 <TheShow />
                 <Playlist />
                 <Music />
+                <SongList />
                 <Events />
                 <Gallery />
-                {/* <Testimonials />
-                <Newsletter /> */}
+                <Testimonials />
+                {/* <Newsletter /> */}
                 <ContactBooking />
               </main>
               <Footer />
