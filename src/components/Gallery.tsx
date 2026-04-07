@@ -14,23 +14,22 @@ import portrait from '../assets/PWP09949.png'
 
 import { useContentContext } from '../contexts/ContentContext'
 
-type Aspect = 'tall' | 'extra-tall' | 'wide' | 'square'
+type Aspect = string
 
-const aspectClass = (aspect?: Aspect) => {
-  switch (aspect) {
-    case 'wide':
-      return 'gallery-item wide'
-    case 'square':
-      return 'gallery-item square'
-    case 'extra-tall':
-      return 'gallery-item extra-tall'
-    case 'tall':
-    default:
-      return 'gallery-item tall'
-  }
+// Map legacy named values to CSS aspect-ratio values
+const legacyAspectMap: Record<string, string> = {
+  'square': '1/1',
+  'tall': '4/5',
+  'extra-tall': '9/16',
+  'wide': '4/3',
 }
 
-const STATIC_PHOTOS: { src: string; alt: string; aspect: Aspect; type?: 'image' | 'video'; videoUrl?: string; embedCode?: string; platform?: 'instagram' | 'youtube' }[] = [
+const resolveAspect = (aspect?: string): string => {
+  if (!aspect) return '4/5'
+  return legacyAspectMap[aspect] ?? aspect
+}
+
+const STATIC_PHOTOS: { src: string; alt: string; aspect: string; type?: 'image' | 'video'; videoUrl?: string; embedCode?: string; platform?: 'instagram' | 'youtube' }[] = [
   { src: img1, alt: 'Live performance', aspect: 'wide' },
   { src: portrait, alt: 'Portrait', aspect: 'tall' },
   { src: img2, alt: 'Studio session', aspect: 'square' },
@@ -214,107 +213,112 @@ const InstagramEmbedBlock = ({ embedCode }: { embedCode: string }) => {
 export const Gallery: React.FC = () => {
   const { content } = useContentContext()
 
-  const photos = content?.gallery?.length ? content.gallery.map(item => ({
+  const allItems = content?.gallery?.length ? content.gallery.map(item => ({
     src: item.image,
     alt: item.title,
-    aspect: item.aspect as Aspect,
+    aspect: item.aspect,
     type: item.type || 'image',
     videoUrl: item.videoUrl,
     embedCode: item.embedCode,
     platform: item.platform
   })) : STATIC_PHOTOS
 
+  const photoItems = allItems.filter(item => item.type !== 'video')
+  const videoItems = allItems.filter(item => item.type === 'video')
+
+  const renderItem = (item: typeof allItems[0], index: number, globalOffset: number = 0) => {
+    const youtubeEmbedUrl = item.platform === 'youtube' && item.videoUrl ? getYouTubeEmbedUrl(item.videoUrl) : '';
+    const instagramPostId = item.platform === 'instagram' && item.videoUrl ? getInstagramPostId(item.videoUrl) : '';
+
+    let itemContent = null;
+
+    if (item.type === 'video' && item.platform === 'instagram') {
+      if (item.embedCode) {
+        itemContent = (
+          <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <InstagramEmbedBlock embedCode={item.embedCode} />
+          </div>
+        );
+      } else if (instagramPostId && item.videoUrl) {
+        itemContent = (
+          <div style={{ width: '100%', height: '100%', background: '#000' }}>
+            <InstagramEmbed url={item.videoUrl} />
+          </div>
+        );
+      } else {
+        itemContent = (
+          <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', fontSize: '14px' }}>
+            Instagram content not available
+          </div>
+        );
+      }
+    } else if (item.type === 'video' && item.platform === 'youtube' && youtubeEmbedUrl) {
+      itemContent = (
+        <div style={{ width: '100%', height: '100%', background: '#000' }}>
+          <iframe
+            src={youtubeEmbedUrl}
+            width="100%"
+            height="100%"
+            style={{ border: 'none', borderRadius: '0px' }}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={item.alt}
+          />
+        </div>
+      );
+    } else if (item.src) {
+      itemContent = (
+        <>
+          <img
+            src={item.src}
+            alt={item.alt}
+            loading={(globalOffset + index) < 2 ? 'eager' : 'lazy'}
+            decoding={(globalOffset + index) < 2 ? 'sync' : 'async'}
+            draggable={false}
+          />
+          <div className="gallery-overlay">
+            <p>{item.alt}</p>
+          </div>
+        </>
+      );
+    }
+
+    return (
+      <div
+        className="reveal-scale gallery-item"
+        style={{ ['--delay' as any]: `${(globalOffset + index) * 0.1}s`, position: 'relative', aspectRatio: resolveAspect(item.aspect) }}
+        key={`${item.alt}-${globalOffset + index}`}
+      >
+        {itemContent}
+      </div>
+    )
+  }
+
   return (
     <section id="gallery" className="gallery">
       <div className="container-fluid">
         <h2 className="section-title center">Gallery</h2>
         <div className="title-decoration center"></div>
-        <div className="gallery-grid">
-          {photos.map((item, index) => {
-            const youtubeEmbedUrl = item.platform === 'youtube' && item.videoUrl ? getYouTubeEmbedUrl(item.videoUrl) : '';
-            const instagramPostId = item.platform === 'instagram' && item.videoUrl ? getInstagramPostId(item.videoUrl) : '';
 
-            // Determine what to render
-            let content = null;
+        {photoItems.length > 0 && (
+          <>
+            {videoItems.length > 0 && (
+              <h3 className="gallery-sub-title">Photos</h3>
+            )}
+            <div className="gallery-grid">
+              {photoItems.map((item, index) => renderItem(item, index, 0))}
+            </div>
+          </>
+        )}
 
-            if (item.type === 'video' && item.platform === 'instagram') {
-              if (item.embedCode) {
-                // Instagram Reel with embed code
-                content = (
-                  <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <InstagramEmbedBlock embedCode={item.embedCode} />
-                  </div>
-                );
-              } else if (instagramPostId && item.videoUrl) {
-                // Instagram embed using blockquote + embed.js
-                content = (
-                  <div style={{ width: '100%', height: '100%', background: '#000' }}>
-                    <InstagramEmbed url={item.videoUrl} />
-                  </div>
-                );
-              } else {
-                // Fallback for missing embed info
-                content = (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    background: '#f0f0f0',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    color: '#666',
-                    fontSize: '14px'
-                  }}>
-                    Instagram content not available
-                  </div>
-                );
-              }
-            } else if (item.type === 'video' && item.platform === 'youtube' && youtubeEmbedUrl) {
-              // YouTube video
-              content = (
-                <div style={{ width: '100%', height: '100%', background: '#000' }}>
-                  <iframe
-                    src={youtubeEmbedUrl}
-                    width="100%"
-                    height="100%"
-                    style={{ border: 'none', borderRadius: '0px' }}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    title={item.alt}
-                  />
-                </div>
-              );
-            } else if (item.src) {
-              // Regular image
-              content = (
-                <>
-                  <img
-                    src={item.src}
-                    alt={item.alt}
-                    loading={index < 2 ? 'eager' : 'lazy'}
-                    decoding={index < 2 ? 'sync' : 'async'}
-                    draggable={false}
-                  />
-                  <div className="gallery-overlay">
-                    <p>{item.alt}</p>
-                  </div>
-                </>
-              );
-            }
-
-            return (
-              <div
-                className={`reveal-scale ${aspectClass(item.aspect)}`}
-                style={{ ['--delay' as any]: `${index * 0.1}s`, position: 'relative' }}
-                key={`${item.alt}-${index}`}
-              >
-
-
-                {content}
-              </div>
-            )
-          })}
-        </div>
+        {videoItems.length > 0 && (
+          <>
+            <h3 className="gallery-sub-title">Videos</h3>
+            <div className="gallery-grid">
+              {videoItems.map((item, index) => renderItem(item, index, photoItems.length))}
+            </div>
+          </>
+        )}
       </div>
     </section>
   )

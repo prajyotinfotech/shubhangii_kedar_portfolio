@@ -83,13 +83,16 @@ export interface ContentData {
         embedCode?: string;
         platform?: 'instagram' | 'youtube';
         gradient: [string, string];
-        aspect: 'tall' | 'wide' | 'square';
+        aspect: string;
         type?: 'image' | 'video';
     }[];
     testimonials: {
         id: string;
         quote: string;
         author: string;
+        type?: 'text' | 'video';
+        platform?: 'youtube' | 'instagram';
+        videoUrl?: string;
     }[];
     contact: {
         email: string;
