@@ -52,8 +52,8 @@ export const Testimonials: React.FC = () => {
   const { content } = useContentContext()
   const [index, setIndex] = useState(0)
 
-  // Use API content or fallback to static
-  const testimonials = content?.testimonials || staticTestimonials
+  // Use API content if non-empty, otherwise fall back to static
+  const testimonials = content?.testimonials?.length ? content.testimonials : staticTestimonials
 
   useEffect(() => {
     const timer = setInterval(() => {

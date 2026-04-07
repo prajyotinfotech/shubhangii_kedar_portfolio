@@ -32,6 +32,7 @@ export interface ContentData {
         description: string;
         descriptionSecondary: string;
         image: string;
+        imageAspect?: string;
         stats: { label: string; value: number }[];
         show: {
             title: string;

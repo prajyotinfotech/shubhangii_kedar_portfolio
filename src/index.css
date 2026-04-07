@@ -1453,7 +1453,7 @@ a {
 .image-placeholder {
     position: relative;
     width: 100%;
-    aspect-ratio: 4 / 5;
+    aspect-ratio: 4/5; /* default; overridden by inline style from CMS */
     border-radius: 28px;
     overflow: hidden;
     box-shadow: 0 28px 80px rgba(0, 0, 0, 0.3);
@@ -2860,7 +2860,7 @@ html.is-playing .disc {
 
     .container,
     .container-fluid {
-        padding: 0 20px;
+        padding: 0 16px;
     }
 
     .hero-title {
@@ -2869,6 +2869,25 @@ html.is-playing .disc {
 
     .section-title {
         font-size: 28px;
+    }
+
+    /* Reduce section padding on mobile */
+    .about,
+    .events,
+    .gallery,
+    .contact,
+    .music {
+        padding: 64px 0;
+    }
+
+    .testimonials {
+        padding: 56px 0;
+    }
+
+    /* Feature stats: 2 columns instead of 3 */
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 
     .stats {
@@ -2881,8 +2900,66 @@ html.is-playing .disc {
         grid-template-columns: 1fr;
     }
 
+    /* Gallery grid top margin */
+    .gallery-grid {
+        margin-top: 28px;
+    }
+
+    /* Gallery sub-title spacing */
+    .gallery-sub-title {
+        margin: 1.5rem 0 0.75rem;
+        font-size: 1.1rem;
+    }
+
+    /* Event card: tighter inner layout */
+    .event-card {
+        grid-template-columns: 64px 1fr auto;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .event-date .day {
+        font-size: 20px;
+    }
+
+    .event-title {
+        font-size: 15px;
+    }
+
+    /* About banner text */
+    .about-banner {
+        padding: 16px;
+    }
+
+    /* Testimonial quote font */
+    .testimonial-slide .quote {
+        font-size: 17px;
+    }
+
+    /* Newsletter: stack vertically */
+    .newsletter-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .newsletter-form {
+        width: 100%;
+    }
+
+    .newsletter-form input {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+    }
+
     .contact-form .btn-primary {
         width: 100%;
+    }
+
+    /* About image: full width when stacked */
+    .image-wrapper {
+        max-width: 100%;
     }
 
     /* Mobile mini-player: full-width bar within safe area */
@@ -2904,6 +2981,37 @@ html.is-playing .disc {
     .mini-btn.play {
         width: 40px;
         height: 40px;
+    }
+}
+
+/* Extra small screens (360px) */
+@media (max-width: 400px) {
+    .container,
+    .container-fluid {
+        padding: 0 12px;
+    }
+
+    .hero-title {
+        font-size: clamp(28px, 8vw, 38px);
+    }
+
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .feature-number {
+        font-size: 24px;
+    }
+
+    .event-card {
+        grid-template-columns: 56px 1fr;
+        gap: 8px;
+    }
+
+    /* Hide the event action button text on very small screens */
+    .event-card > *:last-child {
+        display: none;
     }
 }
 
