@@ -9,12 +9,15 @@ interface Testimonial {
     id: string;
     quote: string;
     author: string;
+    type?: 'text' | 'video';
+    platform?: 'youtube' | 'instagram';
+    videoUrl?: string;
 }
 
 export default function TestimonialsManager() {
     const [items, setItems] = useState<Testimonial[]>([]);
     const [isAdding, setIsAdding] = useState(false);
-    const [newItem, setNewItem] = useState({ quote: '', author: '' });
+    const [newItem, setNewItem] = useState<Omit<Testimonial, 'id'>>({ quote: '', author: '', type: 'text', platform: 'youtube', videoUrl: '' });
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -35,8 +38,16 @@ export default function TestimonialsManager() {
     };
 
     const handleAdd = async () => {
-        if (!newItem.quote || !newItem.author) {
-            setMessage({ type: 'error', text: 'Please fill in all fields' });
+        if (!newItem.author) {
+            setMessage({ type: 'error', text: 'Please fill in the author field' });
+            return;
+        }
+        if (newItem.type === 'video' && !newItem.videoUrl) {
+            setMessage({ type: 'error', text: 'Please enter a video URL' });
+            return;
+        }
+        if (newItem.type !== 'video' && !newItem.quote) {
+            setMessage({ type: 'error', text: 'Please fill in the quote field' });
             return;
         }
 
@@ -102,11 +113,44 @@ export default function TestimonialsManager() {
                     <h3>Add Testimonial</h3>
                     <div className="editor-form">
                         <div className="editor-field">
-                            <label>Quote *</label>
+                            <label>Type</label>
+                            <select
+                                value={newItem.type || 'text'}
+                                onChange={(e) => setNewItem({ ...newItem, type: e.target.value as 'text' | 'video' })}
+                            >
+                                <option value="text">Text Review</option>
+                                <option value="video">Video Review (YouTube / Instagram)</option>
+                            </select>
+                        </div>
+                        {newItem.type === 'video' && (
+                            <>
+                                <div className="editor-field">
+                                    <label>Platform</label>
+                                    <select
+                                        value={newItem.platform || 'youtube'}
+                                        onChange={(e) => setNewItem({ ...newItem, platform: e.target.value as 'youtube' | 'instagram' })}
+                                    >
+                                        <option value="youtube">YouTube</option>
+                                        <option value="instagram">Instagram</option>
+                                    </select>
+                                </div>
+                                <div className="editor-field">
+                                    <label>Video URL *</label>
+                                    <input
+                                        type="text"
+                                        value={newItem.videoUrl || ''}
+                                        onChange={(e) => setNewItem({ ...newItem, videoUrl: e.target.value })}
+                                        placeholder={newItem.platform === 'youtube' ? 'https://www.youtube.com/watch?v=...' : 'https://www.instagram.com/reel/...'}
+                                    />
+                                </div>
+                            </>
+                        )}
+                        <div className="editor-field">
+                            <label>{newItem.type === 'video' ? 'Caption (optional)' : 'Quote *'}</label>
                             <textarea
                                 value={newItem.quote}
                                 onChange={(e) => setNewItem({ ...newItem, quote: e.target.value })}
-                                placeholder='"A voice that lingers..."'
+                                placeholder={newItem.type === 'video' ? 'Optional caption shown below the video' : '"A voice that lingers..."'}
                                 rows={3}
                             />
                         </div>
@@ -148,7 +192,15 @@ export default function TestimonialsManager() {
                         <div key={item.id} className="editor-list-item">
                             <div className="editor-list-item__content">
                                 <div className="editor-list-item__info">
-                                    <h4 style={{ fontStyle: 'italic', fontWeight: 400 }}>{item.quote}</h4>
+                                    {item.type === 'video' && (
+                                        <p style={{ fontSize: '0.78rem', color: item.platform === 'youtube' ? '#c00' : '#c13584', fontWeight: 600, marginBottom: '4px' }}>
+                                            {item.platform === 'youtube' ? '▶ YouTube' : '📷 Instagram'} Video
+                                        </p>
+                                    )}
+                                    {item.quote && <h4 style={{ fontStyle: 'italic', fontWeight: 400 }}>{item.quote}</h4>}
+                                    {item.type === 'video' && item.videoUrl && (
+                                        <p style={{ fontSize: '0.8rem', color: '#888', wordBreak: 'break-all' }}>{item.videoUrl}</p>
+                                    )}
                                     <p>— {item.author}</p>
                                 </div>
                             </div>

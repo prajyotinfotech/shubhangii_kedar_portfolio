@@ -15,7 +15,7 @@ interface GalleryItem {
     embedCode?: string;
     platform?: 'instagram' | 'youtube';
     gradient: [string, string];
-    aspect: 'tall' | 'wide' | 'square';
+    aspect: string;
     type?: 'image' | 'video';
 }
 
@@ -329,15 +329,44 @@ export default function GalleryManager() {
                 <div className="editor-row editor-row--3">
                     <div className="editor-field">
                         <label>Aspect Ratio</label>
-                        <select
+                        <input
+                            type="text"
                             value={aspect}
-                            onChange={(e) => onChange({ ...item, aspect: e.target.value as 'tall' | 'extra-tall' | 'wide' | 'square' })}
-                        >
-                            <option value="square">Square</option>
-                            <option value="tall">Tall</option>
-                            <option value="extra-tall">Extra Tall (Best for Instagram Posts)</option>
-                            <option value="wide">Wide</option>
-                        </select>
+                            onChange={(e) => onChange({ ...item, aspect: e.target.value })}
+                            placeholder="e.g. 16/9 or 4/5"
+                        />
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
+                            {[
+                                { label: '1/1', title: 'Square' },
+                                { label: '4/5', title: 'Portrait (Instagram)' },
+                                { label: '3/4', title: 'Portrait photo' },
+                                { label: '2/3', title: 'Portrait 35mm' },
+                                { label: '9/16', title: 'Story / Reel' },
+                                { label: '4/3', title: 'Landscape' },
+                                { label: '3/2', title: 'Landscape 35mm' },
+                                { label: '16/9', title: 'Widescreen' },
+                                { label: '21/9', title: 'Cinematic' },
+                            ].map(preset => (
+                                <button
+                                    key={preset.label}
+                                    type="button"
+                                    title={preset.title}
+                                    onClick={() => onChange({ ...item, aspect: preset.label })}
+                                    style={{
+                                        padding: '3px 8px',
+                                        fontSize: '0.78rem',
+                                        border: aspect === preset.label ? '2px solid #764ba2' : '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        background: aspect === preset.label ? '#f3ecff' : '#fff',
+                                        cursor: 'pointer',
+                                        fontWeight: aspect === preset.label ? 600 : 400,
+                                    }}
+                                >
+                                    {preset.label}
+                                    <span style={{ fontSize: '0.68rem', color: '#888', marginLeft: '4px' }}>{preset.title}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                     <div className="editor-field">
                         <label>Gradient Start</label>
