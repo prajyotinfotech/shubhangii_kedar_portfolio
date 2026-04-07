@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSection, updateSection } from '../../api/client';
+import { fetchSection, updateSection, uploadImage } from '../../api/client';
 import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
@@ -18,6 +18,7 @@ interface AboutContent {
     description: string;
     descriptionSecondary: string;
     image: string;
+    imageAspect?: string;
     stats: { label: string; value: number }[];
     show: {
         title: string;
@@ -39,6 +40,7 @@ export default function AboutEditor() {
         description: '',
         descriptionSecondary: '',
         image: '',
+        imageAspect: '4/5',
         stats: [],
         show: { title: '', description: '' },
         performanceBanner: { cities: '', footfall: '', fontSize: '1.4rem', fontFamily: '' },
@@ -103,6 +105,21 @@ export default function AboutEditor() {
         }));
     };
 
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            setContent(prev => ({ ...prev, image: result.data.url }));
+            setMessage({ type: 'success', text: 'Image uploaded!' });
+        } catch {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setSaving(true);
@@ -154,6 +171,78 @@ export default function AboutEditor() {
                         onChange={(val: string) => handleChange({ target: { name: 'descriptionSecondary', value: val } } as any)}
                         rows={4}
                     />
+                </div>
+
+                <div className="editor-section">
+                    <h3>Profile Image</h3>
+                    <div className="editor-field">
+                        <label>Upload Image</label>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                disabled={saving}
+                                style={{ width: 'auto' }}
+                            />
+                            <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                            <input
+                                type="text"
+                                name="image"
+                                value={content.image}
+                                onChange={handleChange}
+                                placeholder="Image URL"
+                                style={{ flex: 1, minWidth: '200px' }}
+                            />
+                        </div>
+                        {content.image && (
+                            <div className="editor-preview" style={{ marginTop: '0.75rem' }}>
+                                <img src={content.image} alt="Preview" style={{ maxHeight: '200px', borderRadius: '8px' }} />
+                            </div>
+                        )}
+                    </div>
+                    <div className="editor-field">
+                        <label>Aspect Ratio</label>
+                        <input
+                            type="text"
+                            name="imageAspect"
+                            value={content.imageAspect || '4/5'}
+                            onChange={handleChange}
+                            placeholder="e.g. 4/5 or 1/1"
+                        />
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
+                            {[
+                                { label: '1/1', title: 'Square' },
+                                { label: '4/5', title: 'Portrait (Instagram)' },
+                                { label: '3/4', title: 'Portrait photo' },
+                                { label: '2/3', title: 'Portrait 35mm' },
+                                { label: '9/16', title: 'Story / Reel' },
+                                { label: '4/3', title: 'Landscape' },
+                                { label: '3/2', title: 'Landscape 35mm' },
+                                { label: '16/9', title: 'Widescreen' },
+                            ].map(preset => (
+                                <button
+                                    key={preset.label}
+                                    type="button"
+                                    title={preset.title}
+                                    onClick={() => setContent(prev => ({ ...prev, imageAspect: preset.label }))}
+                                    style={{
+                                        padding: '3px 8px',
+                                        fontSize: '0.78rem',
+                                        border: (content.imageAspect || '4/5') === preset.label ? '2px solid #764ba2' : '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        background: (content.imageAspect || '4/5') === preset.label ? '#f3ecff' : '#fff',
+                                        cursor: 'pointer',
+                                        fontWeight: (content.imageAspect || '4/5') === preset.label ? 600 : 400,
+                                        color: '#333',
+                                    }}
+                                >
+                                    {preset.label}
+                                    <span style={{ fontSize: '0.68rem', color: '#888', marginLeft: '4px' }}>{preset.title}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className="editor-section">
