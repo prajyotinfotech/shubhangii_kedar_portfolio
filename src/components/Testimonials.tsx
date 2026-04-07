@@ -79,7 +79,7 @@ export const Testimonials: React.FC = () => {
             const videoUrl = (item as any).videoUrl as string | undefined
 
             return (
-              <div className={`testimonial-slide${idx === index ? ' active' : ''}`} key={item.id || item.author}>
+              <div className={`testimonial-slide${idx === index ? ' active' : ''}`} key={(item as any).id || item.author}>
                 {isVideo && videoUrl && platform === 'youtube' && (
                   <div style={{ width: '100%', maxWidth: '560px', margin: '0 auto 1rem', aspectRatio: '16/9' }}>
                     <iframe

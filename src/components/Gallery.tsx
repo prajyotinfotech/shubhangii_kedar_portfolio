@@ -14,8 +14,6 @@ import portrait from '../assets/PWP09949.png'
 
 import { useContentContext } from '../contexts/ContentContext'
 
-type Aspect = string
-
 // Map legacy named values to CSS aspect-ratio values
 const legacyAspectMap: Record<string, string> = {
   'square': '1/1',
