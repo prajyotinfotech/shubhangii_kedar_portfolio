@@ -2,15 +2,18 @@
  * Song List Manager
  * Manually manage a list of songs with platform links
  */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { fetchSection, addItem, deleteItem, updateSection, uploadImage } from '../../api/client';
 import '../styles/editor.css';
+
+interface FocalPoint { x: number; y: number }
 
 interface SongItem {
     id: string;
     title: string;
     artist?: string;
     thumbnail?: string;
+    thumbnailPosition?: FocalPoint;
     spotifyUrl?: string;
     youtubeUrl?: string;
     instaUrl?: string;
@@ -20,6 +23,7 @@ const emptyItem: Omit<SongItem, 'id'> = {
     title: '',
     artist: '',
     thumbnail: '',
+    thumbnailPosition: { x: 50, y: 50 },
     spotifyUrl: '',
     youtubeUrl: '',
     instaUrl: '',
@@ -41,28 +45,169 @@ const InstaIcon = () => (
     </svg>
 );
 
-const renderPreview = (item: Omit<SongItem, 'id'>, index = 1) => (
-    <div style={{ background: '#0d0d0d', borderRadius: '12px', padding: '1.25rem', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', margin: '0 0 12px' }}>Site Preview</p>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-            <span style={{ color: '#555', fontSize: '0.85rem', minWidth: '22px', textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{index}</span>
-            {item.thumbnail ? (
-                <img src={item.thumbnail} alt="" style={{ width: '48px', height: '48px', objectFit: 'cover', borderRadius: '6px', flexShrink: 0 }} />
-            ) : (
-                <div style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.06)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: '1.3rem', flexShrink: 0 }}>♪</div>
-            )}
-            <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ color: '#fff', fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '0.95rem' }}>{item.title || <span style={{ color: '#555' }}>Song Title</span>}</div>
-                {item.artist && <div style={{ color: '#888', fontSize: '0.8rem', marginTop: '2px' }}>{item.artist}</div>}
-            </div>
-            <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
-                {item.spotifyUrl && <span style={{ color: '#1DB954' }}><SpotifyIcon /></span>}
-                {item.youtubeUrl && <span style={{ color: '#FF4444' }}><YouTubeIcon /></span>}
-                {item.instaUrl && <span style={{ color: '#E1306C' }}><InstaIcon /></span>}
+/** Interactive focal-point picker — click or drag on the image to choose crop center */
+function FocalPointPicker({
+    image,
+    position,
+    onChange,
+}: {
+    image: string;
+    position: FocalPoint;
+    onChange: (pos: FocalPoint) => void;
+}) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const isDragging = useRef(false);
+
+    const posFromEvent = useCallback((e: MouseEvent | React.MouseEvent) => {
+        const rect = containerRef.current!.getBoundingClientRect();
+        const x = Math.round(Math.max(0, Math.min(100, ((e.clientX - rect.left) / rect.width) * 100)));
+        const y = Math.round(Math.max(0, Math.min(100, ((e.clientY - rect.top) / rect.height) * 100)));
+        return { x, y };
+    }, []);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        e.preventDefault();
+        isDragging.current = true;
+        onChange(posFromEvent(e));
+
+        const onMove = (ev: MouseEvent) => {
+            if (isDragging.current) onChange(posFromEvent(ev));
+        };
+        const onUp = () => {
+            isDragging.current = false;
+            window.removeEventListener('mousemove', onMove);
+            window.removeEventListener('mouseup', onUp);
+        };
+        window.addEventListener('mousemove', onMove);
+        window.addEventListener('mouseup', onUp);
+    };
+
+    const pos = position ?? { x: 50, y: 50 };
+
+    return (
+        <div style={{ marginTop: '12px' }}>
+            <p style={{ fontSize: '0.78rem', color: '#888', marginBottom: '8px' }}>
+                Click or drag on the image to set the square crop center
+            </p>
+            <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                {/* Full image with focal-point overlay */}
+                <div
+                    ref={containerRef}
+                    onMouseDown={handleMouseDown}
+                    style={{
+                        position: 'relative',
+                        cursor: 'crosshair',
+                        userSelect: 'none',
+                        flexShrink: 0,
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        maxWidth: '260px',
+                        border: '2px solid rgba(255,255,255,0.1)',
+                    }}
+                >
+                    <img
+                        src={image}
+                        draggable={false}
+                        style={{ width: '260px', display: 'block', pointerEvents: 'none' }}
+                        alt="focal point source"
+                    />
+                    {/* Crosshair lines */}
+                    <div style={{
+                        position: 'absolute', left: `${pos.x}%`, top: 0, bottom: 0,
+                        width: '1px', background: 'rgba(255,255,255,0.5)', pointerEvents: 'none',
+                    }} />
+                    <div style={{
+                        position: 'absolute', top: `${pos.y}%`, left: 0, right: 0,
+                        height: '1px', background: 'rgba(255,255,255,0.5)', pointerEvents: 'none',
+                    }} />
+                    {/* Marker dot */}
+                    <div style={{
+                        position: 'absolute',
+                        left: `${pos.x}%`, top: `${pos.y}%`,
+                        transform: 'translate(-50%, -50%)',
+                        width: '18px', height: '18px',
+                        borderRadius: '50%',
+                        background: 'rgba(118,75,162,0.9)',
+                        border: '2px solid #fff',
+                        boxShadow: '0 0 0 1px rgba(0,0,0,0.6), 0 2px 6px rgba(0,0,0,0.5)',
+                        pointerEvents: 'none',
+                    }} />
+                </div>
+
+                {/* Live square preview */}
+                <div style={{ flexShrink: 0 }}>
+                    <p style={{ fontSize: '0.72rem', color: '#666', marginBottom: '6px' }}>Square preview</p>
+                    <div style={{
+                        width: '96px', height: '96px',
+                        borderRadius: '8px',
+                        overflow: 'hidden',
+                        border: '2px solid rgba(255,255,255,0.12)',
+                    }}>
+                        <img
+                            src={image}
+                            style={{
+                                width: '100%', height: '100%',
+                                objectFit: 'cover',
+                                objectPosition: `${pos.x}% ${pos.y}%`,
+                                display: 'block',
+                            }}
+                            alt="crop preview"
+                        />
+                    </div>
+                    <p style={{ fontSize: '0.68rem', color: '#555', marginTop: '6px', textAlign: 'center' }}>
+                        {pos.x}% / {pos.y}%
+                    </p>
+                    <button
+                        type="button"
+                        onClick={() => onChange({ x: 50, y: 50 })}
+                        style={{
+                            marginTop: '6px', width: '100%', fontSize: '0.7rem',
+                            padding: '4px 0', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.12)',
+                            background: 'rgba(255,255,255,0.04)', color: '#888', cursor: 'pointer',
+                        }}
+                    >
+                        Reset to center
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-);
+    );
+}
+
+const renderPreview = (item: Omit<SongItem, 'id'>, index = 1) => {
+    const pos = item.thumbnailPosition ?? { x: 50, y: 50 };
+    return (
+        <div style={{ background: '#0d0d0d', borderRadius: '12px', padding: '1.25rem', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '12px', margin: '0 0 12px' }}>Site Preview</p>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 0', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                <span style={{ color: '#555', fontSize: '0.85rem', minWidth: '22px', textAlign: 'center', fontVariantNumeric: 'tabular-nums' }}>{index}</span>
+                {item.thumbnail ? (
+                    <img
+                        src={item.thumbnail}
+                        alt=""
+                        style={{
+                            width: '48px', height: '48px',
+                            objectFit: 'cover',
+                            objectPosition: `${pos.x}% ${pos.y}%`,
+                            borderRadius: '6px', flexShrink: 0,
+                        }}
+                    />
+                ) : (
+                    <div style={{ width: '48px', height: '48px', background: 'rgba(255,255,255,0.06)', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#555', fontSize: '1.3rem', flexShrink: 0 }}>♪</div>
+                )}
+                <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: '#fff', fontWeight: 500, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontSize: '0.95rem' }}>{item.title || <span style={{ color: '#555' }}>Song Title</span>}</div>
+                    {item.artist && <div style={{ color: '#888', fontSize: '0.8rem', marginTop: '2px' }}>{item.artist}</div>}
+                </div>
+                <div style={{ display: 'flex', gap: '10px', flexShrink: 0 }}>
+                    {item.spotifyUrl && <span style={{ color: '#1DB954' }}><SpotifyIcon /></span>}
+                    {item.youtubeUrl && <span style={{ color: '#FF4444' }}><YouTubeIcon /></span>}
+                    {item.instaUrl && <span style={{ color: '#E1306C' }}><InstaIcon /></span>}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 export default function SongListManager() {
     const [items, setItems] = useState<SongItem[]>([]);
@@ -161,7 +306,7 @@ export default function SongListManager() {
         setSaving(true);
         try {
             const result = await uploadImage(file);
-            onChange({ ...current, thumbnail: result.data.url });
+            onChange({ ...current, thumbnail: result.data.url, thumbnailPosition: { x: 50, y: 50 } });
             setMessage({ type: 'success', text: 'Thumbnail uploaded!' });
         } catch {
             setMessage({ type: 'error', text: 'Failed to upload thumbnail' });
@@ -187,8 +332,22 @@ export default function SongListManager() {
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
                     <input type="file" accept="image/*" onChange={e => handleThumbnailUpload(e, onChange, item)} disabled={saving} style={{ width: 'auto' }} />
                     <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
-                    <input type="text" value={item.thumbnail || ''} onChange={e => onChange({ ...item, thumbnail: e.target.value })} placeholder="Image URL" style={{ flex: 1, minWidth: '180px' }} />
+                    <input
+                        type="text"
+                        value={item.thumbnail || ''}
+                        onChange={e => onChange({ ...item, thumbnail: e.target.value })}
+                        placeholder="Image URL"
+                        style={{ flex: 1, minWidth: '180px' }}
+                    />
                 </div>
+                {/* Focal point picker — only shown when image is set */}
+                {item.thumbnail && (
+                    <FocalPointPicker
+                        image={item.thumbnail}
+                        position={item.thumbnailPosition ?? { x: 50, y: 50 }}
+                        onChange={pos => onChange({ ...item, thumbnailPosition: pos })}
+                    />
+                )}
             </div>
             <div className="editor-row editor-row--3">
                 <div className="editor-field">
@@ -260,7 +419,17 @@ export default function SongListManager() {
                                 <>
                                     <div className="editor-list-item__content">
                                         {item.thumbnail ? (
-                                            <img src={item.thumbnail} alt={item.title} className="editor-list-item__image" style={{ borderRadius: '6px' }} />
+                                            <img
+                                                src={item.thumbnail}
+                                                alt={item.title}
+                                                className="editor-list-item__image"
+                                                style={{
+                                                    borderRadius: '6px',
+                                                    objectPosition: item.thumbnailPosition
+                                                        ? `${item.thumbnailPosition.x}% ${item.thumbnailPosition.y}%`
+                                                        : 'center',
+                                                }}
+                                            />
                                         ) : (
                                             <div className="editor-list-item__image" style={{ background: 'rgba(255,255,255,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.5rem' }}>♪</div>
                                         )}
@@ -268,9 +437,9 @@ export default function SongListManager() {
                                             <h4>{index + 1}. {item.title}</h4>
                                             <p style={{ fontSize: '0.85rem', color: '#888' }}>
                                                 {item.artist && <span>{item.artist} &nbsp;</span>}
-                                                {item.spotifyUrl && <span style={{ color: '#1DB954' }}>Spotify </span>}
-                                                {item.youtubeUrl && <span style={{ color: '#FF0000' }}>YouTube </span>}
-                                                {item.instaUrl && <span style={{ color: '#E1306C' }}>Instagram</span>}
+                                                {item.spotifyUrl && <span style={{ color: '#1DB954' }}><SpotifyIcon /></span>}
+                                                {item.youtubeUrl && <span style={{ color: '#FF4444', marginLeft: 4 }}><YouTubeIcon /></span>}
+                                                {item.instaUrl && <span style={{ color: '#E1306C', marginLeft: 4 }}><InstaIcon /></span>}
                                             </p>
                                         </div>
                                     </div>

@@ -25,6 +25,7 @@ interface JourneyMilestone {
 export default function JourneyManager() {
     const [steps, setSteps] = useState<JourneyStep[]>([]);
     const [milestones, setMilestones] = useState<JourneyMilestone[]>([]);
+    const [pageHeader, setPageHeader] = useState({ title: 'The Tracklist', subtitle: 'Milestones that defined the sound' });
     const [isAddingMilestone, setIsAddingMilestone] = useState(false);
     const [editingMilestoneId, setEditingMilestoneId] = useState<number | null>(null);
     const [editMilestone, setEditMilestone] = useState<Omit<JourneyMilestone, 'id'>>({
@@ -50,6 +51,8 @@ export default function JourneyManager() {
         try {
             const stepsData = await fetchSection('journeySteps');
             const milestonesData = await fetchSection('journeyMilestones');
+            const pageData = await fetchSection('journeyPage').catch(() => null);
+            if (pageData) setPageHeader(pageData);
             setSteps(stepsData || []);
             // Sort milestones by year ascending (earliest first)
             const sorted = (milestonesData || []).sort((a: JourneyMilestone, b: JourneyMilestone) => {
@@ -89,6 +92,18 @@ export default function JourneyManager() {
         const newSteps = [...steps];
         newSteps[stepIdx] = { ...newSteps[stepIdx], highlights: newSteps[stepIdx].highlights.filter((_, i) => i !== hIdx) };
         setSteps(newSteps);
+    };
+
+    const handleSavePageHeader = async () => {
+        setSaving(true);
+        try {
+            await updateSection('journeyPage', pageHeader);
+            setMessage({ type: 'success', text: 'Page header saved!' });
+        } catch {
+            setMessage({ type: 'error', text: 'Failed to save page header' });
+        } finally {
+            setSaving(false);
+        }
     };
 
     const handleSaveSteps = async () => {
@@ -198,6 +213,36 @@ export default function JourneyManager() {
                     {message.text}
                 </div>
             )}
+
+            <div className="editor-section">
+                <h2>Journey Page Header</h2>
+                <p style={{ opacity: 0.6, fontSize: '0.85rem', marginBottom: '1rem' }}>Title and subtitle shown at the top of the /journey page. Leave blank to hide.</p>
+                <div className="editor-form">
+                    <div className="editor-row">
+                        <div className="editor-field">
+                            <label>Page Title</label>
+                            <input
+                                value={pageHeader.title}
+                                onChange={e => setPageHeader(p => ({ ...p, title: e.target.value }))}
+                                placeholder="e.g. The Tracklist"
+                            />
+                        </div>
+                        <div className="editor-field">
+                            <label>Page Subtitle</label>
+                            <input
+                                value={pageHeader.subtitle}
+                                onChange={e => setPageHeader(p => ({ ...p, subtitle: e.target.value }))}
+                                placeholder="e.g. Milestones that defined the sound"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className="editor-actions">
+                    <button className="editor-button editor-button--primary" onClick={handleSavePageHeader} disabled={saving}>
+                        {saving ? 'Saving...' : 'Save Header'}
+                    </button>
+                </div>
+            </div>
 
             <div className="editor-section">
                 <h2>Home Page Journey (Chapters)</h2>

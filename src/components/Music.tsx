@@ -55,7 +55,6 @@ export const Music: React.FC = () => {
   const { content } = useContentContext()
   const [releases, setReleases] = useState<ReleaseCard[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   // 1) Prefer context topTracks (already fetched for Playlist section)
   const contextReleases = useMemo<ReleaseCard[]>(() => {
@@ -112,7 +111,6 @@ export const Music: React.FC = () => {
       }
       try {
         setLoading(true)
-        setError(null)
         const items = await fetchPlaylistTracks(playlistId)
         if (cancelled) return
         const normalized: ReleaseCard[] = (items ?? [])
@@ -132,9 +130,8 @@ export const Music: React.FC = () => {
           .sort((a, b) => new Date(b.releaseDateLabel).getTime() - new Date(a.releaseDateLabel).getTime())
           .slice(0, 5)
         setReleases(normalized)
-      } catch (err: any) {
-        if (cancelled) return
-        setError(err?.message || 'Failed to load releases from Spotify')
+      } catch {
+        // Silently ignore Spotify API errors — CMS data takes priority
       } finally {
         if (!cancelled) setLoading(false)
       }
@@ -172,14 +169,9 @@ export const Music: React.FC = () => {
       <div className="container">
         <h2 className="section-title center">Latest Releases</h2>
         <div className="title-decoration center"></div>
-        {loading && (
+        {loading && cmsReleases.length === 0 && (
           <div className="loading" style={{ textAlign: 'center', marginTop: '1rem' }}>
-            Fetching the newest drops from Spotify...
-          </div>
-        )}
-        {error && (
-          <div className="error" style={{ textAlign: 'center', marginBottom: '1rem' }}>
-            {error}
+            Loading releases...
           </div>
         )}
         <div className="music-grid">
