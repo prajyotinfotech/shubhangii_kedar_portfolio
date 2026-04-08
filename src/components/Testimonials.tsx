@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useContentContext } from '../contexts/ContentContext'
 import { testimonials as staticTestimonials } from '../data/content'
 
@@ -50,20 +50,7 @@ const InstagramTestimonialEmbed = ({ url }: { url: string }) => {
 
 export const Testimonials: React.FC = () => {
   const { content } = useContentContext()
-  const [index, setIndex] = useState(0)
-
-  // Use API content if non-empty, otherwise fall back to static
   const testimonials = content?.testimonials?.length ? content.testimonials : staticTestimonials
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prev) => (prev + 1) % testimonials.length)
-    }, 5000)
-    return () => clearInterval(timer)
-  }, [testimonials.length])
-
-  const prev = () => setIndex((prev) => (prev - 1 + testimonials.length) % testimonials.length)
-  const next = () => setIndex((prev) => (prev + 1) % testimonials.length)
 
   return (
     <section id="testimonials" className="testimonials">
@@ -72,45 +59,44 @@ export const Testimonials: React.FC = () => {
           <h2 className="section-title">What They Say</h2>
           <div className="title-decoration"></div>
         </div>
-        <div className="testimonial-slider">
-          {testimonials.map((item, idx) => {
+
+        <div className="testimonials-grid">
+          {testimonials.map((item) => {
             const isVideo = (item as any).type === 'video'
             const platform = (item as any).platform as 'youtube' | 'instagram' | undefined
             const videoUrl = (item as any).videoUrl as string | undefined
+            const ytEmbed = isVideo && videoUrl && platform === 'youtube' ? getYouTubeEmbedUrl(videoUrl) : ''
 
             return (
-              <div className={`testimonial-slide${idx === index ? ' active' : ''}`} key={(item as any).id || item.author}>
-                {isVideo && videoUrl && platform === 'youtube' && (
-                  <div style={{ width: '100%', maxWidth: '560px', margin: '0 auto 1rem', aspectRatio: '16/9' }}>
+              <div
+                className={`testimonial-card${isVideo ? ' testimonial-card--video' : ''}`}
+                key={(item as any).id || item.author}
+              >
+                {isVideo && videoUrl && ytEmbed && (
+                  <div className="testimonial-video-wrap">
                     <iframe
-                      src={getYouTubeEmbedUrl(videoUrl)}
+                      src={ytEmbed}
                       width="100%"
                       height="100%"
-                      style={{ border: 'none', borderRadius: '8px' }}
+                      style={{ border: 'none', borderRadius: '10px' }}
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
                       title={item.author}
                     />
                   </div>
                 )}
-                {isVideo && videoUrl && platform === 'instagram' && (
+                {isVideo && videoUrl && platform === 'instagram' && !ytEmbed && (
                   <div style={{ marginBottom: '1rem' }}>
                     <InstagramTestimonialEmbed url={videoUrl} />
                   </div>
                 )}
-                {item.quote && <p className="quote">{item.quote}</p>}
-                <p className="author">{item.author}</p>
+                {item.quote && (
+                  <p className="quote" style={{ textAlign: 'center' }}>{item.quote}</p>
+                )}
+                <p className="author" style={{ textAlign: 'center' }}>{item.author}</p>
               </div>
             )
           })}
-        </div>
-        <div className="slider-controls">
-          <button className="slider-prev" onClick={prev} aria-label="Previous testimonial">
-            ‹
-          </button>
-          <button className="slider-next" onClick={next} aria-label="Next testimonial">
-            ›
-          </button>
         </div>
       </div>
     </section>
@@ -118,4 +104,3 @@ export const Testimonials: React.FC = () => {
 }
 
 export default Testimonials
-

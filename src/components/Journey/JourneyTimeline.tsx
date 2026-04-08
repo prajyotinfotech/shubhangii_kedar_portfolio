@@ -67,8 +67,16 @@ export default function JourneyTimeline() {
                     }}>
                         ← Back to Home
                     </Link>
-                    <h1 className="journey-title">The Tracklist</h1>
-                    <p className="journey-subtitle">Milestones that defined the sound</p>
+                    {((content as any)?.journeyPage?.title ?? 'The Tracklist') && (
+                        <h1 className="journey-title">
+                            {(content as any)?.journeyPage?.title || 'The Tracklist'}
+                        </h1>
+                    )}
+                    {(content as any)?.journeyPage?.subtitle !== '' && (
+                        <p className="journey-subtitle">
+                            {(content as any)?.journeyPage?.subtitle ?? 'Milestones that defined the sound'}
+                        </p>
+                    )}
                 </div>
 
                 <div className="timeline">

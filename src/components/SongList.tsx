@@ -5,6 +5,7 @@ export type SongItem = {
   title: string
   artist?: string
   thumbnail?: string
+  thumbnailPosition?: { x: number; y: number }
   spotifyUrl?: string
   youtubeUrl?: string
   instaUrl?: string
@@ -44,7 +45,16 @@ export const SongList: React.FC = () => {
             <div className="songlist-row" key={song.id || idx}>
               <span className="songlist-index">{idx + 1}</span>
               {song.thumbnail ? (
-                <img className="songlist-thumb" src={song.thumbnail} alt={song.title} />
+                <img
+                  className="songlist-thumb"
+                  src={song.thumbnail}
+                  alt={song.title}
+                  style={{
+                    objectPosition: song.thumbnailPosition
+                      ? `${song.thumbnailPosition.x}% ${song.thumbnailPosition.y}%`
+                      : 'center center'
+                  }}
+                />
               ) : (
                 <div className="songlist-thumb songlist-thumb--placeholder">♪</div>
               )}

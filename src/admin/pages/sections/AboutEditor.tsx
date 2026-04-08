@@ -23,6 +23,8 @@ interface AboutContent {
     show: {
         title: string;
         description: string;
+        image?: string;
+        imageAspect?: string;
     };
     performanceBanner: {
         cities: string;
@@ -42,7 +44,7 @@ export default function AboutEditor() {
         image: '',
         imageAspect: '4/5',
         stats: [],
-        show: { title: '', description: '' },
+        show: { title: '', description: '', image: '', imageAspect: '4/3' },
         performanceBanner: { cities: '', footfall: '', fontSize: '1.4rem', fontFamily: '' },
         metrics: [],
         achievements: []
@@ -113,6 +115,21 @@ export default function AboutEditor() {
             const result = await uploadImage(file);
             setContent(prev => ({ ...prev, image: result.data.url }));
             setMessage({ type: 'success', text: 'Image uploaded!' });
+        } catch {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleShowImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            setContent(prev => ({ ...prev, show: { ...prev.show, image: result.data.url } }));
+            setMessage({ type: 'success', text: 'Show image uploaded!' });
         } catch {
             setMessage({ type: 'error', text: 'Failed to upload image' });
         } finally {
@@ -302,7 +319,66 @@ export default function AboutEditor() {
                     </div>
                     <div className="editor-field">
                         <label>Show Description</label>
-                        <textarea name="show.description" value={content.show.description} onChange={handleChange} rows={3} />
+                        <textarea name="show.description" value={content.show.description} onChange={handleChange} rows={4} />
+                    </div>
+                    <div className="editor-field">
+                        <label>Show Image (optional — adds image beside text)</label>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                            <input type="file" accept="image/*" onChange={handleShowImageUpload} disabled={saving} style={{ width: 'auto' }} />
+                            <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                            <input
+                                type="text"
+                                value={content.show.image || ''}
+                                onChange={e => setContent(prev => ({ ...prev, show: { ...prev.show, image: e.target.value } }))}
+                                placeholder="Image URL"
+                                style={{ flex: 1, minWidth: '200px' }}
+                            />
+                        </div>
+                        {content.show.image && (
+                            <div style={{ marginTop: '0.75rem' }}>
+                                <img src={content.show.image} alt="Preview" style={{ maxHeight: '160px', borderRadius: '8px' }} />
+                            </div>
+                        )}
+                    </div>
+                    <div className="editor-field">
+                        <label>Show Image Aspect Ratio</label>
+                        <input
+                            type="text"
+                            value={content.show.imageAspect || '4/3'}
+                            onChange={e => setContent(prev => ({ ...prev, show: { ...prev.show, imageAspect: e.target.value } }))}
+                            placeholder="e.g. 4/3 or 16/9"
+                        />
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
+                            {[
+                                { label: '1/1', title: 'Square' },
+                                { label: '4/5', title: 'Portrait' },
+                                { label: '3/4', title: 'Tall' },
+                                { label: '9/16', title: 'Story' },
+                                { label: '4/3', title: 'Landscape' },
+                                { label: '3/2', title: 'Photo' },
+                                { label: '16/9', title: 'Widescreen' },
+                                { label: '21/9', title: 'Cinematic' },
+                            ].map(preset => (
+                                <button
+                                    key={preset.label}
+                                    type="button"
+                                    title={preset.title}
+                                    onClick={() => setContent(prev => ({ ...prev, show: { ...prev.show, imageAspect: preset.label } }))}
+                                    style={{
+                                        padding: '3px 8px',
+                                        fontSize: '0.78rem',
+                                        border: (content.show.imageAspect || '4/3') === preset.label ? '2px solid #764ba2' : '1px solid #ccc',
+                                        borderRadius: '4px',
+                                        background: (content.show.imageAspect || '4/3') === preset.label ? '#f3ecff' : '#fff',
+                                        cursor: 'pointer',
+                                        fontWeight: (content.show.imageAspect || '4/3') === preset.label ? 600 : 400,
+                                        color: '#333',
+                                    }}
+                                >
+                                    {preset.label} <span style={{ fontSize: '0.68rem', color: '#888' }}>{preset.title}</span>
+                                </button>
+                            ))}
+                        </div>
                     </div>
                 </div>
 
