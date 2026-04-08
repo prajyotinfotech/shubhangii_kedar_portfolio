@@ -25,8 +25,21 @@ type ReleaseCard = {
   artists: string
   releaseDateLabel: string
   spotifyUrl?: string
+  youtubeUrl?: string
+  instaUrl?: string
+  videoUrl?: string
+  videoPlatform?: 'youtube' | 'instagram'
   imageUrl?: string
   gradient?: [string, string]
+}
+
+const getYouTubeEmbedUrl = (url: string) => {
+  try {
+    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)([^&?/]+)|youtu\.be\/([^&?/]+))/)
+    const videoId = match?.[1] || match?.[2]
+    if (videoId) return `https://www.youtube.com/embed/${videoId}`
+  } catch (e) { /* ignore */ }
+  return ''
 }
 
 const formatReleaseDate = (value?: string) => {
@@ -72,6 +85,10 @@ export const Music: React.FC = () => {
       artists: release.meta || '',
       releaseDateLabel: release.meta || '',
       spotifyUrl: (release.links || []).find((l: any) => l.label?.toLowerCase() === 'spotify')?.href,
+      youtubeUrl: (release.links || []).find((l: any) => l.label?.toLowerCase() === 'youtube')?.href || release.youtubeUrl,
+      instaUrl: (release.links || []).find((l: any) => l.label?.toLowerCase() === 'instagram')?.href || release.instaUrl,
+      videoUrl: release.videoUrl,
+      videoPlatform: release.videoPlatform,
       imageUrl: release.coverImage || undefined,
       gradient: release.gradient,
     }))
@@ -140,13 +157,13 @@ export const Music: React.FC = () => {
     []
   )
 
-  // Priority: Spotify API > CMS content > static fallback
+  // Priority: CMS content first (manual), then Spotify API, then static fallback
   const data = (
-    releases.length > 0 ? releases
+    cmsReleases.length > 0 ? cmsReleases
+    : releases.length > 0 ? releases
     : contextReleases.length > 0 ? contextReleases
-    : cmsReleases.length > 0 ? cmsReleases
     : fallbackReleases
-  ).slice(0, 4)
+  ).slice(0, 8)
 
   return (
     <section id="music" className="music">
@@ -164,37 +181,61 @@ export const Music: React.FC = () => {
           </div>
         )}
         <div className="music-grid">
-          {data.map((release) => (
-            <div className="music-card reveal-scale active" key={release.id}>
-              <div className="album-art">
-                {release.imageUrl ? (
-                  <img src={release.imageUrl} alt={release.title} />
-                ) : release.gradient ? (
-                  <AlbumArt gradient={release.gradient} />
-                ) : null}
-                {release.spotifyUrl && (
-                  <a className="play-button" href={release.spotifyUrl} target="_blank" rel="noreferrer" aria-label="Play on Spotify">
-                    <svg width="50" height="50" viewBox="0 0 50 50">
-                      <circle cx="25" cy="25" r="24" fill="rgba(255,255,255,0.9)" />
-                      <polygon points="20,15 35,25 20,35" fill="#1DB954" />
-                    </svg>
-                  </a>
-                )}
-              </div>
-              <div className="music-info">
-                <h3 className="song-title">{release.title}</h3>
-                <p className="song-meta">{release.artists}</p>
-                <p className="song-meta" style={{ opacity: 0.8 }}>Released {release.releaseDateLabel}</p>
-                {release.spotifyUrl && (
-                  <div className="music-links">
-                    <a href={release.spotifyUrl} className="music-link" target="_blank" rel="noreferrer">
-                      Open in Spotify
+          {data.map((release) => {
+            const ytEmbed = release.videoPlatform === 'youtube' && release.videoUrl
+              ? getYouTubeEmbedUrl(release.videoUrl) : ''
+            const primaryLink = release.spotifyUrl || release.youtubeUrl || release.instaUrl
+
+            return (
+              <div className="music-card reveal-scale active" key={release.id}>
+                <div className="album-art">
+                  {ytEmbed ? (
+                    <iframe
+                      src={ytEmbed}
+                      width="100%"
+                      height="100%"
+                      style={{ border: 'none', display: 'block', aspectRatio: '16/9' }}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      title={release.title}
+                    />
+                  ) : release.videoPlatform === 'instagram' && release.videoUrl ? (
+                    <a href={release.videoUrl} target="_blank" rel="noreferrer"
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,#E1306C,#F77737)', aspectRatio: '1/1', fontSize: '3rem' }}>
+                      📷
                     </a>
+                  ) : release.imageUrl ? (
+                    <img src={release.imageUrl} alt={release.title} />
+                  ) : release.gradient ? (
+                    <AlbumArt gradient={release.gradient} />
+                  ) : null}
+                  {primaryLink && !ytEmbed && (
+                    <a className="play-button" href={primaryLink} target="_blank" rel="noreferrer" aria-label="Play">
+                      <svg width="50" height="50" viewBox="0 0 50 50">
+                        <circle cx="25" cy="25" r="24" fill="rgba(255,255,255,0.9)" />
+                        <polygon points="20,15 35,25 20,35" fill="#1DB954" />
+                      </svg>
+                    </a>
+                  )}
+                </div>
+                <div className="music-info">
+                  <h3 className="song-title">{release.title}</h3>
+                  {release.artists && <p className="song-meta">{release.artists}</p>}
+                  <div className="music-links" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '8px' }}>
+                    {release.spotifyUrl && (
+                      <a href={release.spotifyUrl} className="music-link" target="_blank" rel="noreferrer">Spotify</a>
+                    )}
+                    {release.youtubeUrl && (
+                      <a href={release.youtubeUrl} className="music-link" target="_blank" rel="noreferrer">YouTube</a>
+                    )}
+                    {release.instaUrl && (
+                      <a href={release.instaUrl} className="music-link" target="_blank" rel="noreferrer">Instagram</a>
+                    )}
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
     </section>

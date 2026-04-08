@@ -18,6 +18,10 @@ interface MusicRelease {
     gradient: [string, string];
     coverImage: string;
     links: MusicLink[];
+    videoUrl?: string;
+    videoPlatform?: 'youtube' | 'instagram';
+    youtubeUrl?: string;
+    instaUrl?: string;
 }
 
 const emptyRelease: Omit<MusicRelease, 'id'> = {
@@ -25,7 +29,11 @@ const emptyRelease: Omit<MusicRelease, 'id'> = {
     meta: '',
     gradient: ['#667eea', '#764ba2'],
     coverImage: '',
-    links: []
+    links: [],
+    videoUrl: '',
+    videoPlatform: undefined,
+    youtubeUrl: '',
+    instaUrl: '',
 };
 
 export default function MusicManager() {
@@ -146,6 +154,62 @@ export default function MusicManager() {
                                 onChange={(e) => setNewRelease({ ...newRelease, coverImage: e.target.value })}
                                 placeholder="https://..."
                             />
+                        </div>
+                        <div className="editor-row">
+                            <div className="editor-field">
+                                <label>Embed Video Platform (optional)</label>
+                                <select
+                                    value={newRelease.videoPlatform || ''}
+                                    onChange={(e) => setNewRelease({ ...newRelease, videoPlatform: e.target.value as any || undefined })}
+                                >
+                                    <option value="">None (show image)</option>
+                                    <option value="youtube">YouTube embed</option>
+                                    <option value="instagram">Instagram link</option>
+                                </select>
+                            </div>
+                            {newRelease.videoPlatform && (
+                                <div className="editor-field">
+                                    <label>Video URL</label>
+                                    <input
+                                        type="text"
+                                        value={newRelease.videoUrl || ''}
+                                        onChange={(e) => setNewRelease({ ...newRelease, videoUrl: e.target.value })}
+                                        placeholder={newRelease.videoPlatform === 'youtube' ? 'https://youtube.com/watch?v=...' : 'https://instagram.com/reel/...'}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        <div className="editor-row">
+                            <div className="editor-field">
+                                <label>Spotify Link</label>
+                                <input
+                                    type="text"
+                                    value={newRelease.links.find(l => l.label === 'Spotify')?.href || ''}
+                                    onChange={(e) => {
+                                        const others = newRelease.links.filter(l => l.label !== 'Spotify');
+                                        setNewRelease({ ...newRelease, links: e.target.value ? [...others, { label: 'Spotify', href: e.target.value }] : others });
+                                    }}
+                                    placeholder="https://open.spotify.com/..."
+                                />
+                            </div>
+                            <div className="editor-field">
+                                <label>YouTube Link</label>
+                                <input
+                                    type="text"
+                                    value={newRelease.youtubeUrl || ''}
+                                    onChange={(e) => setNewRelease({ ...newRelease, youtubeUrl: e.target.value })}
+                                    placeholder="https://youtube.com/watch?v=..."
+                                />
+                            </div>
+                            <div className="editor-field">
+                                <label>Instagram Link</label>
+                                <input
+                                    type="text"
+                                    value={newRelease.instaUrl || ''}
+                                    onChange={(e) => setNewRelease({ ...newRelease, instaUrl: e.target.value })}
+                                    placeholder="https://instagram.com/p/..."
+                                />
+                            </div>
                         </div>
                         <div className="editor-row">
                             <div className="editor-field">

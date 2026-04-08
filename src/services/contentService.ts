@@ -95,6 +95,15 @@ export interface ContentData {
         platform?: 'youtube' | 'instagram';
         videoUrl?: string;
     }[];
+    songList?: {
+        id: string;
+        title: string;
+        artist?: string;
+        thumbnail?: string;
+        spotifyUrl?: string;
+        youtubeUrl?: string;
+        instaUrl?: string;
+    }[];
     contact: {
         email: string;
         phone: string;
