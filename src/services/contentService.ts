@@ -63,6 +63,11 @@ export interface ContentData {
         gradient: [string, string];
         coverImage: string;
         links: { label: string; href: string }[];
+        videoUrl?: string;
+        videoPlatform?: 'youtube' | 'instagram';
+        youtubeUrl?: string;
+        instaUrl?: string;
+        aspect?: string;
     }[];
     events: {
         id: string;
