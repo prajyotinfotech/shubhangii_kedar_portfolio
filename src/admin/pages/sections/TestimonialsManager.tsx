@@ -2,7 +2,7 @@
  * Testimonials Manager
  */
 import { useState, useEffect } from 'react';
-import { fetchSection, addItem, deleteItem } from '../../api/client';
+import { fetchSection, addItem, deleteItem, updateSection } from '../../api/client';
 import '../styles/editor.css';
 
 interface Testimonial {
@@ -14,23 +14,80 @@ interface Testimonial {
     videoUrl?: string;
 }
 
+const emptyItem: Omit<Testimonial, 'id'> = {
+    quote: '',
+    author: '',
+    type: 'text',
+    platform: 'youtube',
+    videoUrl: '',
+};
+
+const getYouTubeEmbedUrl = (url: string) => {
+    try {
+        const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)([^&?/]+)|youtu\.be\/([^&?/]+))/)
+        const videoId = match?.[1] || match?.[2]
+        if (videoId) return `https://www.youtube.com/embed/${videoId}`
+    } catch { /* ignore */ }
+    return ''
+}
+
+const renderPreview = (item: Omit<Testimonial, 'id'>) => {
+    const ytEmbed = item.type === 'video' && item.platform === 'youtube' && item.videoUrl
+        ? getYouTubeEmbedUrl(item.videoUrl) : ''
+
+    return (
+        <div style={{ background: '#0d0d0d', borderRadius: '12px', padding: '1.25rem', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 16px' }}>Site Preview</p>
+            <div style={{ textAlign: 'center', padding: '1rem' }}>
+                {item.type === 'video' && item.videoUrl && ytEmbed && (
+                    <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto 1rem', aspectRatio: '16/9' }}>
+                        <iframe
+                            src={ytEmbed}
+                            width="100%"
+                            height="100%"
+                            style={{ border: 'none', borderRadius: '8px' }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen
+                            title="Preview"
+                        />
+                    </div>
+                )}
+                {item.type === 'video' && item.platform === 'instagram' && item.videoUrl && !ytEmbed && (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg,#E1306C,#F77737)', borderRadius: '10px', padding: '12px 20px', marginBottom: '1rem', color: '#fff', fontSize: '0.9rem' }}>
+                        <span style={{ fontSize: '1.4rem' }}>📷</span>
+                        <span>Instagram video</span>
+                    </div>
+                )}
+                {item.quote ? (
+                    <p style={{ color: 'rgba(255,255,255,0.9)', fontStyle: 'italic', fontSize: '1.05rem', lineHeight: 1.6, margin: '1rem 0', maxWidth: '560px', marginInline: 'auto' }}>
+                        "{item.quote}"
+                    </p>
+                ) : (
+                    item.type !== 'video' && <p style={{ color: '#444', fontStyle: 'italic', margin: '1rem 0' }}>Quote will appear here...</p>
+                )}
+                <p style={{ color: '#888', fontSize: '0.9rem', margin: 0 }}>— {item.author || <span style={{ color: '#444' }}>Author</span>}</p>
+            </div>
+        </div>
+    );
+};
+
 export default function TestimonialsManager() {
     const [items, setItems] = useState<Testimonial[]>([]);
     const [isAdding, setIsAdding] = useState(false);
-    const [newItem, setNewItem] = useState<Omit<Testimonial, 'id'>>({ quote: '', author: '', type: 'text', platform: 'youtube', videoUrl: '' });
+    const [newItem, setNewItem] = useState<Omit<Testimonial, 'id'>>(emptyItem);
+    const [editingItem, setEditingItem] = useState<Testimonial | null>(null);
+    const [showPreview, setShowPreview] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
 
-    useEffect(() => {
-        loadItems();
-    }, []);
+    useEffect(() => { loadItems(); }, []);
 
     const loadItems = async () => {
         try {
             const data = await fetchSection('testimonials');
             setItems(data || []);
-        } catch (err) {
+        } catch {
             setMessage({ type: 'error', text: 'Failed to load testimonials' });
         } finally {
             setLoading(false);
@@ -38,28 +95,36 @@ export default function TestimonialsManager() {
     };
 
     const handleAdd = async () => {
-        if (!newItem.author) {
-            setMessage({ type: 'error', text: 'Please fill in the author field' });
-            return;
-        }
-        if (newItem.type === 'video' && !newItem.videoUrl) {
-            setMessage({ type: 'error', text: 'Please enter a video URL' });
-            return;
-        }
-        if (newItem.type !== 'video' && !newItem.quote) {
-            setMessage({ type: 'error', text: 'Please fill in the quote field' });
-            return;
-        }
-
+        if (!newItem.author) { setMessage({ type: 'error', text: 'Author is required' }); return; }
+        if (newItem.type === 'video' && !newItem.videoUrl) { setMessage({ type: 'error', text: 'Video URL is required' }); return; }
+        if (newItem.type !== 'video' && !newItem.quote) { setMessage({ type: 'error', text: 'Quote is required' }); return; }
         setSaving(true);
         try {
             await addItem('testimonials', newItem);
-            setNewItem({ quote: '', author: '' });
+            setNewItem(emptyItem);
             setIsAdding(false);
+            setShowPreview(false);
             await loadItems();
             setMessage({ type: 'success', text: 'Testimonial added!' });
-        } catch (err) {
+        } catch {
             setMessage({ type: 'error', text: 'Failed to add testimonial' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const handleUpdate = async () => {
+        if (!editingItem) return;
+        setSaving(true);
+        try {
+            const updated = items.map(i => i.id === editingItem.id ? editingItem : i);
+            await updateSection('testimonials', updated);
+            setEditingItem(null);
+            setShowPreview(false);
+            await loadItems();
+            setMessage({ type: 'success', text: 'Testimonial updated!' });
+        } catch {
+            setMessage({ type: 'error', text: 'Failed to update testimonial' });
         } finally {
             setSaving(false);
         }
@@ -71,19 +136,68 @@ export default function TestimonialsManager() {
             await deleteItem('testimonials', id);
             await loadItems();
             setMessage({ type: 'success', text: 'Testimonial deleted!' });
-        } catch (err) {
+        } catch {
             setMessage({ type: 'error', text: 'Failed to delete testimonial' });
         }
     };
 
-    if (loading) {
-        return (
-            <div className="editor-loading">
-                <div className="editor-spinner"></div>
-                <p>Loading...</p>
+    const handleMoveUp = async (index: number) => {
+        if (index === 0) return;
+        const reordered = [...items];
+        [reordered[index - 1], reordered[index]] = [reordered[index], reordered[index - 1]];
+        setItems(reordered);
+        try { await updateSection('testimonials', reordered); }
+        catch { await loadItems(); }
+    };
+
+    const handleMoveDown = async (index: number) => {
+        if (index === items.length - 1) return;
+        const reordered = [...items];
+        [reordered[index], reordered[index + 1]] = [reordered[index + 1], reordered[index]];
+        setItems(reordered);
+        try { await updateSection('testimonials', reordered); }
+        catch { await loadItems(); }
+    };
+
+    const renderForm = (item: Omit<Testimonial, 'id'>, onChange: (item: Omit<Testimonial, 'id'>) => void) => (
+        <div className="editor-form">
+            <div className="editor-field">
+                <label>Type</label>
+                <select value={item.type || 'text'} onChange={e => onChange({ ...item, type: e.target.value as 'text' | 'video' })}>
+                    <option value="text">Text Review</option>
+                    <option value="video">Video Review (YouTube / Instagram)</option>
+                </select>
             </div>
-        );
-    }
+            {item.type === 'video' && (
+                <>
+                    <div className="editor-field">
+                        <label>Platform</label>
+                        <select value={item.platform || 'youtube'} onChange={e => onChange({ ...item, platform: e.target.value as 'youtube' | 'instagram' })}>
+                            <option value="youtube">YouTube</option>
+                            <option value="instagram">Instagram</option>
+                        </select>
+                    </div>
+                    <div className="editor-field">
+                        <label>Video URL *</label>
+                        <input type="text" value={item.videoUrl || ''} onChange={e => onChange({ ...item, videoUrl: e.target.value })}
+                            placeholder={item.platform === 'instagram' ? 'https://www.instagram.com/reel/...' : 'https://www.youtube.com/watch?v=...'} />
+                    </div>
+                </>
+            )}
+            <div className="editor-field">
+                <label>{item.type === 'video' ? 'Caption (optional)' : 'Quote *'}</label>
+                <textarea value={item.quote} onChange={e => onChange({ ...item, quote: e.target.value })}
+                    placeholder={item.type === 'video' ? 'Optional caption shown below the video' : '"A voice that lingers..."'}
+                    rows={3} />
+            </div>
+            <div className="editor-field">
+                <label>Author *</label>
+                <input type="text" value={item.author} onChange={e => onChange({ ...item, author: e.target.value })} placeholder="SoundWave Magazine" />
+            </div>
+        </div>
+    );
+
+    if (loading) return <div className="editor-loading"><div className="editor-spinner"></div><p>Loading...</p></div>;
 
     return (
         <div className="editor-page">
@@ -92,126 +206,70 @@ export default function TestimonialsManager() {
                     <h1>Testimonials</h1>
                     <p>Manage reviews and quotes</p>
                 </div>
-                {!isAdding && (
-                    <button
-                        className="editor-button editor-button--primary"
-                        onClick={() => setIsAdding(true)}
-                    >
-                        + Add Testimonial
-                    </button>
+                {!isAdding && !editingItem && (
+                    <button className="editor-button editor-button--primary" onClick={() => setIsAdding(true)}>+ Add Testimonial</button>
                 )}
             </div>
 
-            {message.text && (
-                <div className={`editor-message editor-message--${message.type}`}>
-                    {message.text}
-                </div>
-            )}
+            {message.text && <div className={`editor-message editor-message--${message.type}`}>{message.text}</div>}
 
             {isAdding && (
                 <div className="editor-card">
                     <h3>Add Testimonial</h3>
-                    <div className="editor-form">
-                        <div className="editor-field">
-                            <label>Type</label>
-                            <select
-                                value={newItem.type || 'text'}
-                                onChange={(e) => setNewItem({ ...newItem, type: e.target.value as 'text' | 'video' })}
-                            >
-                                <option value="text">Text Review</option>
-                                <option value="video">Video Review (YouTube / Instagram)</option>
-                            </select>
-                        </div>
-                        {newItem.type === 'video' && (
-                            <>
-                                <div className="editor-field">
-                                    <label>Platform</label>
-                                    <select
-                                        value={newItem.platform || 'youtube'}
-                                        onChange={(e) => setNewItem({ ...newItem, platform: e.target.value as 'youtube' | 'instagram' })}
-                                    >
-                                        <option value="youtube">YouTube</option>
-                                        <option value="instagram">Instagram</option>
-                                    </select>
-                                </div>
-                                <div className="editor-field">
-                                    <label>Video URL *</label>
-                                    <input
-                                        type="text"
-                                        value={newItem.videoUrl || ''}
-                                        onChange={(e) => setNewItem({ ...newItem, videoUrl: e.target.value })}
-                                        placeholder={newItem.platform === 'youtube' ? 'https://www.youtube.com/watch?v=...' : 'https://www.instagram.com/reel/...'}
-                                    />
-                                </div>
-                            </>
-                        )}
-                        <div className="editor-field">
-                            <label>{newItem.type === 'video' ? 'Caption (optional)' : 'Quote *'}</label>
-                            <textarea
-                                value={newItem.quote}
-                                onChange={(e) => setNewItem({ ...newItem, quote: e.target.value })}
-                                placeholder={newItem.type === 'video' ? 'Optional caption shown below the video' : '"A voice that lingers..."'}
-                                rows={3}
-                            />
-                        </div>
-                        <div className="editor-field">
-                            <label>Author *</label>
-                            <input
-                                type="text"
-                                value={newItem.author}
-                                onChange={(e) => setNewItem({ ...newItem, author: e.target.value })}
-                                placeholder="SoundWave Magazine"
-                            />
-                        </div>
-                        <div className="editor-actions">
-                            <button
-                                className="editor-button editor-button--primary"
-                                onClick={handleAdd}
-                                disabled={saving}
-                            >
-                                {saving ? 'Adding...' : 'Add Testimonial'}
-                            </button>
-                            <button
-                                className="editor-button"
-                                onClick={() => setIsAdding(false)}
-                            >
-                                Cancel
-                            </button>
-                        </div>
+                    {renderForm(newItem, setNewItem)}
+                    {showPreview && renderPreview(newItem)}
+                    <div className="editor-actions">
+                        <button className="editor-button editor-button--primary" onClick={handleAdd} disabled={saving}>{saving ? 'Adding...' : 'Add Testimonial'}</button>
+                        <button className="editor-button" onClick={() => { setIsAdding(false); setNewItem(emptyItem); setShowPreview(false); }}>Cancel</button>
+                        <button className="editor-button" onClick={() => setShowPreview(p => !p)} style={{ marginLeft: 'auto' }}>
+                            {showPreview ? 'Hide Preview' : '👁 Preview'}
+                        </button>
                     </div>
                 </div>
             )}
 
             <div className="editor-list">
                 {items.length === 0 ? (
-                    <div className="editor-empty">
-                        <p>No testimonials yet.</p>
-                    </div>
+                    <div className="editor-empty"><p>No testimonials yet.</p></div>
                 ) : (
-                    items.map((item) => (
+                    items.map((item, index) => (
                         <div key={item.id} className="editor-list-item">
-                            <div className="editor-list-item__content">
-                                <div className="editor-list-item__info">
-                                    {item.type === 'video' && (
-                                        <p style={{ fontSize: '0.78rem', color: item.platform === 'youtube' ? '#c00' : '#c13584', fontWeight: 600, marginBottom: '4px' }}>
-                                            {item.platform === 'youtube' ? '▶ YouTube' : '📷 Instagram'} Video
-                                        </p>
-                                    )}
-                                    {item.quote && <h4 style={{ fontStyle: 'italic', fontWeight: 400 }}>{item.quote}</h4>}
-                                    {item.type === 'video' && item.videoUrl && (
-                                        <p style={{ fontSize: '0.8rem', color: '#888', wordBreak: 'break-all' }}>{item.videoUrl}</p>
-                                    )}
-                                    <p>— {item.author}</p>
+                            {editingItem?.id === item.id ? (
+                                <div style={{ width: '100%' }}>
+                                    {renderForm(editingItem, (updated) => setEditingItem({ ...updated, id: item.id }))}
+                                    {showPreview && renderPreview(editingItem)}
+                                    <div className="editor-actions" style={{ marginTop: '1rem' }}>
+                                        <button className="editor-button editor-button--primary" onClick={handleUpdate} disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
+                                        <button className="editor-button" onClick={() => { setEditingItem(null); setShowPreview(false); }}>Cancel</button>
+                                        <button className="editor-button" onClick={() => setShowPreview(p => !p)} style={{ marginLeft: 'auto' }}>
+                                            {showPreview ? 'Hide Preview' : '👁 Preview'}
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="editor-list-item__actions">
-                                <button
-                                    className="editor-button editor-button--small editor-button--danger"
-                                    onClick={() => handleDelete(item.id)}
-                                >
-                                    Delete
-                                </button>
-                            </div>
+                            ) : (
+                                <>
+                                    <div className="editor-list-item__content">
+                                        <div className="editor-list-item__info">
+                                            {item.type === 'video' && (
+                                                <p style={{ fontSize: '0.78rem', color: item.platform === 'youtube' ? '#c00' : '#c13584', fontWeight: 600, marginBottom: '4px' }}>
+                                                    {item.platform === 'youtube' ? '▶ YouTube' : '📷 Instagram'} Video
+                                                </p>
+                                            )}
+                                            {item.quote && <h4 style={{ fontStyle: 'italic', fontWeight: 400 }}>{item.quote}</h4>}
+                                            {item.type === 'video' && item.videoUrl && (
+                                                <p style={{ fontSize: '0.8rem', color: '#888', wordBreak: 'break-all' }}>{item.videoUrl}</p>
+                                            )}
+                                            <p>— {item.author}</p>
+                                        </div>
+                                    </div>
+                                    <div className="editor-list-item__actions">
+                                        <button className="editor-button editor-button--small" onClick={() => handleMoveUp(index)} disabled={index === 0} title="Move up">↑</button>
+                                        <button className="editor-button editor-button--small" onClick={() => handleMoveDown(index)} disabled={index === items.length - 1} title="Move down">↓</button>
+                                        <button className="editor-button editor-button--small" onClick={() => { setEditingItem({ ...item }); setShowPreview(false); }}>Edit</button>
+                                        <button className="editor-button editor-button--small editor-button--danger" onClick={() => handleDelete(item.id)}>Delete</button>
+                                    </div>
+                                </>
+                            )}
                         </div>
                     ))
                 )}

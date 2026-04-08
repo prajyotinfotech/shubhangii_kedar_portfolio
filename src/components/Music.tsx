@@ -31,6 +31,7 @@ type ReleaseCard = {
   videoPlatform?: 'youtube' | 'instagram'
   imageUrl?: string
   gradient?: [string, string]
+  aspect?: string
 }
 
 const getYouTubeEmbedUrl = (url: string) => {
@@ -91,6 +92,7 @@ export const Music: React.FC = () => {
       videoPlatform: release.videoPlatform,
       imageUrl: release.coverImage || undefined,
       gradient: release.gradient,
+      aspect: release.aspect,
     }))
   }, [content?.musicReleases])
 
@@ -188,7 +190,7 @@ export const Music: React.FC = () => {
 
             return (
               <div className="music-card reveal-scale active" key={release.id}>
-                <div className="album-art">
+                <div className="album-art" style={release.aspect ? { aspectRatio: release.aspect } : undefined}>
                   {ytEmbed ? (
                     <iframe
                       src={ytEmbed}

@@ -31,11 +31,54 @@ const emptyItem: Omit<GalleryItem, 'id'> = {
     type: 'image'
 };
 
+const getYouTubeEmbedUrl = (url: string) => {
+    try {
+        const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)([^&?/]+)|youtu\.be\/([^&?/]+))/)
+        const videoId = match?.[1] || match?.[2]
+        if (videoId) return `https://www.youtube.com/embed/${videoId}`
+    } catch { /* ignore */ }
+    return ''
+}
+
+const renderGalleryPreview = (item: Partial<GalleryItem>) => {
+    const aspect = item.aspect || '1/1'
+    const ytEmbed = item.type === 'video' && item.platform === 'youtube' && item.videoUrl
+        ? getYouTubeEmbedUrl(item.videoUrl) : ''
+
+    return (
+        <div style={{ background: '#0d0d0d', borderRadius: '12px', padding: '1.25rem', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.06)' }}>
+            <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 16px' }}>Site Preview</p>
+            <div style={{ maxWidth: '260px', margin: '0 auto', borderRadius: '12px', overflow: 'hidden', position: 'relative' }}>
+                {ytEmbed ? (
+                    <div style={{ aspectRatio: aspect }}>
+                        <iframe src={ytEmbed} width="100%" height="100%"
+                            style={{ border: 'none', display: 'block' }}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowFullScreen title={item.title || 'Preview'} />
+                    </div>
+                ) : item.type === 'video' && item.platform === 'instagram' ? (
+                    <div style={{ aspectRatio: aspect, background: 'linear-gradient(135deg,#E1306C,#F77737)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '3rem', color: '#fff' }}>📷</div>
+                ) : item.image ? (
+                    <img src={item.image} alt={item.title || ''} style={{ width: '100%', aspectRatio: aspect, objectFit: 'cover', display: 'block' }} />
+                ) : (
+                    <div style={{ aspectRatio: aspect, background: `linear-gradient(135deg, ${item.gradient?.[0] || '#667eea'}, ${item.gradient?.[1] || '#764ba2'})` }} />
+                )}
+                {/* overlay */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'linear-gradient(transparent, rgba(0,0,0,0.85))', padding: '1rem 0.75rem 0.75rem' }}>
+                    <div style={{ color: '#fff', fontWeight: 600, fontSize: '0.9rem' }}>{item.title || <span style={{ color: '#666' }}>Title</span>}</div>
+                    {item.description && <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.75rem', marginTop: '2px' }}>{item.description}</div>}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export default function GalleryManager() {
     const [items, setItems] = useState<GalleryItem[]>([]);
     const [editingItem, setEditingItem] = useState<GalleryItem | null>(null);
     const [isAdding, setIsAdding] = useState(false);
     const [newItem, setNewItem] = useState(emptyItem);
+    const [showPreview, setShowPreview] = useState(false);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
@@ -425,19 +468,16 @@ export default function GalleryManager() {
                 <div className="editor-card">
                     <h3>Add New Gallery Item</h3>
                     {renderForm(newItem, setNewItem)}
+                    {showPreview && renderGalleryPreview(newItem)}
                     <div className="editor-actions" style={{ marginTop: '1rem' }}>
-                        <button
-                            className="editor-button editor-button--primary"
-                            onClick={handleAdd}
-                            disabled={saving}
-                        >
+                        <button className="editor-button editor-button--primary" onClick={handleAdd} disabled={saving}>
                             {saving ? 'Adding...' : 'Add to Gallery'}
                         </button>
-                        <button
-                            className="editor-button"
-                            onClick={() => { setIsAdding(false); setNewItem(emptyItem); }}
-                        >
+                        <button className="editor-button" onClick={() => { setIsAdding(false); setNewItem(emptyItem); setShowPreview(false); }}>
                             Cancel
+                        </button>
+                        <button className="editor-button" onClick={() => setShowPreview(p => !p)} style={{ marginLeft: 'auto' }}>
+                            {showPreview ? 'Hide Preview' : '👁 Preview'}
                         </button>
                     </div>
                 </div>
@@ -454,19 +494,16 @@ export default function GalleryManager() {
                             {editingItem?.id === item.id ? (
                                 <div style={{ width: '100%' }}>
                                     {renderForm(editingItem, setEditingItem as any)}
+                                    {showPreview && renderGalleryPreview(editingItem)}
                                     <div className="editor-actions" style={{ marginTop: '1rem' }}>
-                                        <button
-                                            className="editor-button editor-button--primary"
-                                            onClick={handleUpdate}
-                                            disabled={saving}
-                                        >
+                                        <button className="editor-button editor-button--primary" onClick={handleUpdate} disabled={saving}>
                                             {saving ? 'Saving...' : 'Save'}
                                         </button>
-                                        <button
-                                            className="editor-button"
-                                            onClick={() => setEditingItem(null)}
-                                        >
+                                        <button className="editor-button" onClick={() => { setEditingItem(null); setShowPreview(false); }}>
                                             Cancel
+                                        </button>
+                                        <button className="editor-button" onClick={() => setShowPreview(p => !p)} style={{ marginLeft: 'auto' }}>
+                                            {showPreview ? 'Hide Preview' : '👁 Preview'}
                                         </button>
                                     </div>
                                 </div>
