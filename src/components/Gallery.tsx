@@ -284,7 +284,7 @@ export const Gallery: React.FC = () => {
     return (
       <div
         className="reveal-scale gallery-item"
-        style={{ ['--delay' as any]: `${(globalOffset + index) * 0.1}s`, position: 'relative', aspectRatio: resolveAspect(item.aspect) }}
+        style={{ ['--delay' as any]: `${(globalOffset + index) * 0.1}s`, position: 'relative', aspectRatio: item.type === 'video' ? resolveAspect(item.aspect || '16/9') : resolveAspect(item.aspect) }}
         key={`${item.alt}-${globalOffset + index}`}
       >
         {itemContent}

@@ -43,15 +43,8 @@ export const Playlist: React.FC = () => {
     )
   }
 
-  if (error) {
-    return (
-      <section id="playlist" className="playlist">
-        <div className="container">
-          <div className="error">{error}</div>
-        </div>
-      </section>
-    )
-  }
+  // Silently hide the playlist section on Spotify API errors
+  if (error) return null
 
   const coverList = [coverA, coverB, coverC]
   const activeTrack = topTracks[currentIndex] ?? topTracks[0]
