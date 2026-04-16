@@ -312,7 +312,7 @@ export const Gallery: React.FC = () => {
         {videoItems.length > 0 && (
           <>
             <h3 className="gallery-sub-title">Videos</h3>
-            <div className="gallery-grid">
+            <div className="gallery-grid gallery-grid--videos">
               {videoItems.map((item, index) => renderItem(item, index, photoItems.length))}
             </div>
           </>

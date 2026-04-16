@@ -25,6 +25,7 @@ interface AboutContent {
         description: string;
         image?: string;
         imageAspect?: string;
+        layout?: 'side' | 'stacked';
     };
     performanceBanner: {
         cities: string;
@@ -44,7 +45,7 @@ export default function AboutEditor() {
         image: '',
         imageAspect: '4/5',
         stats: [],
-        show: { title: '', description: '', image: '', imageAspect: '4/3' },
+        show: { title: '', description: '', image: '', imageAspect: '4/3', layout: 'side' },
         performanceBanner: { cities: '', footfall: '', fontSize: '1.4rem', fontFamily: '' },
         metrics: [],
         achievements: []
@@ -320,6 +321,47 @@ export default function AboutEditor() {
                     <div className="editor-field">
                         <label>Show Description</label>
                         <textarea name="show.description" value={content.show.description} onChange={handleChange} rows={4} />
+                    </div>
+                    <div className="editor-field">
+                        <label>Layout</label>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                            {[
+                                { value: 'side', label: 'Side by side', hint: 'Image beside text (stacks on mobile)' },
+                                { value: 'stacked', label: 'Landscape on top', hint: 'Landscape image above, text below' },
+                            ].map(opt => {
+                                const isActive = (content.show.layout || 'side') === opt.value;
+                                return (
+                                    <button
+                                        key={opt.value}
+                                        type="button"
+                                        title={opt.hint}
+                                        onClick={() => setContent(prev => ({
+                                            ...prev,
+                                            show: {
+                                                ...prev.show,
+                                                layout: opt.value as 'side' | 'stacked',
+                                                imageAspect: opt.value === 'stacked' && (!prev.show.imageAspect || prev.show.imageAspect === '4/3') ? '16/9' : prev.show.imageAspect,
+                                            }
+                                        }))}
+                                        style={{
+                                            padding: '8px 14px',
+                                            fontSize: '0.85rem',
+                                            border: isActive ? '2px solid #764ba2' : '1px solid #ccc',
+                                            borderRadius: '6px',
+                                            background: isActive ? '#f3ecff' : '#fff',
+                                            cursor: 'pointer',
+                                            fontWeight: isActive ? 600 : 400,
+                                            color: '#333',
+                                        }}
+                                    >
+                                        {opt.label}
+                                        <span style={{ fontSize: '0.72rem', color: '#888', marginLeft: '6px' }}>
+                                            {opt.hint}
+                                        </span>
+                                    </button>
+                                );
+                            })}
+                        </div>
                     </div>
                     <div className="editor-field">
                         <label>Show Image (optional — adds image beside text)</label>

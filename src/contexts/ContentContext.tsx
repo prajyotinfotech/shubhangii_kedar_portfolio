@@ -4,7 +4,7 @@
  */
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { fetchContent, clearContentCache } from '../services/contentService';
+import { fetchContent, clearContentCache, ContentFetchError } from '../services/contentService';
 import type { ContentData } from '../services/contentService';
 
 interface ContentContextType {
@@ -13,6 +13,7 @@ interface ContentContextType {
     error: string | null;
     refetch: () => void;
     isStatic: boolean; // true if using static fallback
+    usingCachedContent: boolean; // true when live fetch failed but cached data is shown
 }
 
 const ContentContext = createContext<ContentContextType | undefined>(undefined);
@@ -22,6 +23,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [isStatic, setIsStatic] = useState(false);
+    const [usingCachedContent, setUsingCachedContent] = useState(false);
 
     const loadContent = async () => {
         setLoading(true);
@@ -31,13 +33,18 @@ export function ContentProvider({ children }: { children: ReactNode }) {
             const data = await fetchContent();
             setContent(data);
             setIsStatic(false);
+            setUsingCachedContent(false);
         } catch (err) {
             console.error('Content fetch failed:', err);
-            // "if it is not able to fetch from gist file it should show a decent massage"
-            // "it should not be rely on any local harcoded content file"
-            setError(err instanceof Error ? err.message : 'An error occurred while loading content.');
+            const message = err instanceof Error ? err.message : 'An error occurred while loading content.';
+
+            // If the service provided a persistent cache snapshot, keep the site usable.
+            if (err instanceof ContentFetchError && err.cachedContent) {
+                setContent(err.cachedContent);
+                setUsingCachedContent(true);
+            }
+            setError(message);
             setIsStatic(false);
-            // Do NOT fall back to static content.
         } finally {
             setLoading(false);
         }
@@ -53,7 +60,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <ContentContext.Provider value={{ content, loading, error, refetch, isStatic }}>
+        <ContentContext.Provider value={{ content, loading, error, refetch, isStatic, usingCachedContent }}>
             {children}
         </ContentContext.Provider>
     );

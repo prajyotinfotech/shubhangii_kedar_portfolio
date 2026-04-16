@@ -37,6 +37,11 @@ export interface ContentData {
         show: {
             title: string;
             description: string;
+            image?: string;
+            imageAspect?: string;
+            /** 'side' (default): image on left / text on right, stacked on mobile.
+             *  'stacked': landscape image full-width on top, text below (all breakpoints). */
+            layout?: 'side' | 'stacked';
         };
         metrics: {
             id: string;
@@ -242,10 +247,42 @@ export const COLOR_PRESETS = [
 ] as const;
 
 
-// Cache for content
+// In-memory cache for content
 let contentCache: ContentData | null = null;
 let cacheTimestamp: number = 0;
 const CACHE_DURATION = 60000; // 1 minute cache
+
+// Persistent cache key for resilience when Gist is unreachable
+const PERSISTENT_CACHE_KEY = 'sk-content-cache-v1';
+
+function readPersistentCache(): ContentData | null {
+    try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(PERSISTENT_CACHE_KEY) : null;
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object' && Object.keys(parsed).length > 0) {
+            return parsed as ContentData;
+        }
+    } catch { /* ignore corrupt cache */ }
+    return null;
+}
+
+function writePersistentCache(data: ContentData): void {
+    try {
+        if (typeof localStorage === 'undefined') return;
+        localStorage.setItem(PERSISTENT_CACHE_KEY, JSON.stringify(data));
+    } catch { /* quota errors — ignore */ }
+}
+
+/** Error thrown when the network fetch fails but a persistent cache exists. */
+export class ContentFetchError extends Error {
+    cachedContent: ContentData | null;
+    constructor(message: string, cachedContent: ContentData | null) {
+        super(message);
+        this.name = 'ContentFetchError';
+        this.cachedContent = cachedContent;
+    }
+}
 
 /**
  * Fetch all content from API
@@ -281,17 +318,19 @@ export async function fetchContent(): Promise<ContentData> {
 
         contentCache = data;
         cacheTimestamp = now;
+        writePersistentCache(data);
         return data;
 
     } catch (error) {
         console.error('CRITICAL: Failed to fetch content from Gist:', error);
 
-        // If we want to try the local API as a backup *only if* Gist fails, we could do it here.
-        // But the user said: "it should not be rely on any local harcoded content file"
-        // and "if it is not able to fetch from gist file it should show a decent massage".
-        // So we will throw the error to be caught by ContentContext.
-
-        throw new Error(`Unable to load content from Gist. Please check your internet connection or Gist configuration. (${error instanceof Error ? error.message : String(error)})`);
+        // Resilient fallback: if a previously successful fetch exists in
+        // localStorage, surface it so the UI can still render while flagging
+        // the content as stale. This is NOT a hardcoded static file — it's
+        // the user's own last-known-good content that was previously fetched.
+        const cached = readPersistentCache();
+        const message = `Unable to load content from Gist. Please check your internet connection or Gist configuration. (${error instanceof Error ? error.message : String(error)})`;
+        throw new ContentFetchError(message, cached);
     }
 }
 

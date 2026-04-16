@@ -14,8 +14,9 @@ export const Footer: React.FC = () => {
           <div className="footer-brand">Shubhangii Kedar</div>
           <div className="footer-links">
             <a href="#home">Home</a>
+            <a href="#music">Music</a>
+            <a href="#songlist">Discography</a>
             <a href="#events">Events</a>
-            <a href="#playlist">Playlist</a>
             <a href="#contact">Contact</a>
           </div>
           <div className="footer-social">

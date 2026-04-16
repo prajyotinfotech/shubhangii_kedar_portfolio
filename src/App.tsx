@@ -8,40 +8,22 @@ import StatsShowcase from './components/StatsShowcase'
 import TheShow from './components/TheShow'
 import Music from './components/Music'
 import Events from './components/Events'
-import Playlist from './components/Playlist'
 import Gallery from './components/Gallery'
 import Testimonials from './components/Testimonials'
 import SongList from './components/SongList'
 // import Newsletter from './components/Newsletter'
 import ContactBooking from './components/ContactBooking'
 import Footer from './components/Footer'
-import MiniPlayer from './components/MiniPlayer'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useScrollReveal } from './hooks/useScrollReveal'
-import { useScrollToExpandPlayer } from './hooks/useScrollToExpandPlayer'
-import { SpotifyProvider } from './contexts/SpotifyContext'
-import { SPOTIFY_ARTIST_ID } from './config/spotify'
-import { AuthProvider } from './contexts/AuthContext'
-import { SpotifyWebPlaybackProvider } from './contexts/SpotifyWebPlaybackContext'
 
 import { useContentContext } from './contexts/ContentContext'
 
 function App() {
-  const { content, error, refetch, loading } = useContentContext()
+  const { content, error, refetch, loading, usingCachedContent } = useContentContext()
   useScrollReveal([content])
-  useScrollToExpandPlayer()
 
   const [showJourney, setShowJourney] = useState(false)
-
-  /* Hook Order Check:
-     1. useContentContext (Context)
-     2. useScrollReveal (Effect)
-     3. useScrollToExpandPlayer (Effect)
-     4. useState (State)
-     5. useEffect (Theme)
-     6. useEffect (Scroll)
-     -- ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURN --
-  */
 
   useEffect(() => {
     if (content?.theme?.primaryColor) {
@@ -80,7 +62,8 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  if (error) {
+  // Only show the error screen if there is NO cached content to fall back to.
+  if (error && !content) {
     return (
       <div style={{
         height: '100vh',
@@ -116,7 +99,7 @@ function App() {
     )
   }
 
-  if (loading || !content) {
+  if (loading && !content) {
     return (
       <div style={{
         height: '100vh',
@@ -130,52 +113,47 @@ function App() {
     )
   }
 
+  if (!content) return null
+
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <SpotifyWebPlaybackProvider>
-          <SpotifyProvider artistId={SPOTIFY_ARTIST_ID}>
-            <div className="app">
-              <Navbar />
-              <HangingMic />
-              <main>
-                <Hero />
-                <About />
-                <StatsShowcase />
-                <TheShow />
-                <Playlist />
-                <Music />
-                <SongList />
-                <Events />
-                <Gallery />
-                <Testimonials />
-                {/* <Newsletter /> */}
-                <ContactBooking />
-              </main>
-              <Footer />
-              <MiniPlayer style={{
-                '--player-opacity': showJourney ? 1 : 0,
-                '--player-pointer-events': showJourney ? 'auto' : 'none',
-                '--player-y-offset': showJourney ? '0px' : '20px',
-              } as React.CSSProperties}
-              />
-              <a
-                href="/journey"
-                className="follow-journey-button follow-fab"
-                aria-label="Follow My Journey"
-                style={{
-                  opacity: showJourney ? 1 : 0,
-                  pointerEvents: showJourney ? 'auto' : 'none',
-                  transform: showJourney ? 'translateY(0)' : 'translateY(20px)',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                Follow My Journey
-              </a>
-            </div>
-          </SpotifyProvider>
-        </SpotifyWebPlaybackProvider>
-      </AuthProvider>
+      <div className="app">
+        <Navbar />
+        <HangingMic />
+        {usingCachedContent && (
+          <div className="cached-content-banner" role="status" aria-live="polite">
+            Showing cached content — latest data is temporarily unavailable.
+            <button onClick={refetch} className="cached-content-retry">Retry</button>
+          </div>
+        )}
+        <main>
+          <Hero />
+          <About />
+          <StatsShowcase />
+          <TheShow />
+          <Music />
+          <SongList />
+          <Events />
+          <Gallery />
+          <Testimonials />
+          {/* <Newsletter /> */}
+          <ContactBooking />
+        </main>
+        <Footer />
+        <a
+          href="/journey"
+          className="follow-journey-button follow-fab"
+          aria-label="Follow My Journey"
+          style={{
+            opacity: showJourney ? 1 : 0,
+            pointerEvents: showJourney ? 'auto' : 'none',
+            transform: showJourney ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          Follow My Journey
+        </a>
+      </div>
     </ErrorBoundary>
   )
 }

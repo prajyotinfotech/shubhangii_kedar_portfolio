@@ -8,14 +8,15 @@ const TheShow: React.FC = () => {
     if (!show || !show.title) return null
 
     const hasImage = Boolean(show.image)
-    const aspect = show.imageAspect || '4/3'
+    const isStacked = show.layout === 'stacked'
+    const aspect = show.imageAspect || (isStacked ? '16/9' : '4/3')
 
     return (
         <section id="the-show" className="the-show-section">
             <div className="container">
                 {hasImage ? (
-                    <div className="the-show-grid">
-                        <div className="the-show-image reveal-left">
+                    <div className={`the-show-grid${isStacked ? ' the-show-grid--stacked' : ''}`}>
+                        <div className={`the-show-image ${isStacked ? 'reveal-scale' : 'reveal-left'}`}>
                             <div style={{ aspectRatio: aspect, overflow: 'hidden', borderRadius: '16px', width: '100%' }}>
                                 <img
                                     src={show.image}
@@ -24,7 +25,7 @@ const TheShow: React.FC = () => {
                                 />
                             </div>
                         </div>
-                        <div className="the-show-text reveal-right">
+                        <div className={`the-show-text ${isStacked ? 'reveal-scale' : 'reveal-right'}`}>
                             <h2 className="section-title">{show.title}</h2>
                             <div className="title-decoration"></div>
                             <p className="the-show-desc">{show.description}</p>
