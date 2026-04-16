@@ -22,7 +22,7 @@ export default defineConfig({
       svg: {
         multipass: true,
         plugins: [
-          { name: 'preset-default', params: { overrides: { removeViewBox: false } } },
+          'preset-default',
         ],
       },
     }),
