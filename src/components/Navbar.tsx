@@ -4,8 +4,8 @@ import { useContentContext } from '../contexts/ContentContext'
 const links = [
   { href: '#home', label: 'Home' },
   { href: '#about', label: 'About' },
-  { href: '#playlist', label: 'Playlist' },
   { href: '#music', label: 'Music' },
+  { href: '#songlist', label: 'Discography' },
   { href: '#events', label: 'Events' },
   { href: '#gallery', label: 'Gallery' },
   { href: '#contact', label: 'Contact' },

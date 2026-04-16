@@ -31,16 +31,6 @@ export type EventItem = {
   ticketUrl: string
 }
 
-export type PlaylistTrack = {
-  title: string
-  artist: string
-  album: string
-  dateAdded: string
-  duration: string
-  color: string
-  src: string
-}
-
 export type IconName =
   | 'spotify'
   | 'youtube'
@@ -140,36 +130,6 @@ export const events: EventItem[] = [
     title: 'Golden Hour Live',
     meta: 'London, UK • Royal Albert Hall',
     ticketUrl: '#',
-  },
-]
-
-export const playlistTracks: PlaylistTrack[] = [
-  {
-    title: 'GoVyachya Kinaryav',
-    artist: 'Shubhangii Kedar',
-    album: '',
-    dateAdded: '',
-    duration: '',
-    color: '#1DB954',
-    src: '',
-  },
-  {
-    title: '',
-    artist: 'Shubhangii Kedar',
-    album: '',
-    dateAdded: '',
-    duration: '',
-    color: '#1DB954',
-    src: '',
-  },
-  {
-    title: '',
-    artist: 'Shubhangii Kedar',
-    album: '',
-    dateAdded: '',
-    duration: '',
-    color: '#1DB954',
-    src: '',
   },
 ]
 

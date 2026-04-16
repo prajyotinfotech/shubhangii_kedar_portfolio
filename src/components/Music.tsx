@@ -1,8 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { musicReleases } from '../data/content'
-import { fetchPlaylistTracks } from '../services/spotifyService'
-import { SPOTIFY_LATEST_RELEASE_PLAYLIST_ID } from '../config/spotify'
-import { useSpotify } from '../contexts/SpotifyContext'
 import { useContentContext } from '../contexts/ContentContext'
 
 const AlbumArt: React.FC<{ gradient: [string, string] }> = ({ gradient }) => (
@@ -43,39 +40,10 @@ const getYouTubeEmbedUrl = (url: string) => {
   return ''
 }
 
-const formatReleaseDate = (value?: string) => {
-  if (!value) return 'Release date unavailable'
-  const parsed = new Date(value)
-  if (Number.isNaN(parsed.getTime())) return value
-  return new Intl.DateTimeFormat('en', { month: 'short', day: 'numeric', year: 'numeric' }).format(parsed)
-}
-
 export const Music: React.FC = () => {
-  const { topTracks } = useSpotify()
   const { content } = useContentContext()
-  const [releases, setReleases] = useState<ReleaseCard[]>([])
-  const [loading, setLoading] = useState(true)
 
-  // 1) Prefer context topTracks (already fetched for Playlist section)
-  const contextReleases = useMemo<ReleaseCard[]>(() => {
-    if (!topTracks || topTracks.length === 0) return []
-    return topTracks
-      .map((track: any) => {
-        const date = track?.album?.release_date || track?.release_date
-        return {
-          id: track?.id || track?.uri,
-          title: track?.name ?? 'Untitled',
-          artists: (track?.artists || []).map((a: any) => a.name).join(', '),
-          releaseDateLabel: formatReleaseDate(date),
-          spotifyUrl: track?.external_urls?.spotify,
-          imageUrl: track?.album?.images?.[0]?.url,
-        } as ReleaseCard
-      })
-      .sort((a, b) => new Date(b.releaseDateLabel).getTime() - new Date(a.releaseDateLabel).getTime())
-      .slice(0, 5)
-  }, [topTracks])
-
-  // 2) CMS releases from admin panel (content.json / Gist)
+  // CMS releases from admin panel (content.json / Gist)
   const cmsReleases = useMemo<ReleaseCard[]>(() => {
     const cms = content?.musicReleases
     if (!cms || !Array.isArray(cms) || cms.length === 0) return []
@@ -95,54 +63,7 @@ export const Music: React.FC = () => {
     }))
   }, [content?.musicReleases])
 
-  // 3) If Spotify context empty, try playlist fetch
-  useEffect(() => {
-    let cancelled = false
-    const maybeFetch = async () => {
-      if (contextReleases.length > 0) {
-        setReleases(contextReleases)
-        setLoading(false)
-        return
-      }
-      const playlistId = SPOTIFY_LATEST_RELEASE_PLAYLIST_ID
-      if (!playlistId || playlistId === 'YOUR_PLAYLIST_ID_HERE') {
-        setLoading(false)
-        return
-      }
-      try {
-        setLoading(true)
-        const items = await fetchPlaylistTracks(playlistId)
-        if (cancelled) return
-        const normalized: ReleaseCard[] = (items ?? [])
-          .map((item: any) => ({ track: item?.track, added_at: item?.added_at }))
-          .filter(Boolean)
-          .map(({ track, added_at }: any) => {
-            const dateSource = track?.album?.release_date || track?.release_date || added_at
-            return {
-              id: track?.id || track?.uri,
-              title: track?.name ?? 'Untitled',
-              artists: (track?.artists || []).map((a: any) => a.name).join(', '),
-              releaseDateLabel: formatReleaseDate(dateSource),
-              spotifyUrl: track?.external_urls?.spotify,
-              imageUrl: track?.album?.images?.[0]?.url,
-            } as ReleaseCard
-          })
-          .sort((a, b) => new Date(b.releaseDateLabel).getTime() - new Date(a.releaseDateLabel).getTime())
-          .slice(0, 5)
-        setReleases(normalized)
-      } catch {
-        // Silently ignore Spotify API errors — CMS data takes priority
-      } finally {
-        if (!cancelled) setLoading(false)
-      }
-    }
-    maybeFetch()
-    return () => {
-      cancelled = true
-    }
-  }, [contextReleases])
-
-  // 4) Static fallback from code
+  // Static fallback from code
   const fallbackReleases = useMemo<ReleaseCard[]>(
     () =>
       musicReleases.map((release, idx) => ({
@@ -156,24 +77,14 @@ export const Music: React.FC = () => {
     []
   )
 
-  // Priority: CMS content first (manual), then Spotify API, then static fallback
-  const data = (
-    cmsReleases.length > 0 ? cmsReleases
-    : releases.length > 0 ? releases
-    : contextReleases.length > 0 ? contextReleases
-    : fallbackReleases
-  ).slice(0, 8)
+  // Priority: CMS content first (manual), then static fallback
+  const data = (cmsReleases.length > 0 ? cmsReleases : fallbackReleases).slice(0, 8)
 
   return (
     <section id="music" className="music">
       <div className="container">
         <h2 className="section-title center">Latest Releases</h2>
         <div className="title-decoration center"></div>
-        {loading && cmsReleases.length === 0 && (
-          <div className="loading" style={{ textAlign: 'center', marginTop: '1rem' }}>
-            Loading releases...
-          </div>
-        )}
         <div className="music-grid">
           {data.map((release) => {
             const ytEmbed = release.videoPlatform === 'youtube' && release.videoUrl
