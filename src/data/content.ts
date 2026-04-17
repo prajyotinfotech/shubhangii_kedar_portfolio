@@ -50,6 +50,12 @@ export type GalleryItem = {
 export type Testimonial = {
   quote: string
   author: string
+  type?: 'text' | 'video' | 'image'
+  platform?: 'youtube' | 'instagram'
+  videoUrl?: string
+  embedCode?: string
+  image?: string
+  aspect?: string
 }
 
 export type ContactItem = {
