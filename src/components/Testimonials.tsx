@@ -63,17 +63,21 @@ export const Testimonials: React.FC = () => {
         <div className="testimonials-grid">
           {testimonials.map((item) => {
             const isVideo = (item as any).type === 'video'
+            const isImage = (item as any).type === 'image'
             const platform = (item as any).platform as 'youtube' | 'instagram' | undefined
             const videoUrl = (item as any).videoUrl as string | undefined
+            const imageUrl = (item as any).image as string | undefined
+            const aspect = (item as any).aspect || '16/9'
+            const embedCode = (item as any).embedCode as string | undefined
             const ytEmbed = isVideo && videoUrl && platform === 'youtube' ? getYouTubeEmbedUrl(videoUrl) : ''
 
             return (
               <div
-                className={`testimonial-card${isVideo ? ' testimonial-card--video' : ''}`}
+                className={`testimonial-card${isVideo ? ' testimonial-card--video' : ''}${isImage ? ' testimonial-card--image' : ''}`}
                 key={(item as any).id || item.author}
               >
                 {isVideo && videoUrl && ytEmbed && (
-                  <div className="testimonial-video-wrap">
+                  <div className="testimonial-video-wrap" style={{ aspectRatio: aspect }}>
                     <iframe
                       src={ytEmbed}
                       width="100%"
@@ -85,9 +89,18 @@ export const Testimonials: React.FC = () => {
                     />
                   </div>
                 )}
-                {isVideo && videoUrl && platform === 'instagram' && !ytEmbed && (
-                  <div style={{ marginBottom: '1rem' }}>
-                    <InstagramTestimonialEmbed url={videoUrl} />
+                {isVideo && platform === 'instagram' && !ytEmbed && (
+                  <div style={{ marginBottom: '1rem', width: '100%' }}>
+                    {embedCode ? (
+                      <div dangerouslySetInnerHTML={{ __html: embedCode }} style={{ display: 'flex', justifyContent: 'center' }} />
+                    ) : (
+                      videoUrl && <InstagramTestimonialEmbed url={videoUrl} />
+                    )}
+                  </div>
+                )}
+                {isImage && imageUrl && (
+                  <div style={{ width: '100%', marginBottom: '1rem', aspectRatio: aspect, overflow: 'hidden', borderRadius: '10px' }}>
+                    <img src={imageUrl} alt={item.author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                 )}
                 {item.quote && (

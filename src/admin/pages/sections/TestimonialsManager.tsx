@@ -2,16 +2,19 @@
  * Testimonials Manager
  */
 import { useState, useEffect } from 'react';
-import { fetchSection, addItem, deleteItem, updateSection } from '../../api/client';
+import { fetchSection, addItem, deleteItem, updateSection, uploadImage } from '../../api/client';
 import '../styles/editor.css';
 
 interface Testimonial {
     id: string;
     quote: string;
     author: string;
-    type?: 'text' | 'video';
+    type?: 'text' | 'video' | 'image';
     platform?: 'youtube' | 'instagram';
     videoUrl?: string;
+    embedCode?: string;
+    image?: string;
+    aspect?: string;
 }
 
 const emptyItem: Omit<Testimonial, 'id'> = {
@@ -20,6 +23,9 @@ const emptyItem: Omit<Testimonial, 'id'> = {
     type: 'text',
     platform: 'youtube',
     videoUrl: '',
+    embedCode: '',
+    image: '',
+    aspect: '16/9',
 };
 
 const getYouTubeEmbedUrl = (url: string) => {
@@ -32,6 +38,7 @@ const getYouTubeEmbedUrl = (url: string) => {
 }
 
 const renderPreview = (item: Omit<Testimonial, 'id'>) => {
+    const aspect = item.aspect || '16/9'
     const ytEmbed = item.type === 'video' && item.platform === 'youtube' && item.videoUrl
         ? getYouTubeEmbedUrl(item.videoUrl) : ''
 
@@ -39,8 +46,8 @@ const renderPreview = (item: Omit<Testimonial, 'id'>) => {
         <div style={{ background: '#0d0d0d', borderRadius: '12px', padding: '1.25rem', marginTop: '1rem', border: '1px solid rgba(255,255,255,0.06)' }}>
             <p style={{ color: '#666', fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '1px', margin: '0 0 16px' }}>Site Preview</p>
             <div style={{ textAlign: 'center', padding: '1rem' }}>
-                {item.type === 'video' && item.videoUrl && ytEmbed && (
-                    <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto 1rem', aspectRatio: '16/9' }}>
+                {item.type === 'video' && ytEmbed && (
+                    <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto 1rem', aspectRatio: aspect }}>
                         <iframe
                             src={ytEmbed}
                             width="100%"
@@ -52,10 +59,15 @@ const renderPreview = (item: Omit<Testimonial, 'id'>) => {
                         />
                     </div>
                 )}
-                {item.type === 'video' && item.platform === 'instagram' && item.videoUrl && !ytEmbed && (
-                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg,#E1306C,#F77737)', borderRadius: '10px', padding: '12px 20px', marginBottom: '1rem', color: '#fff', fontSize: '0.9rem' }}>
+                {item.type === 'video' && item.platform === 'instagram' && !ytEmbed && (
+                    <div style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(135deg,#E1306C,#F77737)', borderRadius: '10px', padding: '12px 20px', marginBottom: '1rem', color: '#fff', fontSize: '0.9rem', aspectRatio: aspect }}>
                         <span style={{ fontSize: '1.4rem' }}>📷</span>
-                        <span>Instagram video</span>
+                        <span>Instagram preview</span>
+                    </div>
+                )}
+                {item.type === 'image' && item.image && (
+                    <div style={{ width: '100%', maxWidth: '480px', margin: '0 auto 1rem', aspectRatio: aspect, overflow: 'hidden', borderRadius: '8px' }}>
+                        <img src={item.image} alt={item.author} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                 )}
                 {item.quote ? (
@@ -63,7 +75,7 @@ const renderPreview = (item: Omit<Testimonial, 'id'>) => {
                         "{item.quote}"
                     </p>
                 ) : (
-                    item.type !== 'video' && <p style={{ color: '#444', fontStyle: 'italic', margin: '1rem 0' }}>Quote will appear here...</p>
+                    (item.type !== 'video' && item.type !== 'image') && <p style={{ color: '#444', fontStyle: 'italic', margin: '1rem 0' }}>Quote will appear here...</p>
                 )}
                 <p style={{ color: '#888', fontSize: '0.9rem', margin: 0 }}>— {item.author || <span style={{ color: '#444' }}>Author</span>}</p>
             </div>
@@ -159,43 +171,160 @@ export default function TestimonialsManager() {
         catch { await loadItems(); }
     };
 
-    const renderForm = (item: Omit<Testimonial, 'id'>, onChange: (item: Omit<Testimonial, 'id'>) => void) => (
-        <div className="editor-form">
-            <div className="editor-field">
-                <label>Type</label>
-                <select value={item.type || 'text'} onChange={e => onChange({ ...item, type: e.target.value as 'text' | 'video' })}>
-                    <option value="text">Text Review</option>
-                    <option value="video">Video Review (YouTube / Instagram)</option>
-                </select>
-            </div>
-            {item.type === 'video' && (
-                <>
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, onChange: (item: any) => void, currentItem: any) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setSaving(true);
+        try {
+            const result = await uploadImage(file);
+            onChange({ ...currentItem, image: result.data.url });
+            setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+        } catch (err) {
+            setMessage({ type: 'error', text: 'Failed to upload image' });
+        } finally {
+            setSaving(false);
+        }
+    };
+
+    const renderForm = (item: Omit<Testimonial, 'id'>, onChange: (item: Omit<Testimonial, 'id'>) => void) => {
+        const aspect = item.aspect || '16/9';
+        const type = item.type || 'text';
+        const platform = item.platform || 'youtube';
+
+        return (
+            <div className="editor-form">
+                <div className="editor-field">
+                    <label>Type</label>
+                    <select value={type} onChange={e => onChange({ ...item, type: e.target.value as 'text' | 'video' | 'image' })}>
+                        <option value="text">Text Review</option>
+                        <option value="video">Video Review (YouTube / Instagram)</option>
+                        <option value="image">Image Review</option>
+                    </select>
+                </div>
+                {type === 'video' && (
+                    <>
+                        <div className="editor-field">
+                            <label>Platform</label>
+                            <select value={platform} onChange={e => onChange({ ...item, platform: e.target.value as 'youtube' | 'instagram' })}>
+                                <option value="youtube">YouTube</option>
+                                <option value="instagram">Instagram</option>
+                            </select>
+                        </div>
+                    </>
+                )}
+
+                {type === 'video' && platform === 'instagram' ? (
                     <div className="editor-field">
-                        <label>Platform</label>
-                        <select value={item.platform || 'youtube'} onChange={e => onChange({ ...item, platform: e.target.value as 'youtube' | 'instagram' })}>
-                            <option value="youtube">YouTube</option>
-                            <option value="instagram">Instagram</option>
-                        </select>
+                        <label>Instagram URL (simpler)</label>
+                        <input
+                            type="text"
+                            value={item.videoUrl || ''}
+                            onChange={(e) => onChange({ ...item, videoUrl: e.target.value })}
+                            placeholder="https://www.instagram.com/p/... or https://www.instagram.com/reel/..."
+                        />
+                        <p style={{ fontSize: '0.8rem', color: '#888', marginTop: '4px' }}>Paste the Instagram post/reel URL - works better than embed codes</p>
+                        <div style={{ marginTop: '8px', padding: '8px', background: '#f0f0f0', borderRadius: '4px' }}>
+                            <label style={{ fontSize: '0.8rem', color: '#666' }}>OR use embed code:</label>
+                            <textarea
+                                value={item.embedCode || ''}
+                                onChange={(e) => onChange({ ...item, embedCode: e.target.value })}
+                                placeholder='Paste the full embed code from Instagram (the <blockquote> snippet)'
+                                rows={4}
+                                style={{ fontFamily: 'monospace', fontSize: '0.85rem', marginTop: '4px', width: '100%' }}
+                            />
+                        </div>
                     </div>
+                ) : type === 'video' && platform === 'youtube' ? (
                     <div className="editor-field">
-                        <label>Video URL *</label>
+                        <label>YouTube Video URL *</label>
                         <input type="text" value={item.videoUrl || ''} onChange={e => onChange({ ...item, videoUrl: e.target.value })}
-                            placeholder={item.platform === 'instagram' ? 'https://www.instagram.com/reel/...' : 'https://www.youtube.com/watch?v=...'} />
+                            placeholder='https://www.youtube.com/watch?v=...' />
                     </div>
-                </>
-            )}
-            <div className="editor-field">
-                <label>{item.type === 'video' ? 'Caption (optional)' : 'Quote *'}</label>
-                <textarea value={item.quote} onChange={e => onChange({ ...item, quote: e.target.value })}
-                    placeholder={item.type === 'video' ? 'Optional caption shown below the video' : '"A voice that lingers..."'}
-                    rows={3} />
+                ) : type === 'image' ? (
+                    <div className="editor-field">
+                        <label>Image *</label>
+                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => handleImageUpload(e, onChange, item)}
+                                disabled={saving}
+                                style={{ width: 'auto' }}
+                            />
+                            <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                            <input
+                                type="text"
+                                value={item.image || ''}
+                                onChange={(e) => onChange({ ...item, image: e.target.value })}
+                                placeholder="Image URL"
+                                style={{ flex: 1 }}
+                            />
+                        </div>
+                        {item.image && (
+                            <div className="editor-preview" style={{ maxWidth: '300px' }}>
+                                <img src={item.image} alt="Preview" style={{ width: '100%', height: 'auto', borderRadius: '4px' }} />
+                            </div>
+                        )}
+                    </div>
+                ) : null}
+
+                <div className="editor-field">
+                    <label>{type === 'video' || type === 'image' ? 'Caption (optional)' : 'Quote *'}</label>
+                    <textarea value={item.quote} onChange={e => onChange({ ...item, quote: e.target.value })}
+                        placeholder={type === 'video' || type === 'image' ? 'Optional caption shown below the media' : '"A voice that lingers..."'}
+                        rows={3} />
+                </div>
+
+                <div className="editor-field">
+                    <label>Aspect Ratio</label>
+                    <input
+                        type="text"
+                        value={aspect}
+                        onChange={(e) => onChange({ ...item, aspect: e.target.value })}
+                        placeholder="e.g. 16/9 or 4/5"
+                    />
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '8px' }}>
+                        {[
+                            { label: '1/1', title: 'Square' },
+                            { label: '4/5', title: 'Portrait (Instagram)' },
+                            { label: '3/4', title: 'Portrait photo' },
+                            { label: '2/3', title: 'Portrait 35mm' },
+                            { label: '9/16', title: 'Story / Reel' },
+                            { label: '4/3', title: 'Landscape' },
+                            { label: '3/2', title: 'Landscape 35mm' },
+                            { label: '16/9', title: 'Widescreen' },
+                            { label: '21/9', title: 'Cinematic' },
+                        ].map(preset => (
+                            <button
+                                key={preset.label}
+                                type="button"
+                                title={preset.title}
+                                onClick={() => onChange({ ...item, aspect: preset.label })}
+                                style={{
+                                    padding: '3px 8px',
+                                    fontSize: '0.78rem',
+                                    border: aspect === preset.label ? '2px solid #764ba2' : '1px solid #ccc',
+                                    borderRadius: '4px',
+                                    background: aspect === preset.label ? '#f3ecff' : '#fff',
+                                    cursor: 'pointer',
+                                    fontWeight: aspect === preset.label ? 600 : 400,
+                                }}
+                            >
+                                {preset.label}
+                                <span style={{ fontSize: '0.68rem', color: '#888', marginLeft: '4px' }}>{preset.title}</span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="editor-field">
+                    <label>Author *</label>
+                    <input type="text" value={item.author} onChange={e => onChange({ ...item, author: e.target.value })} placeholder="SoundWave Magazine" />
+                </div>
             </div>
-            <div className="editor-field">
-                <label>Author *</label>
-                <input type="text" value={item.author} onChange={e => onChange({ ...item, author: e.target.value })} placeholder="SoundWave Magazine" />
-            </div>
-        </div>
-    );
+        )
+    };
 
     if (loading) return <div className="editor-loading"><div className="editor-spinner"></div><p>Loading...</p></div>;
 

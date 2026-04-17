@@ -86,7 +86,12 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
             }
         } catch (error) {
             console.error('Login error:', error);
-            return { success: false, error: 'Network error. Please try again.' };
+            const errMsg = error instanceof Error ? error.message : String(error);
+            // If the error message typically indicates network issues
+            if (errMsg.toLowerCase().includes('failed to fetch') || errMsg.toLowerCase().includes('network error')) {
+                return { success: false, error: 'Network error: The backend server might not be running.' };
+            }
+            return { success: false, error: `Login error: ${errMsg}` };
         }
     };
 
