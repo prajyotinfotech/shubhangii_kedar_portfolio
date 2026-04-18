@@ -118,6 +118,8 @@ export interface ContentData {
         embedCode?: string;
         image?: string;
         aspect?: string;
+        cityFont?: string;
+        cityColor?: string;
     }[];
     songList?: {
         id: string;

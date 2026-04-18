@@ -5,6 +5,24 @@ import { useState, useEffect } from 'react';
 import { fetchSection, addItem, deleteItem, updateSection, uploadImage } from '../../api/client';
 import '../styles/editor.css';
 
+const CITY_FONTS = [
+    { label: 'Default (site font)', value: '' },
+    { label: 'Pacifico — Retro bubbly', value: 'Pacifico, cursive' },
+    { label: 'Nunito — Rounded bold', value: 'Nunito, sans-serif' },
+    { label: 'Quicksand — Minimal round', value: 'Quicksand, sans-serif' },
+    { label: 'Comfortaa — Soft bubbly', value: 'Comfortaa, sans-serif' },
+];
+
+const CITY_COLOR_PRESETS = [
+    { label: 'White', value: '#ffffff' },
+    { label: 'Gold', value: '#f5c518' },
+    { label: 'Coral', value: '#ff6b6b' },
+    { label: 'Sky Blue', value: '#5bc8f5' },
+    { label: 'Mint', value: '#5bf5b2' },
+    { label: 'Lavender', value: '#c084fc' },
+    { label: 'Peach', value: '#ffb347' },
+];
+
 interface PerformedAtItem {
     id: string;
     venue: string;
@@ -18,6 +36,8 @@ interface PerformedAtItem {
     embedCode?: string;
     image?: string;
     aspect?: string;
+    cityFont?: string;
+    cityColor?: string;
 }
 
 const emptyItem: Omit<PerformedAtItem, 'id'> = {
@@ -32,6 +52,8 @@ const emptyItem: Omit<PerformedAtItem, 'id'> = {
     embedCode: '',
     image: '',
     aspect: '16/9',
+    cityFont: '',
+    cityColor: '#ffffff',
 };
 
 const MONTHS = [
@@ -86,13 +108,21 @@ const renderPreview = (item: Omit<PerformedAtItem, 'id'>) => {
                         "{item.quote}"
                     </p>
                 )}
-                <p style={{ color: '#ccc', fontWeight: 600, margin: '0 0 4px' }}>{item.venue || <span style={{ color: '#444' }}>Venue name</span>}</p>
-                <p style={{ color: '#888', fontSize: '0.85rem', margin: 0 }}>
-                    {item.city || <span style={{ color: '#444' }}>City</span>}
-                    {(item.month || item.year) && (
-                        <span style={{ color: '#666' }}> · {[item.month, item.year].filter(Boolean).join(' ')}</span>
-                    )}
+                <p style={{ color: '#ccc', fontWeight: 600, margin: '0 0 6px' }}>{item.venue || <span style={{ color: '#444' }}>Venue name</span>}</p>
+                <p style={{
+                    fontFamily: item.cityFont || undefined,
+                    color: item.cityColor || 'rgba(255,255,255,0.9)',
+                    fontSize: '20px',
+                    fontWeight: 700,
+                    margin: '0 0 4px',
+                }}>
+                    {item.city || <span style={{ color: '#444', fontFamily: 'inherit', fontWeight: 400, fontSize: '14px' }}>City</span>}
                 </p>
+                {(item.month || item.year) && (
+                    <p style={{ color: '#555', fontSize: '0.8rem', margin: 0 }}>
+                        {[item.month, item.year].filter(Boolean).join(' ')}
+                    </p>
+                )}
             </div>
         </div>
     );
@@ -312,6 +342,73 @@ export default function PerformedAtManager() {
                 <div className="editor-field">
                     <label>Caption (optional)</label>
                     <textarea value={item.quote || ''} onChange={e => onChange({ ...item, quote: e.target.value })} placeholder="Optional caption shown on the card" rows={2} />
+                </div>
+
+                {/* City styling */}
+                <div style={{ borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '1rem', marginTop: '0.5rem' }}>
+                    <p style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#888', marginBottom: '0.75rem' }}>City Name Style</p>
+
+                    <div className="editor-field">
+                        <label>Font Style</label>
+                        <select value={item.cityFont || ''} onChange={e => onChange({ ...item, cityFont: e.target.value })}>
+                            {CITY_FONTS.map(f => (
+                                <option key={f.value} value={f.value}>{f.label}</option>
+                            ))}
+                        </select>
+                        {item.cityFont && item.city && (
+                            <p style={{
+                                fontFamily: item.cityFont,
+                                fontSize: '22px',
+                                fontWeight: 700,
+                                color: item.cityColor || '#fff',
+                                marginTop: '10px',
+                                background: '#111',
+                                padding: '8px 14px',
+                                borderRadius: '8px',
+                                display: 'inline-block',
+                            }}>
+                                {item.city}
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="editor-field">
+                        <label>City Color</label>
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '8px' }}>
+                            {CITY_COLOR_PRESETS.map(c => (
+                                <button
+                                    key={c.value}
+                                    type="button"
+                                    title={c.label}
+                                    onClick={() => onChange({ ...item, cityColor: c.value })}
+                                    style={{
+                                        width: '28px',
+                                        height: '28px',
+                                        borderRadius: '50%',
+                                        background: c.value,
+                                        border: item.cityColor === c.value ? '3px solid #764ba2' : '2px solid rgba(255,255,255,0.2)',
+                                        cursor: 'pointer',
+                                        padding: 0,
+                                    }}
+                                />
+                            ))}
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <input
+                                type="color"
+                                value={item.cityColor || '#ffffff'}
+                                onChange={e => onChange({ ...item, cityColor: e.target.value })}
+                                style={{ width: '40px', height: '32px', border: 'none', borderRadius: '4px', cursor: 'pointer', padding: 0 }}
+                            />
+                            <input
+                                type="text"
+                                value={item.cityColor || '#ffffff'}
+                                onChange={e => onChange({ ...item, cityColor: e.target.value })}
+                                placeholder="#ffffff"
+                                style={{ width: '100px' }}
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
         );
