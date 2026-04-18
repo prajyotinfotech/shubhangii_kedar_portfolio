@@ -151,6 +151,7 @@
 }
 
 .stats-card-category {
+    font-family: var(--font-body, 'Lato'), sans-serif;
     font-size: 13px;
     color: var(--text-dim);
     text-transform: uppercase;
@@ -170,6 +171,7 @@
 }
 
 .stats-card-label {
+    font-family: var(--font-body, 'Lato'), sans-serif;
     font-size: 14px;
     color: var(--text-dim);
 }

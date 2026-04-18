@@ -105,6 +105,20 @@ export interface ContentData {
         platform?: 'youtube' | 'instagram';
         videoUrl?: string;
     }[];
+    performedAt?: {
+        id?: string;
+        venue: string;
+        city: string;
+        month?: string;
+        year?: string;
+        quote?: string;
+        type?: 'text' | 'video' | 'image';
+        platform?: 'youtube' | 'instagram';
+        videoUrl?: string;
+        embedCode?: string;
+        image?: string;
+        aspect?: string;
+    }[];
     songList?: {
         id: string;
         title: string;

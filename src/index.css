@@ -697,11 +697,12 @@ a {
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: 700;
     color: rgb(255, 255, 255);
-    line-height: 1.15;
+    line-height: 1.25;
     margin-bottom: 20px;
+    padding-top: 0.2em;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: visible;
     letter-spacing: 2px;
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -2453,6 +2454,19 @@ html.is-playing .disc {
     color: var(--text-light);
     font-size: 15px;
     letter-spacing: 0.02em;
+}
+
+/* Performed At extras */
+.performed-at-city {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 13px;
+    margin-top: 6px;
+    letter-spacing: 0.03em;
+}
+
+.performed-at-date {
+    color: rgba(255, 255, 255, 0.38);
+    font-size: 12px;
 }
 
 .slider-controls {

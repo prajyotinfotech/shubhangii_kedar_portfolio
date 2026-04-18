@@ -10,6 +10,7 @@ import Music from './components/Music'
 import Events from './components/Events'
 import Gallery from './components/Gallery'
 import Testimonials from './components/Testimonials'
+import PerformedAt from './components/PerformedAt'
 import SongList from './components/SongList'
 // import Newsletter from './components/Newsletter'
 import ContactBooking from './components/ContactBooking'
@@ -136,6 +137,7 @@ function App() {
           <Events />
           <Gallery />
           <Testimonials />
+          <PerformedAt />
           {/* <Newsletter /> */}
           <ContactBooking />
         </main>
