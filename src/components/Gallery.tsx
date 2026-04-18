@@ -1,25 +1,21 @@
-// import { InstagramEmbed } from 'react-social-media-embed' // Replaced with custom implementation
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import img1 from '../assets/1.png'
 import img2 from '../assets/2.png'
 import img3 from '../assets/3.png'
 import img4 from '../assets/4.png'
 import img5 from '../assets/5.png'
 import img6 from '../assets/6.png'
-import imgA from '../assets/3.png'
-import imgB from '../assets/6.png'
 import imgC from '../assets/consert1.png'
 import heroBg from '../assets/backofthelatestR.png'
 import portrait from '../assets/PWP09949.png'
 
 import { useContentContext } from '../contexts/ContentContext'
 
-// Map legacy named values to CSS aspect-ratio values
 const legacyAspectMap: Record<string, string> = {
-  'square': '1/1',
-  'tall': '4/5',
+  square: '1/1',
+  tall: '4/5',
   'extra-tall': '9/16',
-  'wide': '4/3',
+  wide: '4/3',
 }
 
 const resolveAspect = (aspect?: string): string => {
@@ -27,270 +23,264 @@ const resolveAspect = (aspect?: string): string => {
   return legacyAspectMap[aspect] ?? aspect
 }
 
-const STATIC_PHOTOS: { src: string; alt: string; aspect: string; type?: 'image' | 'video'; videoUrl?: string; embedCode?: string; platform?: 'instagram' | 'youtube' }[] = [
+const STATIC_PHOTOS: {
+  src: string
+  alt: string
+  aspect: string
+  type?: 'image' | 'video'
+  videoUrl?: string
+  embedCode?: string
+  platform?: 'instagram' | 'youtube'
+}[] = [
   { src: img1, alt: 'Live performance', aspect: 'wide' },
   { src: portrait, alt: 'Portrait', aspect: 'tall' },
   { src: img2, alt: 'Studio session', aspect: 'square' },
   { src: heroBg, alt: 'Backdrop', aspect: 'wide' },
-  { src: imgA, alt: 'Backstage', aspect: 'square' },
   { src: img3, alt: 'Concert moment', aspect: 'tall' },
   { src: img4, alt: 'On stage', aspect: 'wide' },
-  { src: imgB, alt: 'Recording', aspect: 'square' },
   { src: img5, alt: 'Audience vibe', aspect: 'tall' },
   { src: img6, alt: 'Show highlight', aspect: 'wide' },
   { src: imgC, alt: 'Concert crowd', aspect: 'wide' },
 ]
 
+const GALLERY_MAX = 12
+
 const getYouTubeEmbedUrl = (url: string) => {
   try {
-    // Support regular videos, shorts, and youtu.be links
-    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)([^&?/]+)|youtu\.be\/([^&?/]+))/);
-    const videoId = match?.[1] || match?.[2];
-    if (videoId) {
-      return `https://www.youtube.com/embed/${videoId}`;
-    }
-  } catch (e) {
-    console.warn('Invalid YouTube URL', e);
-  }
-  return '';
+    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/)([^&?/]+)|youtu\.be\/([^&?/]+))/)
+    const videoId = match?.[1] || match?.[2]
+    if (videoId) return `https://www.youtube.com/embed/${videoId}`
+  } catch { /* ignore */ }
+  return ''
 }
 
 const getInstagramPostId = (url: string) => {
   try {
-    const match = url.match(/instagram\.com\/(?:p|reel)\/([A-Za-z0-9_-]+)/);
-    return match?.[1] || '';
-  } catch (e) {
-    console.warn('Invalid Instagram URL', e);
-    return '';
-  }
-}
-
-const isInstagramReel = (url: string) => {
-  return url.includes('/reel/');
+    const match = url.match(/instagram\.com\/(?:p|reel)\/([A-Za-z0-9_-]+)/)
+    return match?.[1] || ''
+  } catch { return '' }
 }
 
 const InstagramEmbed = ({ url }: { url: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const postId = getInstagramPostId(url);
+  const containerRef = useRef<HTMLDivElement>(null)
+  const postId = getInstagramPostId(url)
 
   useEffect(() => {
-    if (!postId) return;
-
-    const processEmbeds = () => {
-      if ((window as any).instgrm) {
-        setTimeout(() => {
-          (window as any).instgrm.Embeds.process();
-        }, 100);
-      }
-    };
-
-    // Load Instagram embed script if not already loaded
-    if (!(window as any).instgrm) {
-      const script = document.createElement('script');
-      script.src = '//www.instagram.com/embed.js';
-      script.async = true;
-      script.onload = () => processEmbeds();
-      document.body.appendChild(script);
-    } else {
-      processEmbeds();
+    if (!postId) return
+    const process = () => {
+      if ((window as any).instgrm) setTimeout(() => (window as any).instgrm.Embeds.process(), 100)
     }
-  }, [postId]);
-  
-  if (!postId) {
-    return (
-      <div style={{
-        width: '100%',
-        height: '100%',
-        background: '#f0f0f0',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: '#666',
-        fontSize: '14px'
-      }}>
-        Invalid Instagram URL
-      </div>
-    );
-  }
+    if (!(window as any).instgrm) {
+      const s = document.createElement('script')
+      s.src = '//www.instagram.com/embed.js'
+      s.async = true
+      s.onload = process
+      document.body.appendChild(s)
+    } else { process() }
+  }, [postId])
 
-  // Determine if this is a reel or post
-  const isReel = isInstagramReel(url);
-  const permalink = isReel 
+  if (!postId) return null
+  const isReel = url.includes('/reel/')
+  const permalink = isReel
     ? `https://www.instagram.com/reel/${postId}/`
-    : `https://www.instagram.com/p/${postId}/`;
-
-  // Generate Instagram blockquote embed HTML
-  const embedHtml = `
-    <blockquote 
-      class="instagram-media" 
-      data-instgrm-captioned 
-      data-instgrm-permalink="${permalink}" 
-      data-instgrm-version="14" 
-      style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
-    </blockquote>
-  `;
-
+    : `https://www.instagram.com/p/${postId}/`
   return (
     <div
       ref={containerRef}
-      dangerouslySetInnerHTML={{ __html: embedHtml }}
-      style={{
-        width: '100%',
-        height: '100%',
-        overflow: 'auto',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
+      style={{ width: '100%', height: '100%', overflow: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      dangerouslySetInnerHTML={{
+        __html: `<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${permalink}" data-instgrm-version="14" style="max-width:540px;width:100%;margin:0 auto;"></blockquote>`,
       }}
     />
-  );
-};
+  )
+}
+
 const InstagramEmbedBlock = ({ embedCode }: { embedCode: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Function to process embeds
-    const processEmbeds = () => {
-      if ((window as any).instgrm) {
-        // Add a small delay to ensure DOM is ready
-        setTimeout(() => {
-          (window as any).instgrm.Embeds.process();
-        }, 100);
-      }
-    };
-
-    // Load Instagram embed script if not already loaded
-    if (!(window as any).instgrm) {
-      const script = document.createElement('script');
-      script.src = '//www.instagram.com/embed.js';
-      script.async = true;
-      script.onload = () => processEmbeds();
-      document.body.appendChild(script);
-    } else {
-      // If script already loaded, process embeds
-      processEmbeds();
+    const process = () => {
+      if ((window as any).instgrm) setTimeout(() => (window as any).instgrm.Embeds.process(), 100)
     }
-  }, [embedCode]);
-
-  // Process embed code to remove external links and improve behavior
-  const processEmbedCode = (code: string) => {
-    return code
-      // Remove target="_blank" to prevent external redirects
-      .replace(/target="_blank"/g, 'target="_self"')
-      // Add CSS to disable external links but allow play buttons
-      .replace('<blockquote', '<blockquote style="position: relative;"')
-      // Add overlay to catch clicks on external links
-      .replace(/<\/blockquote>/, '<style>.instagram-media a[href*="instagram.com"] { pointer-events: none; } .instagram-media .instagram-media__link { pointer-events: auto !important; }</style></blockquote>');
-  };
+    if (!(window as any).instgrm) {
+      const s = document.createElement('script')
+      s.src = '//www.instagram.com/embed.js'
+      s.async = true
+      s.onload = process
+      document.body.appendChild(s)
+    } else { process() }
+  }, [embedCode])
 
   return (
     <div
       ref={containerRef}
-      dangerouslySetInnerHTML={{ __html: processEmbedCode(embedCode) }}
-      style={{
-        width: '100%',
-        height: '100%',
-        overflow: 'hidden',
-        position: 'relative',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center'
-      }}
-      onClick={(e) => {
-        // Prevent external redirects
-        const target = e.target as HTMLElement;
-        if (target.tagName === 'A' && (target as HTMLAnchorElement).href?.includes('instagram.com')) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      }}
+      dangerouslySetInnerHTML={{ __html: embedCode }}
+      style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
     />
-  );
-};
+  )
+}
 
-export const Gallery: React.FC = () => {
-  const { content } = useContentContext()
+type GalleryItem = {
+  src: string
+  alt: string
+  aspect: string
+  type?: 'image' | 'video'
+  videoUrl?: string
+  embedCode?: string
+  platform?: 'instagram' | 'youtube'
+}
 
-  const allItems = content?.gallery?.length ? content.gallery.map(item => ({
-    src: item.image,
-    alt: item.title,
-    aspect: item.aspect,
-    type: item.type || 'image',
-    videoUrl: item.videoUrl,
-    embedCode: item.embedCode,
-    platform: item.platform
-  })) : STATIC_PHOTOS
+function GalleryItemContent({ item, index }: { item: GalleryItem; index: number }) {
+  const ytEmbed = item.platform === 'youtube' && item.videoUrl ? getYouTubeEmbedUrl(item.videoUrl) : ''
+  const igId = item.platform === 'instagram' && item.videoUrl ? getInstagramPostId(item.videoUrl) : ''
 
-  const photoItems = allItems.filter(item => item.type !== 'video')
-  const videoItems = allItems.filter(item => item.type === 'video')
-
-  const renderItem = (item: typeof allItems[0], index: number, globalOffset: number = 0) => {
-    const youtubeEmbedUrl = item.platform === 'youtube' && item.videoUrl ? getYouTubeEmbedUrl(item.videoUrl) : '';
-    const instagramPostId = item.platform === 'instagram' && item.videoUrl ? getInstagramPostId(item.videoUrl) : '';
-
-    let itemContent = null;
-
-    if (item.type === 'video' && item.platform === 'instagram') {
-      if (item.embedCode) {
-        itemContent = (
-          <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <InstagramEmbedBlock embedCode={item.embedCode} />
-          </div>
-        );
-      } else if (instagramPostId && item.videoUrl) {
-        itemContent = (
-          <div style={{ width: '100%', height: '100%', background: '#000' }}>
-            <InstagramEmbed url={item.videoUrl} />
-          </div>
-        );
-      } else {
-        itemContent = (
-          <div style={{ width: '100%', height: '100%', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', fontSize: '14px' }}>
-            Instagram content not available
-          </div>
-        );
-      }
-    } else if (item.type === 'video' && item.platform === 'youtube' && youtubeEmbedUrl) {
-      itemContent = (
-        <div style={{ width: '100%', height: '100%', background: '#000' }}>
-          <iframe
-            src={youtubeEmbedUrl}
-            width="100%"
-            height="100%"
-            style={{ border: 'none', borderRadius: '0px' }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title={item.alt}
-          />
-        </div>
-      );
-    } else if (item.src) {
-      itemContent = (
-        <>
-          <img
-            src={item.src}
-            alt={item.alt}
-            loading={(globalOffset + index) < 2 ? 'eager' : 'lazy'}
-            decoding={(globalOffset + index) < 2 ? 'sync' : 'async'}
-            draggable={false}
-          />
-          <div className="gallery-overlay">
-            <p>{item.alt}</p>
-          </div>
-        </>
-      );
-    }
-
+  if (item.type === 'video' && item.platform === 'instagram') {
     return (
-      <div
-        className="reveal-scale gallery-item"
-        style={{ ['--delay' as any]: `${(globalOffset + index) * 0.1}s`, position: 'relative', aspectRatio: item.type === 'video' ? resolveAspect(item.aspect || '16/9') : resolveAspect(item.aspect) }}
-        key={`${item.alt}-${globalOffset + index}`}
-      >
-        {itemContent}
+      <div style={{ width: '100%', height: '100%', background: '#000', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {item.embedCode
+          ? <InstagramEmbedBlock embedCode={item.embedCode} />
+          : igId && item.videoUrl
+            ? <InstagramEmbed url={item.videoUrl} />
+            : <span style={{ color: '#666', fontSize: 14 }}>Instagram content not available</span>}
       </div>
     )
   }
+  if (item.type === 'video' && item.platform === 'youtube' && ytEmbed) {
+    return (
+      <div style={{ width: '100%', height: '100%', background: '#000' }}>
+        <iframe src={ytEmbed} width="100%" height="100%" style={{ border: 'none' }} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen title={item.alt} />
+      </div>
+    )
+  }
+  if (item.src) {
+    return (
+      <>
+        <img src={item.src} alt={item.alt} loading={index < 2 ? 'eager' : 'lazy'} decoding={index < 2 ? 'sync' : 'async'} draggable={false} />
+        <div className="gallery-overlay"><p>{item.alt}</p></div>
+      </>
+    )
+  }
+  return null
+}
+
+// Mobile horizontal carousel
+function GalleryCarousel({ items }: { items: GalleryItem[] }) {
+  const [current, setCurrent] = useState(0)
+  const trackRef = useRef<HTMLDivElement>(null)
+  const total = items.length
+
+  const scrollTo = (index: number) => {
+    const clamped = Math.max(0, Math.min(index, total - 1))
+    setCurrent(clamped)
+    if (!trackRef.current) return
+    const slide = trackRef.current.children[clamped] as HTMLElement
+    if (slide) slide.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+  }
+
+  // Sync dot indicator when user swipes freely
+  useEffect(() => {
+    const track = trackRef.current
+    if (!track) return
+    const onScroll = () => {
+      const slideWidth = (track.children[0] as HTMLElement)?.offsetWidth || 1
+      const idx = Math.round(track.scrollLeft / (slideWidth + 12))
+      setCurrent(Math.max(0, Math.min(idx, total - 1)))
+    }
+    track.addEventListener('scroll', onScroll, { passive: true })
+    return () => track.removeEventListener('scroll', onScroll)
+  }, [total])
+
+  return (
+    <div className="gallery-carousel">
+      <div className="gallery-carousel-track" ref={trackRef}>
+        {items.map((item, i) => (
+          <div
+            className="gallery-carousel-slide"
+            key={`${item.alt}-${i}`}
+            style={{ aspectRatio: resolveAspect(item.aspect) }}
+          >
+            <GalleryItemContent item={item} index={i} />
+          </div>
+        ))}
+      </div>
+
+      {total > 1 && (
+        <>
+          <button
+            className="gallery-carousel-arrow gallery-carousel-arrow--prev"
+            onClick={() => scrollTo(current - 1)}
+            aria-label="Previous"
+            disabled={current === 0}
+          >‹</button>
+          <button
+            className="gallery-carousel-arrow gallery-carousel-arrow--next"
+            onClick={() => scrollTo(current + 1)}
+            aria-label="Next"
+            disabled={current === total - 1}
+          >›</button>
+          <div className="gallery-carousel-dots">
+            {items.map((_, i) => (
+              <button
+                key={i}
+                className={`gallery-carousel-dot${i === current ? ' active' : ''}`}
+                onClick={() => scrollTo(i)}
+                aria-label={`Go to slide ${i + 1}`}
+              />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+// Desktop grid (existing style, max 12)
+function GalleryGrid({ items, offset = 0 }: { items: GalleryItem[]; offset?: number }) {
+  return (
+    <div className="gallery-grid">
+      {items.map((item, i) => (
+        <div
+          className="reveal-scale gallery-item"
+          style={{
+            ['--delay' as any]: `${(offset + i) * 0.1}s`,
+            position: 'relative',
+            aspectRatio: item.type === 'video' ? resolveAspect(item.aspect || '16/9') : resolveAspect(item.aspect),
+          }}
+          key={`${item.alt}-${offset + i}`}
+        >
+          <GalleryItemContent item={item} index={offset + i} />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+export const Gallery: React.FC = () => {
+  const { content } = useContentContext()
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 640px)')
+    setIsMobile(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const allItems: GalleryItem[] = content?.gallery?.length
+    ? content.gallery.map(item => ({
+        src: item.image,
+        alt: item.title,
+        aspect: item.aspect,
+        type: item.type || 'image',
+        videoUrl: item.videoUrl,
+        embedCode: item.embedCode,
+        platform: item.platform,
+      }))
+    : STATIC_PHOTOS
+
+  const photoItems = allItems.filter(item => item.type !== 'video').slice(0, GALLERY_MAX)
+  const videoItems = allItems.filter(item => item.type === 'video').slice(0, GALLERY_MAX)
 
   return (
     <section id="gallery" className="gallery">
@@ -300,21 +290,33 @@ export const Gallery: React.FC = () => {
 
         {photoItems.length > 0 && (
           <>
-            {videoItems.length > 0 && (
-              <h3 className="gallery-sub-title">Photos</h3>
-            )}
-            <div className="gallery-grid">
-              {photoItems.map((item, index) => renderItem(item, index, 0))}
-            </div>
+            {videoItems.length > 0 && <h3 className="gallery-sub-title">Photos</h3>}
+            {isMobile
+              ? <GalleryCarousel items={photoItems} />
+              : <GalleryGrid items={photoItems} offset={0} />}
           </>
         )}
 
         {videoItems.length > 0 && (
           <>
             <h3 className="gallery-sub-title">Videos</h3>
-            <div className="gallery-grid gallery-grid--videos">
-              {videoItems.map((item, index) => renderItem(item, index, photoItems.length))}
-            </div>
+            {isMobile
+              ? <GalleryCarousel items={videoItems} />
+              : <div className="gallery-grid gallery-grid--videos">
+                  {videoItems.map((item, i) => (
+                    <div
+                      className="reveal-scale gallery-item"
+                      style={{
+                        ['--delay' as any]: `${(photoItems.length + i) * 0.1}s`,
+                        position: 'relative',
+                        aspectRatio: resolveAspect(item.aspect || '16/9'),
+                      }}
+                      key={`${item.alt}-${photoItems.length + i}`}
+                    >
+                      <GalleryItemContent item={item} index={photoItems.length + i} />
+                    </div>
+                  ))}
+                </div>}
           </>
         )}
       </div>

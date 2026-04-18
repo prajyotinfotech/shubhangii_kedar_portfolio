@@ -18,6 +18,7 @@ const EventsManager = lazy(() => import('./admin/pages/sections/EventsManager'))
 const GalleryManager = lazy(() => import('./admin/pages/sections/GalleryManager'))
 const MusicManager = lazy(() => import('./admin/pages/sections/MusicManager'))
 const TestimonialsManager = lazy(() => import('./admin/pages/sections/TestimonialsManager'))
+const PerformedAtManager = lazy(() => import('./admin/pages/sections/PerformedAtManager'))
 const ContactEditor = lazy(() => import('./admin/pages/sections/ContactEditor'))
 const SocialLinksEditor = lazy(() => import('./admin/pages/sections/SocialLinksEditor'))
 const JourneyManager = lazy(() => import('./admin/pages/sections/JourneyManager'))
@@ -93,6 +94,11 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/testimonials" element={
                 <Suspense fallback={<AdminLoadingFallback />}>
                   <TestimonialsManager />
+                </Suspense>
+              } />
+              <Route path="/admin/performed-at" element={
+                <Suspense fallback={<AdminLoadingFallback />}>
+                  <PerformedAtManager />
                 </Suspense>
               } />
               <Route path="/admin/contact" element={
