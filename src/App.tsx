@@ -134,10 +134,10 @@ function App() {
           <TheShow />
           <Music />
           <SongList />
+          <PerformedAt />
           <Events />
           <Gallery />
           <Testimonials />
-          <PerformedAt />
           {/* <Newsletter /> */}
           <ContactBooking />
         </main>

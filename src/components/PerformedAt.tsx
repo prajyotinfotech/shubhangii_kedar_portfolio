@@ -66,6 +66,8 @@ export type PerformedAtItem = {
   embedCode?: string
   image?: string
   aspect?: string
+  cityFont?: string
+  cityColor?: string
 }
 
 const staticPerformedAt: PerformedAtItem[] = []
@@ -155,7 +157,14 @@ export const PerformedAt: React.FC = () => {
                 <p className="author" style={{ textAlign: 'center' }}>
                   {item.venue}
                 </p>
-                <p className="performed-at-city" style={{ textAlign: 'center' }}>
+                <p
+                  className="performed-at-city"
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: item.cityFont || undefined,
+                    color: item.cityColor || undefined,
+                  }}
+                >
                   {item.city}
                   {(item.month || item.year) && (
                     <span className="performed-at-date">
