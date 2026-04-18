@@ -229,30 +229,32 @@ export const Hero: React.FC = () => {
             </p>
           )}
 
-          <div className="hero-pills">
-            {heroPills.map((p, idx) => (
-              <div className={`hero-pill ${p.kind}`} key={`${p.kind}-${idx}`}>
-                <span className="pill-icon" aria-hidden="true">
-                  {p.kind === 'youtube' && <img src={youtubeIcon} alt="" />}
-                  {p.kind === 'instagram' && <img src={instagramIcon} alt="" />}
-                  {p.kind === 'tracks' && <img src={spotifyIcon} alt="" />}
-                </span>
-                <div className="pill-content">
-                  <span className="pill-label">{p.top}</span>
-                  <span className="pill-value" style={{
-                    color: '#ffffff',
-                    fontWeight: 700,
-                    ['--pill-desktop-size' as string]: p.desktopSize || '2rem',
-                    ['--pill-mobile-size' as string]: p.mobileSize || '1.5rem'
-                  } as React.CSSProperties}>
-                    <CountUp value={p.value} duration={2500} delay={500 + (idx * 200)} />
-                    {p.value > 1000 ? '+' : ''}
+          {activeSlide === 0 && (
+            <div className="hero-pills">
+              {heroPills.map((p, idx) => (
+                <div className={`hero-pill ${p.kind}`} key={`${p.kind}-${idx}`}>
+                  <span className="pill-icon" aria-hidden="true">
+                    {p.kind === 'youtube' && <img src={youtubeIcon} alt="" />}
+                    {p.kind === 'instagram' && <img src={instagramIcon} alt="" />}
+                    {p.kind === 'tracks' && <img src={spotifyIcon} alt="" />}
                   </span>
-                  <span className="pill-sub">{p.sub}</span>
+                  <div className="pill-content">
+                    <span className="pill-label">{p.top}</span>
+                    <span className="pill-value" style={{
+                      color: '#ffffff',
+                      fontWeight: 700,
+                      ['--pill-desktop-size' as string]: p.desktopSize || '2rem',
+                      ['--pill-mobile-size' as string]: p.mobileSize || '1.5rem'
+                    } as React.CSSProperties}>
+                      <CountUp value={p.value} duration={2500} delay={500 + (idx * 200)} />
+                      {p.value > 1000 ? '+' : ''}
+                    </span>
+                    <span className="pill-sub">{p.sub}</span>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {currentSlide.actions && (
             <div className="hero-buttons">
