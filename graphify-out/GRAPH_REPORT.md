@@ -1,12 +1,12 @@
-# Graph Report - /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio  (2026-04-18)
+# Graph Report - /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio  (2026-04-19)
 
 ## Corpus Check
-- 67 files · ~3,617,649 words
+- 67 files · ~3,618,421 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 263 nodes · 347 edges · 55 communities detected
-- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 68 edges (avg confidence: 0.8)
+- 267 nodes · 352 edges · 54 communities detected
+- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 69 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -64,7 +64,6 @@
 - [[_COMMUNITY_Community 51|Community 51]]
 - [[_COMMUNITY_Community 52|Community 52]]
 - [[_COMMUNITY_Community 53|Community 53]]
-- [[_COMMUNITY_Community 54|Community 54]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `updateSection()` - 26 edges
@@ -83,62 +82,62 @@
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleMoveDown()` --calls--> `updateSection()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
-- `handleThumbnailUpload()` --calls--> `uploadImage()`  [INFERRED]
-  /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleSavePageHeader()` --calls--> `updateSection()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleSaveSteps()` --calls--> `updateSection()`  [INFERRED]
+  /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
+- `handleImageUpload()` --calls--> `uploadImage()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.16
-Nodes (16): updateSection(), handleSubmit(), loadContent(), confirmDelete(), handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp() (+8 more)
+Cohesion: 0.09
+Nodes (12): handleImageUpload(), handleShowImageUpload(), handleSubmit(), uploadImage(), handleImageUpload(), handleImageUpload(), handleSlideChange(), handleSubmit() (+4 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.18
-Nodes (18): loadContent(), loadStats(), addItem(), deleteImage(), deleteItem(), fetchContent(), fetchSection(), getAuthHeaders() (+10 more)
+Cohesion: 0.22
+Nodes (14): updateSection(), confirmDelete(), handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems() (+6 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.11
-Nodes (11): handleImageUpload(), handleShowImageUpload(), handleSubmit(), uploadImage(), handleImageUpload(), handleImageUpload(), handleImageUpload(), handleImageUpload() (+3 more)
+Cohesion: 0.17
+Nodes (12): clamp(), onPointerMove(), onPointerUp(), onResize(), onScroll(), smoothScrollTo(), snapToNearest(), startInertia() (+4 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.21
-Nodes (7): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleThumbnailUpload(), handleUpdate(), loadItems()
+Cohesion: 0.14
+Nodes (12): loadContent(), fetchSection(), handleSubmit(), loadContent(), handleAdd(), handleDelete(), handleUpdate(), loadEvents() (+4 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.21
-Nodes (6): handleAddMilestone(), handleDeleteMilestone(), handleSaveEditMilestone(), handleSavePageHeader(), handleSaveSteps(), loadContent()
+Cohesion: 0.27
+Nodes (12): loadStats(), addItem(), deleteImage(), deleteItem(), fetchContent(), getAuthHeaders(), handleResponse(), listImages() (+4 more)
 
 ### Community 5 - "Community 5"
+Cohesion: 0.19
+Nodes (7): handleAddMilestone(), handleDeleteMilestone(), handleImageUpload(), handleSaveEditMilestone(), handleSavePageHeader(), handleSaveSteps(), loadContent()
+
+### Community 6 - "Community 6"
 Cohesion: 0.36
 Nodes (9): addItem(), deleteItem(), getHeaders(), initializeContent(), readContent(), updateItem(), updateSection(), writeContent() (+1 more)
 
-### Community 6 - "Community 6"
-Cohesion: 0.29
-Nodes (9): clamp(), onPointerMove(), onPointerUp(), onResize(), onScroll(), smoothScrollTo(), snapToNearest(), startInertia() (+1 more)
-
 ### Community 7 - "Community 7"
+Cohesion: 0.24
+Nodes (6): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems()
+
+### Community 8 - "Community 8"
 Cohesion: 0.29
 Nodes (6): encode(), handleSubmit(), base64UrlEncode(), beginLogin(), createCodeVerifier(), sha256()
 
-### Community 8 - "Community 8"
+### Community 9 - "Community 9"
 Cohesion: 0.31
 Nodes (5): ContentFetchError, fetchContent(), fetchSection(), readPersistentCache(), writePersistentCache()
 
-### Community 9 - "Community 9"
-Cohesion: 0.25
-Nodes (4): handleImageUpload(), handleSlideChange(), handleSubmit(), loadContent()
-
 ### Community 10 - "Community 10"
-Cohesion: 0.36
-Nodes (7): handleAdd(), handleDelete(), handleImageUpload(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems()
-
-### Community 11 - "Community 11"
 Cohesion: 0.39
 Nodes (4): goToSlide(), nextSlide(), onTouchEnd(), prevSlide()
+
+### Community 11 - "Community 11"
+Cohesion: 0.43
+Nodes (6): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadReleases()
 
 ### Community 12 - "Community 12"
 Cohesion: 0.43
@@ -182,7 +181,7 @@ Nodes (0):
 
 ### Community 22 - "Community 22"
 Cohesion: 0.67
-Nodes (2): getInstagramPostId(), InstagramPerformedEmbed()
+Nodes (0): 
 
 ### Community 23 - "Community 23"
 Cohesion: 0.67
@@ -308,10 +307,6 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
-### Community 54 - "Community 54"
-Cohesion: 1.0
-Nodes (0): 
-
 ## Knowledge Gaps
 - **Thin community `Community 28`** (2 nodes): `initializePassword()`, `auth.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -359,24 +354,22 @@ Nodes (0):
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 50`** (1 nodes): `Events.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (1 nodes): `About.tsx`
+- **Thin community `Community 51`** (1 nodes): `Journey.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `Journey.tsx`
+- **Thin community `Community 52`** (1 nodes): `TheShow.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `TheShow.tsx`
-  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (1 nodes): `content.ts`
+- **Thin community `Community 53`** (1 nodes): `content.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `updateSection()` connect `Community 0` to `Community 1`, `Community 2`, `Community 3`, `Community 4`, `Community 9`, `Community 10`, `Community 12`?**
-  _High betweenness centrality (0.067) - this node is a cross-community bridge._
-- **Why does `fetchSection()` connect `Community 1` to `Community 0`, `Community 2`, `Community 3`, `Community 4`, `Community 9`, `Community 10`, `Community 12`?**
-  _High betweenness centrality (0.043) - this node is a cross-community bridge._
-- **Why does `uploadImage()` connect `Community 2` to `Community 1`, `Community 10`, `Community 3`, `Community 9`?**
-  _High betweenness centrality (0.031) - this node is a cross-community bridge._
+- **Why does `updateSection()` connect `Community 1` to `Community 0`, `Community 3`, `Community 4`, `Community 5`, `Community 7`, `Community 11`, `Community 12`?**
+  _High betweenness centrality (0.065) - this node is a cross-community bridge._
+- **Why does `fetchSection()` connect `Community 3` to `Community 1`, `Community 4`, `Community 5`, `Community 7`, `Community 11`, `Community 12`?**
+  _High betweenness centrality (0.042) - this node is a cross-community bridge._
+- **Why does `uploadImage()` connect `Community 0` to `Community 3`, `Community 4`, `Community 5`?**
+  _High betweenness centrality (0.030) - this node is a cross-community bridge._
 - **Are the 23 inferred relationships involving `updateSection()` (e.g. with `handleUpdate()` and `handleMoveUp()`) actually correct?**
   _`updateSection()` has 23 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 12 inferred relationships involving `fetchSection()` (e.g. with `loadItems()` and `loadContent()`) actually correct?**
