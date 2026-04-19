@@ -36,7 +36,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/index.js",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_backend_src_index_js",
-      "community": 5,
+      "community": 6,
       "norm_label": "index.js"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/index.js",
       "source_location": "L82",
       "id": "index_startserver",
-      "community": 5,
+      "community": 6,
       "norm_label": "startserver()"
     },
     {
@@ -162,7 +162,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/middleware/auth.js",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_backend_src_middleware_auth_js",
-      "community": 23,
+      "community": 22,
       "norm_label": "auth.js"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/middleware/auth.js",
       "source_location": "L12",
       "id": "auth_authenticatetoken",
-      "community": 23,
+      "community": 22,
       "norm_label": "authenticatetoken()"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/middleware/auth.js",
       "source_location": "L46",
       "id": "auth_generatetoken",
-      "community": 23,
+      "community": 22,
       "norm_label": "generatetoken()"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_backend_src_services_fileservice_js",
-      "community": 5,
+      "community": 6,
       "norm_label": "fileservice.js"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L27",
       "id": "fileservice_getheaders",
-      "community": 5,
+      "community": 6,
       "norm_label": "getheaders()"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L39",
       "id": "fileservice_readcontent",
-      "community": 5,
+      "community": 6,
       "norm_label": "readcontent()"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L100",
       "id": "fileservice_writecontent",
-      "community": 5,
+      "community": 6,
       "norm_label": "writecontent()"
     },
     {
@@ -225,7 +225,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L142",
       "id": "fileservice_updatesection",
-      "community": 5,
+      "community": 6,
       "norm_label": "updatesection()"
     },
     {
@@ -234,7 +234,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L152",
       "id": "fileservice_additem",
-      "community": 5,
+      "community": 6,
       "norm_label": "additem()"
     },
     {
@@ -243,7 +243,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L172",
       "id": "fileservice_updateitem",
-      "community": 5,
+      "community": 6,
       "norm_label": "updateitem()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L192",
       "id": "fileservice_deleteitem",
-      "community": 5,
+      "community": 6,
       "norm_label": "deleteitem()"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/backend/src/services/fileService.js",
       "source_location": "L210",
       "id": "fileservice_initializecontent",
-      "community": 5,
+      "community": 6,
       "norm_label": "initializecontent()"
     },
     {
@@ -306,7 +306,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_auth_spotifyauth_ts",
-      "community": 7,
+      "community": 8,
       "norm_label": "spotifyauth.ts"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L15",
       "id": "spotifyauth_base64urlencode",
-      "community": 7,
+      "community": 8,
       "norm_label": "base64urlencode()"
     },
     {
@@ -324,7 +324,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L22",
       "id": "spotifyauth_sha256",
-      "community": 7,
+      "community": 8,
       "norm_label": "sha256()"
     },
     {
@@ -333,7 +333,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L29",
       "id": "spotifyauth_createcodeverifier",
-      "community": 7,
+      "community": 8,
       "norm_label": "createcodeverifier()"
     },
     {
@@ -342,7 +342,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L35",
       "id": "spotifyauth_beginlogin",
-      "community": 7,
+      "community": 8,
       "norm_label": "beginlogin()"
     },
     {
@@ -351,7 +351,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L56",
       "id": "spotifyauth_handleauthcallback",
-      "community": 7,
+      "community": 8,
       "norm_label": "handleauthcallback()"
     },
     {
@@ -360,7 +360,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/auth/spotifyAuth.ts",
       "source_location": "L83",
       "id": "spotifyauth_refreshtoken",
-      "community": 7,
+      "community": 8,
       "norm_label": "refreshtoken()"
     },
     {
@@ -369,7 +369,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/hooks/useContent.ts",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_hooks_usecontent_ts",
-      "community": 24,
+      "community": 23,
       "norm_label": "usecontent.ts"
     },
     {
@@ -378,7 +378,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/hooks/useContent.ts",
       "source_location": "L19",
       "id": "usecontent_usecontent",
-      "community": 24,
+      "community": 23,
       "norm_label": "usecontent()"
     },
     {
@@ -387,7 +387,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/hooks/useContent.ts",
       "source_location": "L47",
       "id": "usecontent_usecontentsection",
-      "community": 24,
+      "community": 23,
       "norm_label": "usecontentsection()"
     },
     {
@@ -495,7 +495,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/ContactBooking.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_contactbooking_tsx",
-      "community": 7,
+      "community": 8,
       "norm_label": "contactbooking.tsx"
     },
     {
@@ -504,7 +504,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/ContactBooking.tsx",
       "source_location": "L3",
       "id": "contactbooking_encode",
-      "community": 7,
+      "community": 8,
       "norm_label": "encode()"
     },
     {
@@ -513,7 +513,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/ContactBooking.tsx",
       "source_location": "L12",
       "id": "contactbooking_handlesubmit",
-      "community": 7,
+      "community": 8,
       "norm_label": "handlesubmit()"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Navbar.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_navbar_tsx",
-      "community": 25,
+      "community": 24,
       "norm_label": "navbar.tsx"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Navbar.tsx",
       "source_location": "L26",
       "id": "navbar_onscroll",
-      "community": 25,
+      "community": 24,
       "norm_label": "onscroll()"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Navbar.tsx",
       "source_location": "L51",
       "id": "navbar_onoutside",
-      "community": 25,
+      "community": 24,
       "norm_label": "onoutside()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_hero_tsx",
-      "community": 11,
+      "community": 10,
       "norm_label": "hero.tsx"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L83",
       "id": "hero_gotoslide",
-      "community": 11,
+      "community": 10,
       "norm_label": "gotoslide()"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L95",
       "id": "hero_nextslide",
-      "community": 11,
+      "community": 10,
       "norm_label": "nextslide()"
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L96",
       "id": "hero_prevslide",
-      "community": 11,
+      "community": 10,
       "norm_label": "prevslide()"
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L98",
       "id": "hero_ontouchstart",
-      "community": 11,
+      "community": 10,
       "norm_label": "ontouchstart()"
     },
     {
@@ -666,7 +666,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L103",
       "id": "hero_ontouchmove",
-      "community": 11,
+      "community": 10,
       "norm_label": "ontouchmove()"
     },
     {
@@ -675,7 +675,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L108",
       "id": "hero_ontouchend",
-      "community": 11,
+      "community": 10,
       "norm_label": "ontouchend()"
     },
     {
@@ -684,7 +684,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Hero.tsx",
       "source_location": "L129",
       "id": "hero_typechar",
-      "community": 11,
+      "community": 10,
       "norm_label": "typechar()"
     },
     {
@@ -819,7 +819,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/OptimizedImage.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_optimizedimage_tsx",
-      "community": 26,
+      "community": 25,
       "norm_label": "optimizedimage.tsx"
     },
     {
@@ -828,7 +828,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/OptimizedImage.tsx",
       "source_location": "L32",
       "id": "optimizedimage_handleload",
-      "community": 26,
+      "community": 25,
       "norm_label": "handleload()"
     },
     {
@@ -837,7 +837,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/OptimizedImage.tsx",
       "source_location": "L37",
       "id": "optimizedimage_handleerror",
-      "community": 26,
+      "community": 25,
       "norm_label": "handleerror()"
     },
     {
@@ -846,8 +846,26 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/About.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_about_tsx",
-      "community": 51,
+      "community": 26,
       "norm_label": "about.tsx"
+    },
+    {
+      "label": "scrollTo()",
+      "file_type": "code",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/About.tsx",
+      "source_location": "L10",
+      "id": "about_scrollto",
+      "community": 26,
+      "norm_label": "scrollto()"
+    },
+    {
+      "label": "onScroll()",
+      "file_type": "code",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/About.tsx",
+      "source_location": "L22",
+      "id": "about_onscroll",
+      "community": 26,
+      "norm_label": "onscroll()"
     },
     {
       "label": "Journey.tsx",
@@ -855,7 +873,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/Journey.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_journey_tsx",
-      "community": 52,
+      "community": 51,
       "norm_label": "journey.tsx"
     },
     {
@@ -864,7 +882,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/TheShow.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_theshow_tsx",
-      "community": 53,
+      "community": 52,
       "norm_label": "theshow.tsx"
     },
     {
@@ -873,7 +891,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_hangingmic_tsx",
-      "community": 6,
+      "community": 2,
       "norm_label": "hangingmic.tsx"
     },
     {
@@ -882,7 +900,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L4",
       "id": "hangingmic_clamp",
-      "community": 6,
+      "community": 2,
       "norm_label": "clamp()"
     },
     {
@@ -891,7 +909,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L19",
       "id": "hangingmic_updateprogress",
-      "community": 6,
+      "community": 2,
       "norm_label": "updateprogress()"
     },
     {
@@ -900,7 +918,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L27",
       "id": "hangingmic_onscroll",
-      "community": 6,
+      "community": 2,
       "norm_label": "onscroll()"
     },
     {
@@ -909,7 +927,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L28",
       "id": "hangingmic_onresize",
-      "community": 6,
+      "community": 2,
       "norm_label": "onresize()"
     },
     {
@@ -918,7 +936,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L48",
       "id": "hangingmic_onpointerdown",
-      "community": 6,
+      "community": 2,
       "norm_label": "onpointerdown()"
     },
     {
@@ -927,7 +945,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L60",
       "id": "hangingmic_onpointermove",
-      "community": 6,
+      "community": 2,
       "norm_label": "onpointermove()"
     },
     {
@@ -936,7 +954,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L77",
       "id": "hangingmic_onpointerup",
-      "community": 6,
+      "community": 2,
       "norm_label": "onpointerup()"
     },
     {
@@ -945,7 +963,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L84",
       "id": "hangingmic_snaptonearest",
-      "community": 6,
+      "community": 2,
       "norm_label": "snaptonearest()"
     },
     {
@@ -954,7 +972,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L98",
       "id": "hangingmic_smoothscrollto",
-      "community": 6,
+      "community": 2,
       "norm_label": "smoothscrollto()"
     },
     {
@@ -963,7 +981,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L113",
       "id": "hangingmic_startinertia",
-      "community": 6,
+      "community": 2,
       "norm_label": "startinertia()"
     },
     {
@@ -999,7 +1017,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
-      "community": 22,
+      "community": 2,
       "norm_label": "performedat.tsx"
     },
     {
@@ -1008,7 +1026,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
       "source_location": "L4",
       "id": "performedat_getyoutubeembedurl",
-      "community": 22,
+      "community": 2,
       "norm_label": "getyoutubeembedurl()"
     },
     {
@@ -1017,7 +1035,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
       "source_location": "L13",
       "id": "performedat_getinstagrampostid",
-      "community": 22,
+      "community": 2,
       "norm_label": "getinstagrampostid()"
     },
     {
@@ -1026,8 +1044,26 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
       "source_location": "L20",
       "id": "performedat_instagramperformedembed",
-      "community": 22,
+      "community": 2,
       "norm_label": "instagramperformedembed()"
+    },
+    {
+      "label": "scrollTo()",
+      "file_type": "code",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
+      "source_location": "L123",
+      "id": "performedat_scrollto",
+      "community": 2,
+      "norm_label": "scrollto()"
+    },
+    {
+      "label": "onScroll()",
+      "file_type": "code",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
+      "source_location": "L135",
+      "id": "performedat_onscroll",
+      "community": 2,
+      "norm_label": "onscroll()"
     },
     {
       "label": "VinylScrollPage.tsx",
@@ -1098,7 +1134,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/data/content.ts",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_data_content_ts",
-      "community": 54,
+      "community": 53,
       "norm_label": "content.ts"
     },
     {
@@ -1179,79 +1215,79 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
-      "community": 8,
+      "community": 9,
       "norm_label": "contentservice.ts"
     },
     {
       "label": "readPersistentCache()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L272",
+      "source_location": "L274",
       "id": "contentservice_readpersistentcache",
-      "community": 8,
+      "community": 9,
       "norm_label": "readpersistentcache()"
     },
     {
       "label": "writePersistentCache()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L284",
+      "source_location": "L286",
       "id": "contentservice_writepersistentcache",
-      "community": 8,
+      "community": 9,
       "norm_label": "writepersistentcache()"
     },
     {
       "label": "ContentFetchError",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L292",
+      "source_location": "L294",
       "id": "contentservice_contentfetcherror",
-      "community": 8,
+      "community": 9,
       "norm_label": "contentfetcherror"
     },
     {
       "label": ".constructor()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L294",
+      "source_location": "L296",
       "id": "contentservice_contentfetcherror_constructor",
-      "community": 8,
+      "community": 9,
       "norm_label": ".constructor()"
     },
     {
       "label": "fetchContent()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L305",
+      "source_location": "L307",
       "id": "contentservice_fetchcontent",
-      "community": 8,
+      "community": 9,
       "norm_label": "fetchcontent()"
     },
     {
       "label": "fetchSection()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L354",
+      "source_location": "L356",
       "id": "contentservice_fetchsection",
-      "community": 8,
+      "community": 9,
       "norm_label": "fetchsection()"
     },
     {
       "label": "clearContentCache()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L365",
+      "source_location": "L367",
       "id": "contentservice_clearcontentcache",
-      "community": 8,
+      "community": 9,
       "norm_label": "clearcontentcache()"
     },
     {
       "label": "getApiUrl()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L373",
+      "source_location": "L375",
       "id": "contentservice_getapiurl",
-      "community": 8,
+      "community": 9,
       "norm_label": "getapiurl()"
     },
     {
@@ -1359,7 +1395,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/AdminDashboard.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_admindashboard_tsx",
-      "community": 1,
+      "community": 4,
       "norm_label": "admindashboard.tsx"
     },
     {
@@ -1368,7 +1404,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/AdminDashboard.tsx",
       "source_location": "L28",
       "id": "admindashboard_loadstats",
-      "community": 1,
+      "community": 4,
       "norm_label": "loadstats()"
     },
     {
@@ -1377,7 +1413,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_songlistmanager_tsx",
-      "community": 3,
+      "community": 7,
       "norm_label": "songlistmanager.tsx"
     },
     {
@@ -1386,7 +1422,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L32",
       "id": "songlistmanager_spotifyicon",
-      "community": 3,
+      "community": 7,
       "norm_label": "spotifyicon()"
     },
     {
@@ -1395,7 +1431,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L37",
       "id": "songlistmanager_youtubeicon",
-      "community": 3,
+      "community": 7,
       "norm_label": "youtubeicon()"
     },
     {
@@ -1404,7 +1440,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L42",
       "id": "songlistmanager_instaicon",
-      "community": 3,
+      "community": 7,
       "norm_label": "instaicon()"
     },
     {
@@ -1413,7 +1449,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L68",
       "id": "songlistmanager_handlemousedown",
-      "community": 3,
+      "community": 7,
       "norm_label": "handlemousedown()"
     },
     {
@@ -1422,7 +1458,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L224",
       "id": "songlistmanager_loaditems",
-      "community": 3,
+      "community": 7,
       "norm_label": "loaditems()"
     },
     {
@@ -1431,7 +1467,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L235",
       "id": "songlistmanager_handleadd",
-      "community": 3,
+      "community": 7,
       "norm_label": "handleadd()"
     },
     {
@@ -1440,7 +1476,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L255",
       "id": "songlistmanager_handleupdate",
-      "community": 3,
+      "community": 7,
       "norm_label": "handleupdate()"
     },
     {
@@ -1449,7 +1485,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L272",
       "id": "songlistmanager_handledelete",
-      "community": 3,
+      "community": 7,
       "norm_label": "handledelete()"
     },
     {
@@ -1458,7 +1494,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L283",
       "id": "songlistmanager_handlemoveup",
-      "community": 3,
+      "community": 7,
       "norm_label": "handlemoveup()"
     },
     {
@@ -1467,7 +1503,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L291",
       "id": "songlistmanager_handlemovedown",
-      "community": 3,
+      "community": 7,
       "norm_label": "handlemovedown()"
     },
     {
@@ -1476,7 +1512,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx",
       "source_location": "L299",
       "id": "songlistmanager_handlethumbnailupload",
-      "community": 3,
+      "community": 0,
       "norm_label": "handlethumbnailupload()"
     },
     {
@@ -1485,7 +1521,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_journeymanager_tsx",
-      "community": 4,
+      "community": 5,
       "norm_label": "journeymanager.tsx"
     },
     {
@@ -1494,7 +1530,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L50",
       "id": "journeymanager_loadcontent",
-      "community": 4,
+      "community": 5,
       "norm_label": "loadcontent()"
     },
     {
@@ -1503,7 +1539,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L71",
       "id": "journeymanager_handlestepchange",
-      "community": 4,
+      "community": 5,
       "norm_label": "handlestepchange()"
     },
     {
@@ -1512,7 +1548,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L77",
       "id": "journeymanager_handlehighlightchange",
-      "community": 4,
+      "community": 5,
       "norm_label": "handlehighlightchange()"
     },
     {
@@ -1521,7 +1557,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L85",
       "id": "journeymanager_addhighlight",
-      "community": 4,
+      "community": 5,
       "norm_label": "addhighlight()"
     },
     {
@@ -1530,7 +1566,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L91",
       "id": "journeymanager_removehighlight",
-      "community": 4,
+      "community": 5,
       "norm_label": "removehighlight()"
     },
     {
@@ -1539,7 +1575,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L97",
       "id": "journeymanager_handlesavepageheader",
-      "community": 4,
+      "community": 5,
       "norm_label": "handlesavepageheader()"
     },
     {
@@ -1548,7 +1584,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L109",
       "id": "journeymanager_handlesavesteps",
-      "community": 4,
+      "community": 5,
       "norm_label": "handlesavesteps()"
     },
     {
@@ -1557,7 +1593,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L121",
       "id": "journeymanager_handleaddmilestone",
-      "community": 4,
+      "community": 5,
       "norm_label": "handleaddmilestone()"
     },
     {
@@ -1566,7 +1602,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L140",
       "id": "journeymanager_starteditmilestone",
-      "community": 4,
+      "community": 5,
       "norm_label": "starteditmilestone()"
     },
     {
@@ -1575,7 +1611,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L152",
       "id": "journeymanager_handlesaveeditmilestone",
-      "community": 4,
+      "community": 5,
       "norm_label": "handlesaveeditmilestone()"
     },
     {
@@ -1584,7 +1620,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L171",
       "id": "journeymanager_handleimageupload",
-      "community": 2,
+      "community": 5,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1593,7 +1629,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx",
       "source_location": "L191",
       "id": "journeymanager_handledeletemilestone",
-      "community": 4,
+      "community": 5,
       "norm_label": "handledeletemilestone()"
     },
     {
@@ -1602,7 +1638,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_musicmanager_tsx",
-      "community": 0,
+      "community": 11,
       "norm_label": "musicmanager.tsx"
     },
     {
@@ -1611,7 +1647,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L50",
       "id": "musicmanager_getyoutubeembedurl",
-      "community": 0,
+      "community": 11,
       "norm_label": "getyoutubeembedurl()"
     },
     {
@@ -1620,7 +1656,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L118",
       "id": "musicmanager_loadreleases",
-      "community": 0,
+      "community": 11,
       "norm_label": "loadreleases()"
     },
     {
@@ -1629,7 +1665,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L129",
       "id": "musicmanager_handleadd",
-      "community": 0,
+      "community": 11,
       "norm_label": "handleadd()"
     },
     {
@@ -1638,7 +1674,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L146",
       "id": "musicmanager_handleupdate",
-      "community": 0,
+      "community": 11,
       "norm_label": "handleupdate()"
     },
     {
@@ -1647,7 +1683,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L163",
       "id": "musicmanager_handledelete",
-      "community": 0,
+      "community": 11,
       "norm_label": "handledelete()"
     },
     {
@@ -1656,7 +1692,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L174",
       "id": "musicmanager_handlemoveup",
-      "community": 0,
+      "community": 11,
       "norm_label": "handlemoveup()"
     },
     {
@@ -1665,7 +1701,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L183",
       "id": "musicmanager_handlemovedown",
-      "community": 0,
+      "community": 11,
       "norm_label": "handlemovedown()"
     },
     {
@@ -1674,7 +1710,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/MusicManager.tsx",
       "source_location": "L192",
       "id": "musicmanager_handleimageupload",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1683,79 +1719,79 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
-      "community": 12,
+      "community": 1,
       "norm_label": "performedatmanager.tsx"
     },
     {
       "label": "getYouTubeEmbedUrl()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L42",
+      "source_location": "L64",
       "id": "performedatmanager_getyoutubeembedurl",
-      "community": 12,
+      "community": 1,
       "norm_label": "getyoutubeembedurl()"
     },
     {
       "label": "loadItems()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L113",
+      "source_location": "L143",
       "id": "performedatmanager_loaditems",
-      "community": 12,
+      "community": 1,
       "norm_label": "loaditems()"
     },
     {
       "label": "handleAdd()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L125",
+      "source_location": "L155",
       "id": "performedatmanager_handleadd",
-      "community": 12,
+      "community": 1,
       "norm_label": "handleadd()"
     },
     {
       "label": "handleUpdate()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L144",
+      "source_location": "L174",
       "id": "performedatmanager_handleupdate",
-      "community": 12,
+      "community": 1,
       "norm_label": "handleupdate()"
     },
     {
       "label": "handleDelete()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L161",
+      "source_location": "L191",
       "id": "performedatmanager_handledelete",
-      "community": 12,
+      "community": 1,
       "norm_label": "handledelete()"
     },
     {
       "label": "handleMoveUp()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L172",
+      "source_location": "L202",
       "id": "performedatmanager_handlemoveup",
-      "community": 12,
+      "community": 1,
       "norm_label": "handlemoveup()"
     },
     {
       "label": "handleMoveDown()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L181",
+      "source_location": "L211",
       "id": "performedatmanager_handlemovedown",
-      "community": 12,
+      "community": 1,
       "norm_label": "handlemovedown()"
     },
     {
       "label": "handleImageUpload()",
       "file_type": "code",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L190",
+      "source_location": "L220",
       "id": "performedatmanager_handleimageupload",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1764,7 +1800,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ThemeManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_thememanager_tsx",
-      "community": 2,
+      "community": 3,
       "norm_label": "thememanager.tsx"
     },
     {
@@ -1773,7 +1809,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ThemeManager.tsx",
       "source_location": "L52",
       "id": "thememanager_loadtheme",
-      "community": 2,
+      "community": 3,
       "norm_label": "loadtheme()"
     },
     {
@@ -1782,7 +1818,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ThemeManager.tsx",
       "source_location": "L65",
       "id": "thememanager_handlesave",
-      "community": 2,
+      "community": 3,
       "norm_label": "handlesave()"
     },
     {
@@ -1791,7 +1827,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ThemeManager.tsx",
       "source_location": "L79",
       "id": "thememanager_handleimageupload",
-      "community": 2,
+      "community": 3,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1800,7 +1836,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ThemeManager.tsx",
       "source_location": "L95",
       "id": "thememanager_handleremovelogo",
-      "community": 2,
+      "community": 3,
       "norm_label": "handleremovelogo()"
     },
     {
@@ -1809,7 +1845,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_abouteditor_tsx",
-      "community": 2,
+      "community": 0,
       "norm_label": "abouteditor.tsx"
     },
     {
@@ -1818,7 +1854,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L61",
       "id": "abouteditor_loadcontent",
-      "community": 1,
+      "community": 3,
       "norm_label": "loadcontent()"
     },
     {
@@ -1827,7 +1863,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L72",
       "id": "abouteditor_handlechange",
-      "community": 2,
+      "community": 0,
       "norm_label": "handlechange()"
     },
     {
@@ -1836,7 +1872,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L85",
       "id": "abouteditor_handlemetricchange",
-      "community": 2,
+      "community": 0,
       "norm_label": "handlemetricchange()"
     },
     {
@@ -1845,7 +1881,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L91",
       "id": "abouteditor_handleachievementchange",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleachievementchange()"
     },
     {
@@ -1854,7 +1890,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L97",
       "id": "abouteditor_addachievement",
-      "community": 2,
+      "community": 0,
       "norm_label": "addachievement()"
     },
     {
@@ -1863,7 +1899,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L104",
       "id": "abouteditor_removeachievement",
-      "community": 2,
+      "community": 0,
       "norm_label": "removeachievement()"
     },
     {
@@ -1872,7 +1908,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L111",
       "id": "abouteditor_handleimageupload",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1881,7 +1917,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L126",
       "id": "abouteditor_handleshowimageupload",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleshowimageupload()"
     },
     {
@@ -1890,7 +1926,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/AboutEditor.tsx",
       "source_location": "L141",
       "id": "abouteditor_handlesubmit",
-      "community": 2,
+      "community": 0,
       "norm_label": "handlesubmit()"
     },
     {
@@ -1899,7 +1935,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_gallerymanager_tsx",
-      "community": 0,
+      "community": 1,
       "norm_label": "gallerymanager.tsx"
     },
     {
@@ -1908,7 +1944,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L34",
       "id": "gallerymanager_getyoutubeembedurl",
-      "community": 0,
+      "community": 1,
       "norm_label": "getyoutubeembedurl()"
     },
     {
@@ -1917,7 +1953,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L86",
       "id": "gallerymanager_confirmdelete",
-      "community": 0,
+      "community": 1,
       "norm_label": "confirmdelete()"
     },
     {
@@ -1926,7 +1962,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L95",
       "id": "gallerymanager_loaditems",
-      "community": 0,
+      "community": 1,
       "norm_label": "loaditems()"
     },
     {
@@ -1935,7 +1971,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L128",
       "id": "gallerymanager_handleadd",
-      "community": 0,
+      "community": 1,
       "norm_label": "handleadd()"
     },
     {
@@ -1944,7 +1980,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L148",
       "id": "gallerymanager_handleupdate",
-      "community": 0,
+      "community": 1,
       "norm_label": "handleupdate()"
     },
     {
@@ -1953,7 +1989,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L167",
       "id": "gallerymanager_handledelete",
-      "community": 0,
+      "community": 1,
       "norm_label": "handledelete()"
     },
     {
@@ -1962,7 +1998,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L208",
       "id": "gallerymanager_handlemoveup",
-      "community": 0,
+      "community": 1,
       "norm_label": "handlemoveup()"
     },
     {
@@ -1971,7 +2007,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L222",
       "id": "gallerymanager_handlemovedown",
-      "community": 0,
+      "community": 1,
       "norm_label": "handlemovedown()"
     },
     {
@@ -1980,7 +2016,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/GalleryManager.tsx",
       "source_location": "L242",
       "id": "gallerymanager_handleimageupload",
-      "community": 2,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -1989,7 +2025,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_heroeditor_tsx",
-      "community": 9,
+      "community": 0,
       "norm_label": "heroeditor.tsx"
     },
     {
@@ -1998,7 +2034,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L43",
       "id": "heroeditor_loadcontent",
-      "community": 9,
+      "community": 3,
       "norm_label": "loadcontent()"
     },
     {
@@ -2007,7 +2043,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L54",
       "id": "heroeditor_handleimageupload",
-      "community": 9,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -2016,7 +2052,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L70",
       "id": "heroeditor_handleslidechange",
-      "community": 9,
+      "community": 0,
       "norm_label": "handleslidechange()"
     },
     {
@@ -2025,7 +2061,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L76",
       "id": "heroeditor_handleheadingchange",
-      "community": 9,
+      "community": 0,
       "norm_label": "handleheadingchange()"
     },
     {
@@ -2034,7 +2070,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L84",
       "id": "heroeditor_addslide",
-      "community": 9,
+      "community": 0,
       "norm_label": "addslide()"
     },
     {
@@ -2043,7 +2079,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L97",
       "id": "heroeditor_removeslide",
-      "community": 9,
+      "community": 0,
       "norm_label": "removeslide()"
     },
     {
@@ -2052,7 +2088,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L104",
       "id": "heroeditor_handlepillchange",
-      "community": 9,
+      "community": 0,
       "norm_label": "handlepillchange()"
     },
     {
@@ -2061,7 +2097,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/HeroEditor.tsx",
       "source_location": "L110",
       "id": "heroeditor_handlesubmit",
-      "community": 9,
+      "community": 0,
       "norm_label": "handlesubmit()"
     },
     {
@@ -2070,7 +2106,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/EventsManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_eventsmanager_tsx",
-      "community": 1,
+      "community": 3,
       "norm_label": "eventsmanager.tsx"
     },
     {
@@ -2079,7 +2115,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/EventsManager.tsx",
       "source_location": "L45",
       "id": "eventsmanager_loadevents",
-      "community": 1,
+      "community": 3,
       "norm_label": "loadevents()"
     },
     {
@@ -2088,7 +2124,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/EventsManager.tsx",
       "source_location": "L56",
       "id": "eventsmanager_handleadd",
-      "community": 1,
+      "community": 3,
       "norm_label": "handleadd()"
     },
     {
@@ -2097,7 +2133,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/EventsManager.tsx",
       "source_location": "L76",
       "id": "eventsmanager_handleupdate",
-      "community": 1,
+      "community": 3,
       "norm_label": "handleupdate()"
     },
     {
@@ -2106,7 +2142,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/EventsManager.tsx",
       "source_location": "L95",
       "id": "eventsmanager_handledelete",
-      "community": 1,
+      "community": 3,
       "norm_label": "handledelete()"
     },
     {
@@ -2115,7 +2151,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ContactEditor.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_contacteditor_tsx",
-      "community": 0,
+      "community": 3,
       "norm_label": "contacteditor.tsx"
     },
     {
@@ -2124,7 +2160,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ContactEditor.tsx",
       "source_location": "L28",
       "id": "contacteditor_loadcontent",
-      "community": 0,
+      "community": 3,
       "norm_label": "loadcontent()"
     },
     {
@@ -2133,7 +2169,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ContactEditor.tsx",
       "source_location": "L39",
       "id": "contacteditor_handlechange",
-      "community": 0,
+      "community": 3,
       "norm_label": "handlechange()"
     },
     {
@@ -2142,7 +2178,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/ContactEditor.tsx",
       "source_location": "L44",
       "id": "contacteditor_handlesubmit",
-      "community": 0,
+      "community": 3,
       "norm_label": "handlesubmit()"
     },
     {
@@ -2151,7 +2187,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_testimonialsmanager_tsx",
-      "community": 10,
+      "community": 12,
       "norm_label": "testimonialsmanager.tsx"
     },
     {
@@ -2160,7 +2196,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L31",
       "id": "testimonialsmanager_getyoutubeembedurl",
-      "community": 10,
+      "community": 12,
       "norm_label": "getyoutubeembedurl()"
     },
     {
@@ -2169,7 +2205,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L98",
       "id": "testimonialsmanager_loaditems",
-      "community": 10,
+      "community": 12,
       "norm_label": "loaditems()"
     },
     {
@@ -2178,7 +2214,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L109",
       "id": "testimonialsmanager_handleadd",
-      "community": 10,
+      "community": 12,
       "norm_label": "handleadd()"
     },
     {
@@ -2187,7 +2223,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L128",
       "id": "testimonialsmanager_handleupdate",
-      "community": 10,
+      "community": 12,
       "norm_label": "handleupdate()"
     },
     {
@@ -2196,7 +2232,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L145",
       "id": "testimonialsmanager_handledelete",
-      "community": 10,
+      "community": 12,
       "norm_label": "handledelete()"
     },
     {
@@ -2205,7 +2241,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L156",
       "id": "testimonialsmanager_handlemoveup",
-      "community": 10,
+      "community": 12,
       "norm_label": "handlemoveup()"
     },
     {
@@ -2214,7 +2250,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L165",
       "id": "testimonialsmanager_handlemovedown",
-      "community": 10,
+      "community": 12,
       "norm_label": "handlemovedown()"
     },
     {
@@ -2223,7 +2259,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/TestimonialsManager.tsx",
       "source_location": "L174",
       "id": "testimonialsmanager_handleimageupload",
-      "community": 10,
+      "community": 0,
       "norm_label": "handleimageupload()"
     },
     {
@@ -2232,7 +2268,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SocialLinksEditor.tsx",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_sociallinkseditor_tsx",
-      "community": 1,
+      "community": 4,
       "norm_label": "sociallinkseditor.tsx"
     },
     {
@@ -2241,7 +2277,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SocialLinksEditor.tsx",
       "source_location": "L29",
       "id": "sociallinkseditor_loadlinks",
-      "community": 1,
+      "community": 4,
       "norm_label": "loadlinks()"
     },
     {
@@ -2250,7 +2286,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SocialLinksEditor.tsx",
       "source_location": "L40",
       "id": "sociallinkseditor_handleadd",
-      "community": 1,
+      "community": 4,
       "norm_label": "handleadd()"
     },
     {
@@ -2259,7 +2295,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SocialLinksEditor.tsx",
       "source_location": "L61",
       "id": "sociallinkseditor_handledelete",
-      "community": 1,
+      "community": 4,
       "norm_label": "handledelete()"
     },
     {
@@ -2268,7 +2304,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L1",
       "id": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_api_client_ts",
-      "community": 1,
+      "community": 4,
       "norm_label": "client.ts"
     },
     {
@@ -2277,7 +2313,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L10",
       "id": "client_getauthheaders",
-      "community": 1,
+      "community": 4,
       "norm_label": "getauthheaders()"
     },
     {
@@ -2286,7 +2322,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L21",
       "id": "client_handleresponse",
-      "community": 1,
+      "community": 4,
       "norm_label": "handleresponse()"
     },
     {
@@ -2295,7 +2331,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L36",
       "id": "client_fetchcontent",
-      "community": 1,
+      "community": 4,
       "norm_label": "fetchcontent()"
     },
     {
@@ -2304,7 +2340,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L44",
       "id": "client_fetchsection",
-      "community": 1,
+      "community": 3,
       "norm_label": "fetchsection()"
     },
     {
@@ -2313,7 +2349,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L52",
       "id": "client_updatesection",
-      "community": 0,
+      "community": 1,
       "norm_label": "updatesection()"
     },
     {
@@ -2322,7 +2358,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L64",
       "id": "client_additem",
-      "community": 1,
+      "community": 4,
       "norm_label": "additem()"
     },
     {
@@ -2331,7 +2367,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L76",
       "id": "client_updateitem",
-      "community": 1,
+      "community": 4,
       "norm_label": "updateitem()"
     },
     {
@@ -2340,7 +2376,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L88",
       "id": "client_deleteitem",
-      "community": 1,
+      "community": 4,
       "norm_label": "deleteitem()"
     },
     {
@@ -2349,7 +2385,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L116",
       "id": "client_uploadimage",
-      "community": 2,
+      "community": 0,
       "norm_label": "uploadimage()"
     },
     {
@@ -2358,7 +2394,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L135",
       "id": "client_deleteimage",
-      "community": 1,
+      "community": 4,
       "norm_label": "deleteimage()"
     },
     {
@@ -2367,7 +2403,7 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts",
       "source_location": "L146",
       "id": "client_listimages",
-      "community": 1,
+      "community": 4,
       "norm_label": "listimages()"
     }
   ],
@@ -3359,6 +3395,30 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/About.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_about_tsx",
+      "_tgt": "about_scrollto",
+      "source": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_about_tsx",
+      "target": "about_scrollto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/About.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_about_tsx",
+      "_tgt": "about_onscroll",
+      "source": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_about_tsx",
+      "target": "about_onscroll",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L4",
       "weight": 1.0,
@@ -3526,6 +3586,18 @@
     },
     {
       "relation": "calls",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_src": "hangingmic_onpointermove",
+      "_tgt": "performedat_scrollto",
+      "source": "hangingmic_onpointermove",
+      "target": "performedat_scrollto"
+    },
+    {
+      "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L81",
@@ -3606,6 +3678,30 @@
       "_tgt": "performedat_instagramperformedembed",
       "source": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
       "target": "performedat_instagramperformedembed",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
+      "source_location": "L123",
+      "weight": 1.0,
+      "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
+      "_tgt": "performedat_scrollto",
+      "source": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
+      "target": "performedat_scrollto",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/PerformedAt.tsx",
+      "source_location": "L135",
+      "weight": 1.0,
+      "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
+      "_tgt": "performedat_onscroll",
+      "source": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_components_performedat_tsx",
+      "target": "performedat_onscroll",
       "confidence_score": 1.0
     },
     {
@@ -3792,7 +3888,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L272",
+      "source_location": "L274",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_readpersistentcache",
@@ -3804,7 +3900,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L284",
+      "source_location": "L286",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_writepersistentcache",
@@ -3816,7 +3912,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L292",
+      "source_location": "L294",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_contentfetcherror",
@@ -3828,7 +3924,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L305",
+      "source_location": "L307",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_fetchcontent",
@@ -3840,7 +3936,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L354",
+      "source_location": "L356",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_fetchsection",
@@ -3852,7 +3948,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L365",
+      "source_location": "L367",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_clearcontentcache",
@@ -3864,7 +3960,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L373",
+      "source_location": "L375",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_services_contentservice_ts",
       "_tgt": "contentservice_getapiurl",
@@ -3876,7 +3972,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L345",
+      "source_location": "L347",
       "weight": 1.0,
       "_src": "contentservice_fetchcontent",
       "_tgt": "contentservice_readpersistentcache",
@@ -3888,7 +3984,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L335",
+      "source_location": "L337",
       "weight": 1.0,
       "_src": "contentservice_fetchcontent",
       "_tgt": "contentservice_writepersistentcache",
@@ -3900,7 +3996,7 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L294",
+      "source_location": "L296",
       "weight": 1.0,
       "_src": "contentservice_contentfetcherror",
       "_tgt": "contentservice_contentfetcherror_constructor",
@@ -3912,7 +4008,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/services/contentService.ts",
-      "source_location": "L357",
+      "source_location": "L359",
       "weight": 1.0,
       "_src": "contentservice_fetchsection",
       "_tgt": "contentservice_fetchcontent",
@@ -4800,7 +4896,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L42",
+      "source_location": "L64",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_getyoutubeembedurl",
@@ -4812,7 +4908,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L113",
+      "source_location": "L143",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_loaditems",
@@ -4824,7 +4920,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L125",
+      "source_location": "L155",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handleadd",
@@ -4836,7 +4932,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L144",
+      "source_location": "L174",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handleupdate",
@@ -4848,7 +4944,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L161",
+      "source_location": "L191",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handledelete",
@@ -4860,7 +4956,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L172",
+      "source_location": "L202",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handlemoveup",
@@ -4872,7 +4968,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L181",
+      "source_location": "L211",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handlemovedown",
@@ -4884,7 +4980,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L190",
+      "source_location": "L220",
       "weight": 1.0,
       "_src": "home_raviraj_prajyot_pranya_shubhangii_kedar_portfolio_src_admin_pages_sections_performedatmanager_tsx",
       "_tgt": "performedatmanager_handleimageupload",
@@ -4896,7 +4992,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L135",
+      "source_location": "L165",
       "weight": 1.0,
       "_src": "performedatmanager_handleadd",
       "_tgt": "performedatmanager_loaditems",
@@ -4908,7 +5004,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L152",
+      "source_location": "L182",
       "weight": 1.0,
       "_src": "performedatmanager_handleupdate",
       "_tgt": "performedatmanager_loaditems",
@@ -4920,7 +5016,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L165",
+      "source_location": "L195",
       "weight": 1.0,
       "_src": "performedatmanager_handledelete",
       "_tgt": "performedatmanager_loaditems",
@@ -4932,7 +5028,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L178",
+      "source_location": "L208",
       "weight": 1.0,
       "_src": "performedatmanager_handlemoveup",
       "_tgt": "performedatmanager_loaditems",
@@ -4944,7 +5040,7 @@
       "relation": "calls",
       "confidence": "EXTRACTED",
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/PerformedAtManager.tsx",
-      "source_location": "L187",
+      "source_location": "L217",
       "weight": 1.0,
       "_src": "performedatmanager_handlemovedown",
       "_tgt": "performedatmanager_loaditems",
