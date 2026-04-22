@@ -36,6 +36,7 @@ export type IconName =
   | 'youtube'
   | 'instagram'
   | 'twitter'
+  | 'facebook'
   | 'mail'
   | 'phone'
   | 'location'
@@ -204,6 +205,7 @@ export const socialLinks: SocialLink[] = [
   { label: 'Spotify', href: 'https://open.spotify.com/artist/5egpRukgysKxUuzH5Iu1ae', icon: 'spotify' },
   { label: 'YouTube', href: 'https://www.youtube.com/@ShubhangiiKedar', icon: 'youtube' },
   { label: 'Instagram', href: 'https://www.instagram.com/shubhangikedarofficial?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==', icon: 'instagram' },
+  { label: 'Facebook', href: '#', icon: 'facebook' },
   { label: 'Twitter', href: '#', icon: 'twitter' },
 ]
 

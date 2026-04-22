@@ -1,12 +1,12 @@
-# Graph Report - /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio  (2026-04-19)
+# Graph Report - /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio  (2026-04-22)
 
 ## Corpus Check
-- 67 files · ~3,618,421 words
+- 68 files · ~3,618,903 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 267 nodes · 352 edges · 54 communities detected
-- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 69 edges (avg confidence: 0.8)
+- 268 nodes · 352 edges · 56 communities detected
+- Extraction: 80% EXTRACTED · 20% INFERRED · 0% AMBIGUOUS · INFERRED: 70 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -64,10 +64,12 @@
 - [[_COMMUNITY_Community 51|Community 51]]
 - [[_COMMUNITY_Community 52|Community 52]]
 - [[_COMMUNITY_Community 53|Community 53]]
+- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 55|Community 55]]
 
 ## God Nodes (most connected - your core abstractions)
-1. `updateSection()` - 26 edges
-2. `fetchSection()` - 14 edges
+1. `updateSection()` - 27 edges
+2. `fetchSection()` - 15 edges
 3. `uploadImage()` - 12 edges
 4. `addItem()` - 11 edges
 5. `deleteItem()` - 11 edges
@@ -82,58 +84,58 @@
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleMoveDown()` --calls--> `updateSection()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
+- `handleThumbnailUpload()` --calls--> `uploadImage()`  [INFERRED]
+  /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/SongListManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleSavePageHeader()` --calls--> `updateSection()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 - `handleSaveSteps()` --calls--> `updateSection()`  [INFERRED]
-  /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
-- `handleImageUpload()` --calls--> `uploadImage()`  [INFERRED]
   /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/pages/sections/JourneyManager.tsx → /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/admin/api/client.ts
 
 ## Communities
 
 ### Community 0 - "Community 0"
-Cohesion: 0.09
-Nodes (12): handleImageUpload(), handleShowImageUpload(), handleSubmit(), uploadImage(), handleImageUpload(), handleImageUpload(), handleSlideChange(), handleSubmit() (+4 more)
+Cohesion: 0.18
+Nodes (18): loadContent(), loadStats(), addItem(), deleteImage(), deleteItem(), fetchContent(), fetchSection(), getAuthHeaders() (+10 more)
 
 ### Community 1 - "Community 1"
-Cohesion: 0.22
-Nodes (14): updateSection(), confirmDelete(), handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems() (+6 more)
+Cohesion: 0.11
+Nodes (12): handleImageUpload(), handleShowImageUpload(), handleSubmit(), uploadImage(), handleImageUpload(), handleImageUpload(), handleImageUpload(), handleImageUpload() (+4 more)
 
 ### Community 2 - "Community 2"
-Cohesion: 0.17
-Nodes (12): clamp(), onPointerMove(), onPointerUp(), onResize(), onScroll(), smoothScrollTo(), snapToNearest(), startInertia() (+4 more)
+Cohesion: 0.18
+Nodes (12): handleSubmit(), loadSettings(), updateSection(), handleSubmit(), loadContent(), confirmDelete(), handleAdd(), handleDelete() (+4 more)
 
 ### Community 3 - "Community 3"
-Cohesion: 0.14
-Nodes (12): loadContent(), fetchSection(), handleSubmit(), loadContent(), handleAdd(), handleDelete(), handleUpdate(), loadEvents() (+4 more)
+Cohesion: 0.21
+Nodes (10): scrollTo(), clamp(), onPointerMove(), onPointerUp(), onResize(), onScroll(), smoothScrollTo(), snapToNearest() (+2 more)
 
 ### Community 4 - "Community 4"
-Cohesion: 0.27
-Nodes (12): loadStats(), addItem(), deleteImage(), deleteItem(), fetchContent(), getAuthHeaders(), handleResponse(), listImages() (+4 more)
+Cohesion: 0.21
+Nodes (7): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleThumbnailUpload(), handleUpdate(), loadItems()
 
 ### Community 5 - "Community 5"
-Cohesion: 0.19
-Nodes (7): handleAddMilestone(), handleDeleteMilestone(), handleImageUpload(), handleSaveEditMilestone(), handleSavePageHeader(), handleSaveSteps(), loadContent()
+Cohesion: 0.21
+Nodes (6): handleAddMilestone(), handleDeleteMilestone(), handleSaveEditMilestone(), handleSavePageHeader(), handleSaveSteps(), loadContent()
 
 ### Community 6 - "Community 6"
 Cohesion: 0.36
 Nodes (9): addItem(), deleteItem(), getHeaders(), initializeContent(), readContent(), updateItem(), updateSection(), writeContent() (+1 more)
 
 ### Community 7 - "Community 7"
-Cohesion: 0.24
-Nodes (6): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems()
-
-### Community 8 - "Community 8"
-Cohesion: 0.29
-Nodes (6): encode(), handleSubmit(), base64UrlEncode(), beginLogin(), createCodeVerifier(), sha256()
-
-### Community 9 - "Community 9"
 Cohesion: 0.31
 Nodes (5): ContentFetchError, fetchContent(), fetchSection(), readPersistentCache(), writePersistentCache()
 
-### Community 10 - "Community 10"
+### Community 8 - "Community 8"
+Cohesion: 0.25
+Nodes (4): handleImageUpload(), handleSlideChange(), handleSubmit(), loadContent()
+
+### Community 9 - "Community 9"
 Cohesion: 0.39
 Nodes (4): goToSlide(), nextSlide(), onTouchEnd(), prevSlide()
+
+### Community 10 - "Community 10"
+Cohesion: 0.43
+Nodes (6): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems()
 
 ### Community 11 - "Community 11"
 Cohesion: 0.43
@@ -144,47 +146,47 @@ Cohesion: 0.43
 Nodes (6): handleAdd(), handleDelete(), handleMoveDown(), handleMoveUp(), handleUpdate(), loadItems()
 
 ### Community 13 - "Community 13"
+Cohesion: 0.43
+Nodes (4): base64UrlEncode(), beginLogin(), createCodeVerifier(), sha256()
+
+### Community 14 - "Community 14"
 Cohesion: 0.29
 Nodes (3): useAdminAuth(), AdminLayout(), AdminSidebar()
 
-### Community 14 - "Community 14"
+### Community 15 - "Community 15"
 Cohesion: 0.33
 Nodes (0): 
 
-### Community 15 - "Community 15"
+### Community 16 - "Community 16"
 Cohesion: 0.53
 Nodes (4): getDeviceInfo(), getQualitySettings(), isLowEndDevice(), shouldDisableHeavyEffects()
 
-### Community 16 - "Community 16"
+### Community 17 - "Community 17"
 Cohesion: 0.4
 Nodes (2): useContentContext(), JourneyPage()
 
-### Community 17 - "Community 17"
+### Community 18 - "Community 18"
 Cohesion: 0.83
 Nodes (3): sanitizeInput(), sanitizeObject(), sanitizeString()
 
-### Community 18 - "Community 18"
+### Community 19 - "Community 19"
 Cohesion: 0.5
 Nodes (0): 
-
-### Community 19 - "Community 19"
-Cohesion: 0.67
-Nodes (2): getInstagramPostId(), InstagramTestimonialEmbed()
 
 ### Community 20 - "Community 20"
-Cohesion: 0.5
-Nodes (0): 
+Cohesion: 0.67
+Nodes (2): getInstagramPostId(), InstagramTestimonialEmbed()
 
 ### Community 21 - "Community 21"
 Cohesion: 0.5
 Nodes (0): 
 
 ### Community 22 - "Community 22"
-Cohesion: 0.67
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 23 - "Community 23"
-Cohesion: 0.67
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 24 - "Community 24"
@@ -196,19 +198,19 @@ Cohesion: 0.67
 Nodes (0): 
 
 ### Community 26 - "Community 26"
-Cohesion: 0.67
-Nodes (0): 
+Cohesion: 1.0
+Nodes (2): handleSubmit(), sanitize()
 
 ### Community 27 - "Community 27"
 Cohesion: 0.67
 Nodes (0): 
 
 ### Community 28 - "Community 28"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 29 - "Community 29"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 30 - "Community 30"
@@ -307,73 +309,81 @@ Nodes (0):
 Cohesion: 1.0
 Nodes (0): 
 
+### Community 54 - "Community 54"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 55 - "Community 55"
+Cohesion: 1.0
+Nodes (0): 
+
 ## Knowledge Gaps
-- **Thin community `Community 28`** (2 nodes): `initializePassword()`, `auth.js`
+- **Thin community `Community 30`** (2 nodes): `initializePassword()`, `auth.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (2 nodes): `errorHandler()`, `errorHandler.js`
+- **Thin community `Community 31`** (2 nodes): `errorHandler()`, `errorHandler.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (2 nodes): `useScrollReveal.ts`, `useScrollReveal()`
+- **Thin community `Community 32`** (2 nodes): `useScrollReveal.ts`, `useScrollReveal()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (2 nodes): `FeatureBar()`, `FeatureBar.tsx`
+- **Thin community `Community 33`** (2 nodes): `FeatureBar()`, `FeatureBar.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (2 nodes): `JourneyAurora.tsx`, `CameraRail()`
+- **Thin community `Community 34`** (2 nodes): `JourneyAurora.tsx`, `CameraRail()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (2 nodes): `handleSubmit()`, `Contact.tsx`
+- **Thin community `Community 35`** (2 nodes): `handleSubmit()`, `Contact.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (2 nodes): `Newsletter.tsx`, `handleSubmit()`
+- **Thin community `Community 36`** (2 nodes): `Newsletter.tsx`, `handleSubmit()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (2 nodes): `VinylScrollPage.tsx`, `handleScroll()`
+- **Thin community `Community 37`** (2 nodes): `VinylScrollPage.tsx`, `handleScroll()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (2 nodes): `JourneyTimeline.tsx`, `handleScroll()`
+- **Thin community `Community 38`** (2 nodes): `JourneyTimeline.tsx`, `handleScroll()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (2 nodes): `RichTextField.tsx`, `handleChange()`
+- **Thin community `Community 39`** (2 nodes): `RichTextField.tsx`, `handleChange()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (2 nodes): `handleSubmit()`, `AdminLogin.tsx`
+- **Thin community `Community 40`** (2 nodes): `handleSubmit()`, `AdminLogin.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 41`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 42`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (1 nodes): `index.js`
+- **Thin community `Community 43`** (1 nodes): `index.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (1 nodes): `content.js`
+- **Thin community `Community 44`** (1 nodes): `content.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (1 nodes): `upload.js`
+- **Thin community `Community 45`** (1 nodes): `upload.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (1 nodes): `index.js`
+- **Thin community `Community 46`** (1 nodes): `index.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (1 nodes): `rateLimit.js`
+- **Thin community `Community 47`** (1 nodes): `rateLimit.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (1 nodes): `StatsShowcase.tsx`
+- **Thin community `Community 48`** (1 nodes): `StatsShowcase.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (1 nodes): `Footer.tsx`
+- **Thin community `Community 49`** (1 nodes): `Footer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `CountUp.tsx`
+- **Thin community `Community 50`** (1 nodes): `CountUp.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (1 nodes): `Icon.tsx`
+- **Thin community `Community 51`** (1 nodes): `Icon.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (1 nodes): `Events.tsx`
+- **Thin community `Community 52`** (1 nodes): `Events.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (1 nodes): `Journey.tsx`
+- **Thin community `Community 53`** (1 nodes): `Journey.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `TheShow.tsx`
+- **Thin community `Community 54`** (1 nodes): `TheShow.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `content.ts`
+- **Thin community `Community 55`** (1 nodes): `content.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `updateSection()` connect `Community 1` to `Community 0`, `Community 3`, `Community 4`, `Community 5`, `Community 7`, `Community 11`, `Community 12`?**
-  _High betweenness centrality (0.065) - this node is a cross-community bridge._
-- **Why does `fetchSection()` connect `Community 3` to `Community 1`, `Community 4`, `Community 5`, `Community 7`, `Community 11`, `Community 12`?**
-  _High betweenness centrality (0.042) - this node is a cross-community bridge._
-- **Why does `uploadImage()` connect `Community 0` to `Community 3`, `Community 4`, `Community 5`?**
+- **Why does `updateSection()` connect `Community 2` to `Community 0`, `Community 1`, `Community 4`, `Community 5`, `Community 8`, `Community 10`, `Community 11`, `Community 12`?**
+  _High betweenness centrality (0.069) - this node is a cross-community bridge._
+- **Why does `fetchSection()` connect `Community 0` to `Community 1`, `Community 2`, `Community 4`, `Community 5`, `Community 8`, `Community 10`, `Community 11`, `Community 12`?**
+  _High betweenness centrality (0.046) - this node is a cross-community bridge._
+- **Why does `uploadImage()` connect `Community 1` to `Community 0`, `Community 8`, `Community 4`?**
   _High betweenness centrality (0.030) - this node is a cross-community bridge._
-- **Are the 23 inferred relationships involving `updateSection()` (e.g. with `handleUpdate()` and `handleMoveUp()`) actually correct?**
-  _`updateSection()` has 23 INFERRED edges - model-reasoned connections that need verification._
-- **Are the 12 inferred relationships involving `fetchSection()` (e.g. with `loadItems()` and `loadContent()`) actually correct?**
-  _`fetchSection()` has 12 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 24 inferred relationships involving `updateSection()` (e.g. with `handleUpdate()` and `handleMoveUp()`) actually correct?**
+  _`updateSection()` has 24 INFERRED edges - model-reasoned connections that need verification._
+- **Are the 13 inferred relationships involving `fetchSection()` (e.g. with `loadItems()` and `loadContent()`) actually correct?**
+  _`fetchSection()` has 13 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 10 inferred relationships involving `uploadImage()` (e.g. with `handleThumbnailUpload()` and `handleImageUpload()`) actually correct?**
   _`uploadImage()` has 10 INFERRED edges - model-reasoned connections that need verification._
 - **Are the 8 inferred relationships involving `addItem()` (e.g. with `handleAdd()` and `handleAddMilestone()`) actually correct?**

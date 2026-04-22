@@ -158,6 +158,9 @@ export interface ContentData {
         color: string;
         image: string;
     }[];
+    bookingSettings?: {
+        web3formsKey?: string;
+    };
     theme?: {
         logoImage?: string;
         logoSize?: number;

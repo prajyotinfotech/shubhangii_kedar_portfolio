@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from 'react'
 import { useContentContext } from '../contexts/ContentContext'
 
 const getYouTubeEmbedUrl = (url: string) => {
@@ -8,49 +7,6 @@ const getYouTubeEmbedUrl = (url: string) => {
     if (videoId) return `https://www.youtube.com/embed/${videoId}`
   } catch (e) { /* ignore */ }
   return ''
-}
-
-const getInstagramPostId = (url: string) => {
-  try {
-    const match = url.match(/instagram\.com\/(?:p|reel)\/([A-Za-z0-9_-]+)/)
-    return match?.[1] || ''
-  } catch (e) { return '' }
-}
-
-const InstagramPerformedEmbed = ({ url }: { url: string }) => {
-  const containerRef = useRef<HTMLDivElement>(null)
-  const postId = getInstagramPostId(url)
-
-  useEffect(() => {
-    if (!postId) return
-    const process = () => {
-      if ((window as any).instgrm) setTimeout(() => (window as any).instgrm.Embeds.process(), 100)
-    }
-    if (!(window as any).instgrm) {
-      const s = document.createElement('script')
-      s.src = '//www.instagram.com/embed.js'
-      s.async = true
-      s.onload = process
-      document.body.appendChild(s)
-    } else {
-      process()
-    }
-  }, [postId])
-
-  if (!postId) return null
-  const isReel = url.includes('/reel/')
-  const permalink = isReel
-    ? `https://www.instagram.com/reel/${postId}/`
-    : `https://www.instagram.com/p/${postId}/`
-  return (
-    <div
-      ref={containerRef}
-      style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
-      dangerouslySetInnerHTML={{
-        __html: `<blockquote class="instagram-media" data-instgrm-permalink="${permalink}" data-instgrm-version="14" style="max-width:540px;width:100%;margin:0 auto;"></blockquote>`,
-      }}
-    />
-  )
 }
 
 export type PerformedAtItem = {
@@ -72,95 +28,17 @@ export type PerformedAtItem = {
 
 const staticPerformedAt: PerformedAtItem[] = []
 
-function PerformedAtCard({ item }: { item: PerformedAtItem }) {
-  const isVideo = item.type === 'video'
-  const isImage = item.type === 'image'
-  const platform = item.platform
-  const videoUrl = item.videoUrl
-  const imageUrl = item.image
-  const aspect = item.aspect || '16/9'
-  const embedCode = item.embedCode
-  const ytEmbed = isVideo && videoUrl && platform === 'youtube' ? getYouTubeEmbedUrl(videoUrl) : ''
+const YouTubeIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+)
 
-  return (
-    <div className={`testimonial-card${isVideo ? ' testimonial-card--video' : ''}${isImage ? ' testimonial-card--image' : ''}`}>
-      {isVideo && videoUrl && ytEmbed && (
-        <div className="testimonial-video-wrap" style={{ aspectRatio: aspect }}>
-          <iframe src={ytEmbed} width="100%" height="100%" style={{ border: 'none', borderRadius: '10px' }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen title={item.venue} />
-        </div>
-      )}
-      {isVideo && platform === 'instagram' && !ytEmbed && (
-        <div style={{ marginBottom: '1rem', width: '100%' }}>
-          {embedCode
-            ? <div dangerouslySetInnerHTML={{ __html: embedCode }} style={{ display: 'flex', justifyContent: 'center' }} />
-            : videoUrl && <InstagramPerformedEmbed url={videoUrl} />}
-        </div>
-      )}
-      {isImage && imageUrl && (
-        <div style={{ width: '100%', marginBottom: '1rem', aspectRatio: aspect, overflow: 'hidden', borderRadius: '10px' }}>
-          <img src={imageUrl} alt={item.venue} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-        </div>
-      )}
-      {item.quote && <p className="quote" style={{ textAlign: 'center' }}>{item.quote}</p>}
-      <p className="author" style={{ textAlign: 'center' }}>{item.venue}</p>
-      <p className="performed-at-city" style={{ textAlign: 'center', fontFamily: item.cityFont || undefined, color: item.cityColor || undefined }}>
-        {item.city}
-        {(item.month || item.year) && (
-          <span className="performed-at-date"> &middot; {[item.month, item.year].filter(Boolean).join(' ')}</span>
-        )}
-      </p>
-    </div>
-  )
-}
-
-function HScrollCarousel({ children, className }: { children: React.ReactNode[]; className?: string }) {
-  const trackRef = useRef<HTMLDivElement>(null)
-  const [current, setCurrent] = useState(0)
-  const total = children.length
-
-  const scrollTo = (index: number) => {
-    const clamped = Math.max(0, Math.min(index, total - 1))
-    setCurrent(clamped)
-    const track = trackRef.current
-    if (!track) return
-    const slide = track.children[clamped] as HTMLElement
-    if (slide) slide.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
-  }
-
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    const onScroll = () => {
-      const slideWidth = (track.children[0] as HTMLElement)?.offsetWidth || 1
-      setCurrent(Math.max(0, Math.min(Math.round(track.scrollLeft / (slideWidth + 16)), total - 1)))
-    }
-    track.addEventListener('scroll', onScroll, { passive: true })
-    return () => track.removeEventListener('scroll', onScroll)
-  }, [total])
-
-  return (
-    <div className={`hscroll-carousel ${className || ''}`}>
-      <div className="hscroll-track" ref={trackRef}>
-        {children.map((child, i) => (
-          <div className="hscroll-slide" key={i}>{child}</div>
-        ))}
-      </div>
-      {total > 1 && (
-        <>
-          <button className="gallery-carousel-arrow gallery-carousel-arrow--prev" onClick={() => scrollTo(current - 1)} disabled={current === 0} aria-label="Previous">‹</button>
-          <button className="gallery-carousel-arrow gallery-carousel-arrow--next" onClick={() => scrollTo(current + 1)} disabled={current === total - 1} aria-label="Next">›</button>
-          <div className="gallery-carousel-dots">
-            {children.map((_, i) => (
-              <button key={i} className={`gallery-carousel-dot${i === current ? ' active' : ''}`} onClick={() => scrollTo(i)} aria-label={`Slide ${i + 1}`} />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  )
-}
+const InstaIcon = () => (
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+  </svg>
+)
 
 export const PerformedAt: React.FC = () => {
   const { content } = useContentContext()
@@ -170,18 +48,48 @@ export const PerformedAt: React.FC = () => {
   if (!items.length) return null
 
   return (
-    <section id="performed-at" className="testimonials performed-at">
+    <section id="performed-at" className="songlist performed-at">
       <div className="container">
-        <div className="testimonials-header">
-          <h2 className="section-title">Performed At</h2>
-          <div className="title-decoration"></div>
-        </div>
+        <h2 className="section-title center">Performed At</h2>
+        <div className="title-decoration center"></div>
+        <div className="songlist-table">
+          {items.map((item, idx) => {
+            const ytId = item.type === 'video' && item.platform === 'youtube' && item.videoUrl
+              ? getYouTubeEmbedUrl(item.videoUrl)?.replace('https://www.youtube.com/embed/', '')
+              : null
+            const thumbSrc = item.image || (ytId ? `https://img.youtube.com/vi/${ytId}/mqdefault.jpg` : null)
 
-        <HScrollCarousel>
-          {items.map((item) => (
-            <PerformedAtCard key={item.id || item.venue} item={item} />
-          ))}
-        </HScrollCarousel>
+            return (
+              <div className="songlist-row" key={item.id || item.venue}>
+                <span className="songlist-index">{idx + 1}</span>
+                {thumbSrc ? (
+                  <img className="songlist-thumb" src={thumbSrc} alt={item.venue} />
+                ) : (
+                  <div className="songlist-thumb songlist-thumb--placeholder">&#9834;</div>
+                )}
+                <div className="songlist-info">
+                  <span className="songlist-title">{item.venue}</span>
+                  <span className="songlist-artist">
+                    {item.city}
+                    {(item.month || item.year) && ` · ${[item.month, item.year].filter(Boolean).join(' ')}`}
+                  </span>
+                </div>
+                <div className="songlist-links">
+                  {item.videoUrl && item.platform === 'youtube' && (
+                    <a href={item.videoUrl} target="_blank" rel="noreferrer" className="songlist-link songlist-link--youtube" aria-label="YouTube">
+                      <YouTubeIcon />
+                    </a>
+                  )}
+                  {item.videoUrl && item.platform === 'instagram' && (
+                    <a href={item.videoUrl} target="_blank" rel="noreferrer" className="songlist-link songlist-link--insta" aria-label="Instagram">
+                      <InstaIcon />
+                    </a>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
