@@ -35,6 +35,7 @@ export type IconName =
   | 'spotify'
   | 'youtube'
   | 'instagram'
+  | 'linkedin'
   | 'twitter'
   | 'facebook'
   | 'mail'
