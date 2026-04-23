@@ -2937,63 +2937,90 @@ html.is-playing .disc {
     opacity: 0.8;
 }
 
+@keyframes liquidAmberGold {
+    0%   { background-position: 0% 50%; }
+    20%  { background-position: 30% 20%; }
+    40%  { background-position: 80% 60%; }
+    60%  { background-position: 100% 40%; }
+    80%  { background-position: 50% 80%; }
+    100% { background-position: 0% 50%; }
+}
+
 .footer-dev-credit {
+    position: fixed;
+    bottom: 14px;
+    left: 16px;
+    z-index: 50;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    margin-top: 14px;
-    opacity: 0.35;
-    transition: opacity 0.2s ease;
-    position: relative;
+    gap: 7px;
+    opacity: 0.45;
+    transition: opacity 0.25s ease;
+}
+
+.footer-dev-credit:hover {
+    opacity: 1;
 }
 
 .footer-dev-credit::after {
     content: attr(data-tooltip);
     position: absolute;
     bottom: calc(100% + 6px);
-    left: 50%;
-    transform: translateX(-50%) translateY(4px);
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
+    left: 0;
+    background: rgba(20, 12, 0, 0.75);
+    color: #f5c842;
     font-size: 11px;
-    letter-spacing: 0.05em;
+    font-style: italic;
+    letter-spacing: 0.06em;
     padding: 4px 10px;
     border-radius: 4px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease, transform 0.2s ease;
+    transform: translateY(4px);
 }
 
 .footer-dev-credit:hover::after {
     opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-.footer-dev-credit:hover {
-    opacity: 0.6;
+    transform: translateY(0);
 }
 
 .footer-dev-credit span {
     font-size: 11px;
-    color: var(--text-light);
+    font-style: italic;
     letter-spacing: 0.04em;
+    background: linear-gradient(
+        135deg,
+        #7c4d00 0%,
+        #b8860b 15%,
+        #f5c842 30%,
+        #ffe066 45%,
+        #f5a623 60%,
+        #e8890c 72%,
+        #f5c842 85%,
+        #7c4d00 100%
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: liquidAmberGold 9s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
 }
 
 .footer-dev-credit a {
     display: inline-flex;
-    color: var(--text-light);
+    color: #b8860b;
     transition: color 0.2s ease;
 }
 
 .footer-dev-credit a:hover {
-    color: #fff;
+    color: #f5c842;
 }
 
 .footer-dev-credit svg {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
 }
 
 /* Sticky Audio Mini-Player */
