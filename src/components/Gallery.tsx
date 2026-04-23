@@ -280,7 +280,7 @@ export const Gallery: React.FC = () => {
     : STATIC_PHOTOS
 
   const photoItems = allItems.filter(item => item.type !== 'video').slice(0, GALLERY_MAX)
-  const videoItems = allItems.filter(item => item.type === 'video').slice(0, GALLERY_MAX)
+  const videoItems = allItems.filter(item => item.type === 'video')
 
   return (
     <section id="gallery" className="gallery">

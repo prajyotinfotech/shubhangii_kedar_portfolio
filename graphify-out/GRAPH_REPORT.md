@@ -1,7 +1,7 @@
 # Graph Report - /home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio  (2026-04-23)
 
 ## Corpus Check
-- 68 files · ~3,619,148 words
+- 68 files · ~3,619,280 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
