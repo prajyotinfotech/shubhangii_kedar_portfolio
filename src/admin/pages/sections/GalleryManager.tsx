@@ -126,9 +126,18 @@ export default function GalleryManager() {
     };
 
     const handleAdd = async () => {
-        if (!newItem.title) {
-            setMessage({ type: 'error', text: 'Please enter a title' });
-            return;
+        const isImageType = !newItem.type || newItem.type === 'image';
+
+        if (isImageType) {
+            const imageCount = items.filter(i => i.type !== 'video').length;
+            if (imageCount >= 12) {
+                setMessage({ type: 'error', text: 'Image limit reached (12 max). Please delete some images to add new ones.' });
+                return;
+            }
+            if (!newItem.image) {
+                setMessage({ type: 'error', text: 'Please upload an image or provide an image URL before adding.' });
+                return;
+            }
         }
 
         setSaving(true);
@@ -243,13 +252,21 @@ export default function GalleryManager() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        if (file.size > 4 * 1024 * 1024) {
+            setMessage({ type: 'error', text: 'Image too large (max 4MB). Please compress or resize the image before uploading.' });
+            e.target.value = '';
+            return;
+        }
+
         setSaving(true);
         try {
             const result = await uploadImage(file);
             onChange({ ...currentItem, image: result.data.url });
             setMessage({ type: 'success', text: 'Image uploaded successfully!' });
         } catch (err) {
-            setMessage({ type: 'error', text: 'Failed to upload image' });
+            const msg = err instanceof Error ? err.message : '';
+            setMessage({ type: 'error', text: msg || 'Failed to upload image. Please try again.' });
+            e.target.value = '';
         } finally {
             setSaving(false);
         }
@@ -289,7 +306,7 @@ export default function GalleryManager() {
                 </div>
 
                 <div className="editor-field">
-                    <label>Title *</label>
+                    <label>Title</label>
                     <input
                         type="text"
                         value={item.title || ''}

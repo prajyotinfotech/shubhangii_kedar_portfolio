@@ -19,7 +19,16 @@ function getAuthHeaders(): HeadersInit {
  * Handle API response
  */
 async function handleResponse(response: Response) {
-    const data = await response.json();
+    if (response.status === 413) {
+        throw new Error('Image too large. Please use an image under 4MB.');
+    }
+
+    let data: any;
+    try {
+        data = await response.json();
+    } catch {
+        throw new Error(`Request failed with status ${response.status}`);
+    }
 
     if (!response.ok) {
         throw new Error(data.message || 'API request failed');
