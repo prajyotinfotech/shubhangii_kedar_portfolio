@@ -2880,9 +2880,8 @@ html.is-playing .disc {
 
 .footer-top {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
     gap: 20px;
     margin-bottom: 20px;
 }
@@ -2947,13 +2946,11 @@ html.is-playing .disc {
 }
 
 .footer-dev-credit {
-    position: fixed;
-    bottom: 14px;
-    left: 16px;
-    z-index: 50;
-    display: flex;
+    position: relative;
+    display: inline-flex;
     align-items: center;
     gap: 7px;
+    padding: 8px 20px 14px;
     opacity: 0.45;
     transition: opacity 0.25s ease;
 }
