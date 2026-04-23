@@ -3420,8 +3420,8 @@
       "source_file": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio/src/components/HangingMic.tsx",
       "source_location": "L66",
       "weight": 1.0,
-      "_src": "hangingmic_onpointermove",
-      "_tgt": "about_scrollto",
+      "_src": "about_scrollto",
+      "_tgt": "hangingmic_onpointermove",
       "source": "about_scrollto",
       "target": "hangingmic_onpointermove"
     },
