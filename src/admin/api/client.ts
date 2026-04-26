@@ -3,6 +3,7 @@
  * Centralized API calls for admin panel
  */
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const AUTH_CREDENTIALS: RequestCredentials = 'include';
 
 /**
  * Get authorization headers
@@ -61,6 +62,7 @@ export async function fetchSection(section: string) {
 export async function updateSection(section: string, data: unknown) {
     const response = await fetch(`${API_URL}/api/content/${section}`, {
         method: 'PUT',
+        credentials: AUTH_CREDENTIALS,
         headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
@@ -73,6 +75,7 @@ export async function updateSection(section: string, data: unknown) {
 export async function addItem(section: string, item: unknown) {
     const response = await fetch(`${API_URL}/api/content/${section}/items`, {
         method: 'POST',
+        credentials: AUTH_CREDENTIALS,
         headers: getAuthHeaders(),
         body: JSON.stringify(item)
     });
@@ -85,6 +88,7 @@ export async function addItem(section: string, item: unknown) {
 export async function updateItem(section: string, itemId: string, updates: unknown) {
     const response = await fetch(`${API_URL}/api/content/${section}/items/${itemId}`, {
         method: 'PUT',
+        credentials: AUTH_CREDENTIALS,
         headers: getAuthHeaders(),
         body: JSON.stringify(updates)
     });
@@ -106,6 +110,7 @@ export async function deleteItem(section: string, itemId: string) {
     
     const response = await fetch(url, {
         method: 'DELETE',
+        credentials: AUTH_CREDENTIALS,
         headers: headers
     });
     
@@ -129,6 +134,7 @@ export async function uploadImage(file: File) {
 
     const response = await fetch(`${API_URL}/api/upload`, {
         method: 'POST',
+        credentials: AUTH_CREDENTIALS,
         headers: {
             ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
@@ -144,6 +150,7 @@ export async function uploadImage(file: File) {
 export async function deleteImage(filename: string) {
     const response = await fetch(`${API_URL}/api/upload/${filename}`, {
         method: 'DELETE',
+        credentials: AUTH_CREDENTIALS,
         headers: getAuthHeaders()
     });
     return handleResponse(response);
@@ -154,6 +161,7 @@ export async function deleteImage(filename: string) {
  */
 export async function listImages() {
     const response = await fetch(`${API_URL}/api/upload/list`, {
+        credentials: AUTH_CREDENTIALS,
         headers: getAuthHeaders()
     });
     return handleResponse(response);
