@@ -4,6 +4,11 @@
  */
 require('dotenv').config();
 
+const allowedGoogleAdminEmails = (process.env.GOOGLE_ADMIN_EMAILS || process.env.ADMIN_EMAIL || 'admin@example.com')
+    .split(',')
+    .map(email => email.trim().toLowerCase())
+    .filter(Boolean);
+
 module.exports = {
     // Server configuration
     port: process.env.PORT || 3001,
@@ -16,9 +21,23 @@ module.exports = {
     // Admin credentials
     adminEmail: process.env.ADMIN_EMAIL || 'admin@example.com',
     adminPassword: process.env.ADMIN_PASSWORD || 'admin123',
+    passwordLoginEnabled: process.env.ADMIN_PASSWORD_LOGIN_ENABLED !== 'false',
+
+    // Cookie authentication
+    authCookieSecure: process.env.AUTH_COOKIE_SECURE
+        ? process.env.AUTH_COOKIE_SECURE === 'true'
+        : process.env.NODE_ENV === 'production',
+    authCookieSameSite: process.env.AUTH_COOKIE_SAMESITE || (process.env.NODE_ENV === 'production' ? 'none' : 'lax'),
 
     // CORS configuration
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+
+    // Google OAuth configuration
+    googleOAuth: {
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        hostedDomain: process.env.GOOGLE_HOSTED_DOMAIN || '',
+        allowedAdminEmails: allowedGoogleAdminEmails
+    },
 
     // File paths
     contentPath: require('path').join(__dirname, '../../data/content.json'),

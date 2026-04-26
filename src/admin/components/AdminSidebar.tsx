@@ -175,8 +175,8 @@ export default function AdminSidebar() {
     const { admin, logout } = useAdminAuth();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        logout();
+    const handleLogout = async () => {
+        await logout();
         navigate('/admin');
     };
 

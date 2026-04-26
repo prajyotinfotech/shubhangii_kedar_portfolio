@@ -184,15 +184,6 @@ export default function GalleryManager() {
             return;
         }
 
-        // Check if user is logged in
-        const token = localStorage.getItem('admin_token');
-        console.log('Admin token exists:', !!token);
-        if (!token) {
-            console.error('No authentication token found');
-            setMessage({ type: 'error', text: 'Please login again' });
-            return;
-        }
-
         console.log('Sending DELETE request to /api/content/gallery/items/' + id);
 
         try {

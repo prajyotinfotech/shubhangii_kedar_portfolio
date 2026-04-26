@@ -5,13 +5,31 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
+const ADMIN_TOKEN_COOKIE = 'admin_token';
+
+function getCookieValue(req, name) {
+    const cookieHeader = req.headers.cookie;
+    if (!cookieHeader) return null;
+
+    const cookies = cookieHeader.split(';');
+    for (const cookie of cookies) {
+        const [rawKey, ...rawValue] = cookie.trim().split('=');
+        if (rawKey === name) {
+            return decodeURIComponent(rawValue.join('='));
+        }
+    }
+
+    return null;
+}
+
 /**
  * Middleware to verify JWT token
- * Extracts token from Authorization header (Bearer token)
+ * Extracts token from Authorization header (Bearer token) or HttpOnly cookie
  */
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const bearerToken = authHeader && authHeader.split(' ')[1]; // Bearer TOKEN
+    const token = bearerToken || getCookieValue(req, ADMIN_TOKEN_COOKIE);
 
     if (!token) {
         return res.status(401).json({
@@ -52,6 +70,7 @@ function generateToken(admin) {
 }
 
 module.exports = {
+    ADMIN_TOKEN_COOKIE,
     authenticateToken,
     generateToken
 };

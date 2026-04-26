@@ -14,7 +14,8 @@ interface AdminAuthContextType {
     isLoading: boolean;
     admin: Admin | null;
     login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-    logout: () => void;
+    loginWithGoogle: (credential: string) => Promise<{ success: boolean; error?: string }>;
+    logout: () => Promise<void>;
     token: string | null;
 }
 
@@ -29,18 +30,15 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     const [admin, setAdmin] = useState<Admin | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Verify token on mount
+    // Verify password fallback token or HttpOnly cookie on mount.
     useEffect(() => {
         const verifyToken = async () => {
-            if (!token) {
-                setIsLoading(false);
-                return;
-            }
-
             try {
+                const storedToken = localStorage.getItem('admin_token');
                 const response = await fetch(`${API_URL}/api/auth/verify`, {
+                    credentials: 'include',
                     headers: {
-                        'Authorization': `Bearer ${token}`
+                        ...(storedToken ? { 'Authorization': `Bearer ${storedToken}` } : {})
                     }
                 });
 
@@ -48,26 +46,29 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
                     const data = await response.json();
                     setAdmin(data.admin);
                 } else {
-                    // Token invalid, clear it
+                    // Token/cookie invalid, clear local fallback token
                     localStorage.removeItem('admin_token');
                     setToken(null);
+                    setAdmin(null);
                 }
             } catch (error) {
                 console.error('Token verification failed:', error);
                 localStorage.removeItem('admin_token');
                 setToken(null);
+                setAdmin(null);
             } finally {
                 setIsLoading(false);
             }
         };
 
         verifyToken();
-    }, [token]);
+    }, []);
 
     const login = async (email: string, password: string) => {
         try {
             const response = await fetch(`${API_URL}/api/auth/login`, {
                 method: 'POST',
+                credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -77,8 +78,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
             const data = await response.json();
 
             if (response.ok && data.success) {
-                localStorage.setItem('admin_token', data.token);
-                setToken(data.token);
+                localStorage.removeItem('admin_token');
+                setToken(null);
                 setAdmin(data.admin);
                 return { success: true };
             } else {
@@ -95,7 +96,51 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
         }
     };
 
-    const logout = () => {
+    const loginWithGoogle = async (credential: string) => {
+        try {
+            const response = await fetch(`${API_URL}/api/auth/google/credential`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ credential })
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.success) {
+                localStorage.removeItem('admin_token');
+                setToken(null);
+                setAdmin(data.admin);
+                return { success: true };
+            }
+
+            return { success: false, error: data.message || 'Google sign-in failed' };
+        } catch (error) {
+            console.error('Google login error:', error);
+            const errMsg = error instanceof Error ? error.message : String(error);
+            if (errMsg.toLowerCase().includes('failed to fetch') || errMsg.toLowerCase().includes('network error')) {
+                return { success: false, error: 'Network error: The backend server might not be running.' };
+            }
+            return { success: false, error: `Google login error: ${errMsg}` };
+        }
+    };
+
+    const logout = async () => {
+        const storedToken = localStorage.getItem('admin_token');
+        try {
+            await fetch(`${API_URL}/api/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    ...(storedToken ? { 'Authorization': `Bearer ${storedToken}` } : {})
+                }
+            });
+        } catch (error) {
+            console.error('Logout request failed:', error);
+        }
+
         localStorage.removeItem('admin_token');
         setToken(null);
         setAdmin(null);
@@ -104,10 +149,11 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     return (
         <AdminAuthContext.Provider
             value={{
-                isAuthenticated: !!token && !!admin,
+                isAuthenticated: !!admin,
                 isLoading,
                 admin,
                 login,
+                loginWithGoogle,
                 logout,
                 token
             }}
