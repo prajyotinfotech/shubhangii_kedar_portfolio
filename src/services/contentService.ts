@@ -2,8 +2,9 @@
  * Content Service
  * Fetches content from backend API with fallback to static data
  */
+import { normalizeApiBaseUrl } from '../utils/apiUrl';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5173';
+const API_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL, 'http://localhost:5173');
 
 export interface ContentData {
     hero: {

@@ -2,7 +2,9 @@
  * Admin API Client
  * Centralized API calls for admin panel
  */
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { normalizeApiBaseUrl } from '../../utils/apiUrl';
+
+const API_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL, 'http://localhost:3001');
 const AUTH_CREDENTIALS: RequestCredentials = 'include';
 
 /**
@@ -24,9 +26,10 @@ async function handleResponse(response: Response) {
         throw new Error('Image too large. Please use an image under 4MB.');
     }
 
-    let data: any;
+    let data: any = {};
     try {
-        data = await response.json();
+        const text = await response.text();
+        data = text.trim() ? JSON.parse(text) : {};
     } catch {
         throw new Error(`Request failed with status ${response.status}`);
     }
