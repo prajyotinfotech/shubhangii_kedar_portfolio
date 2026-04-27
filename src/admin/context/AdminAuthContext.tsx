@@ -4,6 +4,7 @@
  */
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
+import { normalizeApiBaseUrl } from '../../utils/apiUrl';
 
 interface Admin {
     email: string;
@@ -21,7 +22,31 @@ interface AdminAuthContextType {
 
 const AdminAuthContext = createContext<AdminAuthContextType | undefined>(undefined);
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const API_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL, 'http://localhost:3001');
+
+type AuthResponseData = {
+    success?: boolean;
+    message?: string;
+    admin?: Admin;
+};
+
+async function parseAuthResponse(response: Response): Promise<AuthResponseData> {
+    const text = await response.text();
+
+    if (!text.trim()) {
+        return {};
+    }
+
+    try {
+        return JSON.parse(text) as AuthResponseData;
+    } catch {
+        return {
+            message: response.ok
+                ? 'Unexpected response from the authentication server.'
+                : `Authentication request failed with status ${response.status}.`
+        };
+    }
+}
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
     const [token, setToken] = useState<string | null>(() =>
@@ -43,8 +68,8 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
                 });
 
                 if (response.ok) {
-                    const data = await response.json();
-                    setAdmin(data.admin);
+                    const data = await parseAuthResponse(response);
+                    setAdmin(data.admin ?? null);
                 } else {
                     // Token/cookie invalid, clear local fallback token
                     localStorage.removeItem('admin_token');
@@ -75,15 +100,15 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
                 body: JSON.stringify({ email, password })
             });
 
-            const data = await response.json();
+            const data = await parseAuthResponse(response);
 
-            if (response.ok && data.success) {
+            if (response.ok && data.success && data.admin) {
                 localStorage.removeItem('admin_token');
                 setToken(null);
                 setAdmin(data.admin);
                 return { success: true };
             } else {
-                return { success: false, error: data.message || 'Login failed' };
+                return { success: false, error: data.message || `Login failed with status ${response.status}` };
             }
         } catch (error) {
             console.error('Login error:', error);
@@ -107,16 +132,16 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
                 body: JSON.stringify({ credential })
             });
 
-            const data = await response.json();
+            const data = await parseAuthResponse(response);
 
-            if (response.ok && data.success) {
+            if (response.ok && data.success && data.admin) {
                 localStorage.removeItem('admin_token');
                 setToken(null);
                 setAdmin(data.admin);
                 return { success: true };
             }
 
-            return { success: false, error: data.message || 'Google sign-in failed' };
+            return { success: false, error: data.message || `Google sign-in failed with status ${response.status}` };
         } catch (error) {
             console.error('Google login error:', error);
             const errMsg = error instanceof Error ? error.message : String(error);
