@@ -36,7 +36,7 @@ export const Footer: React.FC = () => {
           <p>&copy; {new Date().getFullYear()} Shubhangii Kedar. All rights reserved.</p>
         </div>
       </div>
-      <div className="footer-dev-credit" data-tooltip="Raviraj Gardi">
+      <div className="footer-dev-credit" data-tooltip="Raviraj Gardi & Sanket K.">
         <span>Developed by</span>
         <a href="https://www.instagram.com/raviraj_gardi/" target="_blank" rel="noopener noreferrer" aria-label="Developer Instagram">
           <svg viewBox="0 0 20 20" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
