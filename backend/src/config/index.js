@@ -30,7 +30,7 @@ module.exports = {
     authCookieSameSite: process.env.AUTH_COOKIE_SAMESITE || (process.env.NODE_ENV === 'production' ? 'none' : 'lax'),
 
     // CORS configuration
-    frontendUrl: process.env.FRONTEND_URL || 'http://localhost:5173',
+    frontendUrl: (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, ''),
 
     // Google OAuth configuration
     googleOAuth: {
