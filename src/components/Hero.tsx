@@ -170,6 +170,7 @@ export const Hero: React.FC = () => {
                   draggable={false}
                   loading={index === 0 ? 'eager' : 'lazy'}
                   decoding={index === 0 ? 'sync' : 'async'}
+                  fetchPriority={index === 0 ? 'high' : 'auto'}
                 />
               </picture>
             ) : (
@@ -179,6 +180,7 @@ export const Hero: React.FC = () => {
                 draggable={false}
                 loading={index === 0 ? 'eager' : 'lazy'}
                 decoding={index === 0 ? 'sync' : 'async'}
+                fetchPriority={index === 0 ? 'high' : 'auto'}
               />
             )}
           </div>
