@@ -144,28 +144,28 @@
       "id": "gallery-3",
       "title": "Live Performance",
       "description": "In the studio",
-      "image": "/src/assets/1a.png",
+      "image": "/assets/1a.png",
       "aspect": "wide"
     },
     {
       "id": "gallery-4",
       "title": "Backdrop",
       "description": "Stage backdrop",
-      "image": "/src/assets/backofthelatestR.png",
+      "image": "/assets/backofthelatestR.png",
       "aspect": "wide"
     },
     {
       "id": "gallery-5",
       "title": "Backstage",
       "description": "Behind the scenes",
-      "image": "/src/assets/3a.png",
+      "image": "/assets/3a.png",
       "aspect": "tall"
     },
     {
       "id": "gallery-6",
       "title": "Concert moment",
       "description": "Live on stage",
-      "image": "/src/assets/3.png",
+      "image": "/assets/3.png",
       "aspect": "tall"
     },
     {
@@ -179,28 +179,28 @@
       "id": "gallery-8",
       "title": "Recording",
       "description": "Studio recording",
-      "image": "/src/assets/6a.png",
+      "image": "/assets/6a.png",
       "aspect": "square"
     },
     {
       "id": "gallery-9",
       "title": "Audience vibe",
       "description": "Crowd energy",
-      "image": "/src/assets/5.png",
+      "image": "/assets/5.png",
       "aspect": "tall"
     },
     {
       "id": "gallery-10",
       "title": "Show highlight",
       "description": "Live highlight",
-      "image": "/src/assets/6.png",
+      "image": "/assets/6.png",
       "aspect": "wide"
     },
     {
       "id": "gallery-11",
       "title": "Concert crowd",
       "description": "Vibrant audience",
-      "image": "/src/assets/consert1.png",
+      "image": "/assets/consert1.png",
       "aspect": "wide"
     }
   ],
