@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import concertMic from '../assets/microphone.png'
+import concertMic from '../assets/microphone.webp'
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value))
 

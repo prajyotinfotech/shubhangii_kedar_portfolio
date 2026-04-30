@@ -57,6 +57,8 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
         }
 
         // Return the Cloudinary URL
+        const optimizedUrl = req.file.path.replace('/image/upload/', '/image/upload/f_auto,q_auto/');
+
         res.status(201).json({
             success: true,
             message: 'Image uploaded successfully',
@@ -65,7 +67,7 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
                 originalName: req.file.originalname,
                 size: req.file.size,
                 mimetype: req.file.mimetype,
-                url: req.file.path // Secure URL from Cloudinary
+                url: optimizedUrl
             }
         });
     } catch (error) {
@@ -117,7 +119,7 @@ router.get('/list', authenticateToken, async (req, res, next) => {
 
         const images = resources.map(resource => ({
             filename: resource.public_id,
-            url: resource.secure_url,
+            url: resource.secure_url.replace('/image/upload/', '/image/upload/f_auto,q_auto/'),
             size: resource.bytes,
             uploadedAt: resource.created_at
         }));

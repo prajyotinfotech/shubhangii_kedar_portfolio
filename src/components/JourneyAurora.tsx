@@ -2,10 +2,10 @@ import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { ScrollControls, Scroll, useScroll, Sparkles } from '@react-three/drei'
 import * as THREE from 'three'
-import originsImg from '../assets/1.png'
-import missionImg from '../assets/consert1.png'
-import storiesImg from '../assets/govyachyakinaryav.jpg'
-import futureImg from '../assets/6a.png'
+import originsImg from '../assets/1.webp'
+import missionImg from '../assets/consert1.webp'
+import storiesImg from '../assets/govyachyakinaryav.webp'
+import futureImg from '../assets/6a.webp'
 
 const SECTION_DEPTH = 7
 
