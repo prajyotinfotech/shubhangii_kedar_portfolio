@@ -1,10 +1,10 @@
 // Import journey milestone images
-import journeyImg1 from '../assets/1.png'
-import journeyImg2 from '../assets/2.png'
-import journeyImg3 from '../assets/3.png'
-import journeyImg4 from '../assets/4.png'
-import journeyImg5 from '../assets/5.png'
-import journeyImg6 from '../assets/6.png'
+import journeyImg1 from '../assets/1.webp'
+import journeyImg2 from '../assets/2.webp'
+import journeyImg3 from '../assets/3.webp'
+import journeyImg4 from '../assets/4.webp'
+import journeyImg5 from '../assets/5.webp'
+import journeyImg6 from '../assets/6.webp'
 
 export type FeatureStat = {
   label: string

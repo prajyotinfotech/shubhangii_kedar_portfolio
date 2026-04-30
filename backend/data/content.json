@@ -3,27 +3,27 @@
     "slides": [
       {
         "id": "live-neon-stage",
-        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767166923/singer_portfolio/1d-1767166916834.png",
+        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767166923/singer_portfolio/1d-1767166916834.png",
         "alt": "Shubhangi Kedar performing live",
         "heading": [
           "Namaskar, I’m Shubhangii Kedar"
         ],
         "subtitle": "A voice rooted in Maharashtra, resonating around the world",
-        "mobileImage": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767165320/singer_portfolio/mobile1stslide-1767165316173.png"
+        "mobileImage": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767165320/singer_portfolio/mobile1stslide-1767165316173.png"
       },
       {
         "id": "studio-microphone",
-        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767165341/singer_portfolio/6-1767165334788.png",
+        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767165341/singer_portfolio/6-1767165334788.png",
         "alt": "Shubhangi Kedar recording in studio",
         "heading": [
           "#Marathi Worldwide Mission"
         ],
         "subtitle": "Join our journey to take Marathi music across oceans",
-        "mobileImage": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767165434/singer_portfolio/6-1767165426526.png"
+        "mobileImage": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767165434/singer_portfolio/6-1767165426526.png"
       },
       {
         "id": "crowd-concert",
-        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767165374/singer_portfolio/backofthelatestR-1767165367675.png",
+        "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767165374/singer_portfolio/backofthelatestR-1767165367675.png",
         "alt": "Shubhangi Kedar on stage with vibrant crowd",
         "heading": [
           "Experience the Story behind every Song"
@@ -137,70 +137,70 @@
       "id": "gallery-2",
       "title": "Portrait",
       "description": "Professional portrait",
-      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075750/singer_portfolio/Still202510261456453-1767075743294.png",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767075750/singer_portfolio/Still202510261456453-1767075743294.png",
       "aspect": "tall"
     },
     {
       "id": "gallery-3",
       "title": "Live Performance",
       "description": "In the studio",
-      "image": "/assets/1a.png",
+      "image": "/assets/1a.webp",
       "aspect": "wide"
     },
     {
       "id": "gallery-4",
       "title": "Backdrop",
       "description": "Stage backdrop",
-      "image": "/assets/backofthelatestR.png",
+      "image": "/assets/backofthelatestR.webp",
       "aspect": "wide"
     },
     {
       "id": "gallery-5",
       "title": "Backstage",
       "description": "Behind the scenes",
-      "image": "/assets/3a.png",
+      "image": "/assets/3a.webp",
       "aspect": "tall"
     },
     {
       "id": "gallery-6",
       "title": "Concert moment",
       "description": "Live on stage",
-      "image": "/assets/3.png",
+      "image": "/assets/3.webp",
       "aspect": "tall"
     },
     {
       "id": "gallery-7",
       "title": "On stage",
       "description": "Performance highlight",
-      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/v1767075572/singer_portfolio/Screenshot20251110at5-1767075565492.png",
+      "image": "https://res.cloudinary.com/dl0adj3sk/image/upload/f_auto,q_auto/v1767075572/singer_portfolio/Screenshot20251110at5-1767075565492.png",
       "aspect": "wide"
     },
     {
       "id": "gallery-8",
       "title": "Recording",
       "description": "Studio recording",
-      "image": "/assets/6a.png",
+      "image": "/assets/6a.webp",
       "aspect": "square"
     },
     {
       "id": "gallery-9",
       "title": "Audience vibe",
       "description": "Crowd energy",
-      "image": "/assets/5.png",
+      "image": "/assets/5.webp",
       "aspect": "tall"
     },
     {
       "id": "gallery-10",
       "title": "Show highlight",
       "description": "Live highlight",
-      "image": "/assets/6.png",
+      "image": "/assets/6.webp",
       "aspect": "wide"
     },
     {
       "id": "gallery-11",
       "title": "Concert crowd",
       "description": "Vibrant audience",
-      "image": "/assets/consert1.png",
+      "image": "/assets/consert1.webp",
       "aspect": "wide"
     }
   ],
@@ -257,7 +257,7 @@
       "year": "2010",
       "side": "left",
       "color": "#ff6b35",
-      "image": "/assets/1.png"
+      "image": "/assets/1.webp"
     },
     {
       "id": 2,
@@ -266,7 +266,7 @@
       "year": "2015",
       "side": "right",
       "color": "#00ccff",
-      "image": "/assets/2.png"
+      "image": "/assets/2.webp"
     },
     {
       "id": 3,
@@ -275,7 +275,7 @@
       "year": "2018",
       "side": "left",
       "color": "#ffd700",
-      "image": "/assets/3a.png"
+      "image": "/assets/3a.webp"
     },
     {
       "id": 4,
@@ -284,7 +284,7 @@
       "year": "2020",
       "side": "right",
       "color": "#cc00ff",
-      "image": "/assets/6a.png"
+      "image": "/assets/6a.webp"
     },
     {
       "id": 5,
@@ -293,7 +293,7 @@
       "year": "2022",
       "side": "left",
       "color": "#00ff99",
-      "image": "/assets/5.png"
+      "image": "/assets/5.webp"
     },
     {
       "id": 6,
@@ -302,7 +302,7 @@
       "year": "2024",
       "side": "right",
       "color": "#ff0055",
-      "image": "/assets/1d.png"
+      "image": "/assets/1d.webp"
     }
   ],
   "testimonials": [

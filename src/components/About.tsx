@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import portraitImg from '../assets/6.png'
+import portraitImg from '../assets/6.webp'
 import { useContentContext } from '../contexts/ContentContext'
 
 function AchievementsCarousel({ items }: { items: string[] }) {
