@@ -1,0 +1,14 @@
+{
+  "name": "Shubhangii-Kedar-Portfolio",
+  "root": "/home/raviraj/Prajyot/pranya/Shubhangii-Kedar-Portfolio",
+  "bugs": [],
+  "features": [
+    {
+      "id": "f1",
+      "title": "test",
+      "detail": "",
+      "priority": "medium",
+      "status": "open"
+    }
+  ]
+}

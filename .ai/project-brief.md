@@ -1,0 +1,1 @@
+Artist portfolio and CMS for singer Shubhangii Kedar. The public site presents her music, live show, artist journey, gallery, testimonials, social reach, and booking/contact flow. Behind the site is an admin panel and Express backend so content, images, songs, journey sections, theme, and social links can be managed without touching code.

@@ -1,0 +1,30 @@
+{
+  "stack": [
+    "React",
+    "Vite",
+    "Express API",
+    "React Router"
+  ],
+  "auth": [
+    "Google OAuth admin login",
+    "JWT session",
+    "password fallback"
+  ],
+  "data": [
+    "GitHub Gist content.json as CMS database"
+  ],
+  "services": [
+    "Cloudinary media uploads",
+    "Spotify links/API",
+    "Web3Forms booking/contact",
+    "GitHub API"
+  ],
+  "hosting": [
+    "Vercel-ready"
+  ],
+  "admin": [
+    "admin panel",
+    "section-based CMS editing",
+    "image upload workflow"
+  ]
+}
