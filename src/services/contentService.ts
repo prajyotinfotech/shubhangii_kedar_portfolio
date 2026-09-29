@@ -123,6 +123,7 @@ export interface ContentData {
         cityFont?: string;
         cityColor?: string;
     }[];
+    brands?: (string | { id?: string; name: string; image?: string; url?: string })[];
     songList?: {
         id: string;
         title: string;

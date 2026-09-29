@@ -24,6 +24,7 @@ const SocialLinksEditor = lazy(() => import('./admin/pages/sections/SocialLinksE
 const JourneyManager = lazy(() => import('./admin/pages/sections/JourneyManager'))
 const ThemeManager = lazy(() => import('./admin/pages/sections/ThemeManager'))
 const SongListManager = lazy(() => import('./admin/pages/sections/SongListManager'))
+const BrandsManager = lazy(() => import('./admin/pages/sections/BrandsManager'))
 const BookingSettingsEditor = lazy(() => import('./admin/pages/sections/BookingSettingsEditor'))
 
 const AdminLoadingFallback = () => (
@@ -125,6 +126,11 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/songlist" element={
                 <Suspense fallback={<AdminLoadingFallback />}>
                   <SongListManager />
+                </Suspense>
+              } />
+              <Route path="/admin/brands" element={
+                <Suspense fallback={<AdminLoadingFallback />}>
+                  <BrandsManager />
                 </Suspense>
               } />
               <Route path="/admin/booking-settings" element={
