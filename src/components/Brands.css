@@ -5,7 +5,7 @@
    canvas on upload. Cells are transparent like CINFINI; logos keep their own colours. Hover / focus lifts
    the tile and shows the name; a brand with a URL is a link. */
 .brands {
-    padding: 100px 0;
+    padding: 70px 0;
     background: var(--dark-100);
 }
 
@@ -19,14 +19,19 @@
     --brand-cols: 6;
     display: grid;
     grid-template-columns: repeat(var(--brand-cols), minmax(0, 1fr));
-    gap: 1rem;
-    margin-top: 10px;
+    gap: 0.5rem;
+    /* Raviraj 2026-09-30: ~30% more compact than the full column — the grid
+       is capped narrower and centred, cells and gaps shrink with it */
+    max-width: 780px;
+    margin: 0 auto;
 }
 
-/* one square cell; the slot fills it so every cell in every row is the same square */
+/* one 5:4 cell (the normalised canvas is square but its ink only fills 44%
+   of the height, so a square cell leaves too much air between rows); the
+   slot fills it so every cell in every row is the same size */
 .brand-cell {
     position: relative;
-    aspect-ratio: 1;
+    aspect-ratio: 5 / 4;
     min-width: 0;
 }
 
@@ -108,9 +113,9 @@ a.brand-slot { cursor: pointer; }
 }
 
 @container brands (max-width: 480px) {
-    .brands-grid { --brand-cols: 3; gap: 0.75rem; }
+    .brands-grid { --brand-cols: 4; gap: 0.35rem; }
 }
 
 @media (max-width: 640px) {
-    .brands { padding: 70px 0; }
+    .brands { padding: 50px 0; }
 }
