@@ -137,7 +137,7 @@ export default function BrandsManager() {
                     </p>
                     {item.image && (
                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginTop: '10px' }}>
-                            <div style={{ width: 96, height: 96, background: '#f4f4f2', borderRadius: 12, overflow: 'hidden' }}>
+                            <div style={{ width: 96, height: 96, background: 'transparent', borderRadius: 12, overflow: 'hidden' }}>
                                 <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                             </div>
                             <button type="button" className="editor-button editor-button--small" onClick={() => onChange({ ...item, image: '' })}>Remove logo</button>
@@ -192,7 +192,7 @@ export default function BrandsManager() {
                             ) : (
                                 <>
                                     <div className="editor-list-item__content" style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
-                                        <div style={{ width: 56, height: 56, flex: '0 0 auto', background: '#f4f4f2', borderRadius: 10, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', fontSize: '0.7rem' }}>
+                                        <div style={{ width: 56, height: 56, flex: '0 0 auto', background: 'transparent', borderRadius: 10, border: '1px solid rgba(255,255,255,0.1)', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666', fontSize: '0.7rem' }}>
                                             {item.image ? <img src={item.image} alt={item.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} /> : 'no logo'}
                                         </div>
                                         <div className="editor-list-item__info">
