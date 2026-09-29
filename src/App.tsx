@@ -5,6 +5,7 @@ import Hero from './components/Hero'
 import HangingMic from './components/HangingMic'
 import About from './components/About'
 import StatsShowcase from './components/StatsShowcase'
+import Brands from './components/Brands'
 import TheShow from './components/TheShow'
 import Music from './components/Music'
 import Events from './components/Events'
@@ -130,6 +131,7 @@ function App() {
         <main>
           <Hero />
           <About />
+          <Brands />
           <StatsShowcase />
           <TheShow />
           <Music />

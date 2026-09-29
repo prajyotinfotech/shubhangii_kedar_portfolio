@@ -1,0 +1,119 @@
+/* ---------- Brands we've worked with ---------- */
+/* Ported from CINFINI (2026-09-29): a fixed grid of SQUARE cells — 6 per row
+   on a desktop, 4 on a tablet, 3 on a phone — measured on the grid's own
+   width (container query), every logo already normalised into one square
+   canvas on upload. This site is dark, so each cell is a soft light tile so
+   logos show as supplied (Raviraj's pick, 2026-09-29). Hover / focus lifts
+   the tile and shows the name; a brand with a URL is a link. */
+.brands {
+    padding: 100px 0;
+    background: var(--dark-100);
+}
+
+.brands .container {
+    /* a @container rule cannot match its own container, so the column-count
+       container is the section column: its content width IS the grid width */
+    container: brands / inline-size;
+}
+
+.brands-grid {
+    --brand-cols: 6;
+    display: grid;
+    grid-template-columns: repeat(var(--brand-cols), minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 10px;
+}
+
+/* one square cell; the slot fills it so every cell in every row is the same square */
+.brand-cell {
+    position: relative;
+    aspect-ratio: 1;
+    min-width: 0;
+}
+
+.brand-slot {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: #f4f4f2;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    color: #555;
+    text-decoration: none;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+a.brand-slot { cursor: pointer; }
+
+.brand-slot:hover,
+.brand-slot:focus-visible {
+    background: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--ring);
+    outline: none;
+}
+
+/* the normalised canvas is already square, so the picture IS the cell */
+.brand-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.brand-hover {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.45rem;
+    text-align: center;
+    font-size: 0.68rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #444;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    padding: 0 0.4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.brand-slot:hover .brand-hover,
+.brand-slot:focus-visible .brand-hover {
+    opacity: 1;
+}
+
+/* a brand without a logo prints its name in the square instead of a blank tile */
+.brand-slot--text .brand-hover {
+    opacity: 1;
+    position: static;
+    white-space: normal;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    font-weight: 600;
+}
+
+/* a tap has no hover: the name stays hidden, a URL still opens */
+@media (hover: none) {
+    .brand-slot:hover .brand-hover { opacity: 0; }
+    .brand-slot--text:hover .brand-hover { opacity: 1; }
+}
+
+/* cells per row by the grid's own width: this site's .container is 90vw −
+   40px, so 1280 → 1112 (6), 768 → 651 (4), 375 → 297 (3) */
+@container brands (max-width: 720px) {
+    .brands-grid { --brand-cols: 4; }
+}
+
+@container brands (max-width: 480px) {
+    .brands-grid { --brand-cols: 3; gap: 0.75rem; }
+}
+
+@media (max-width: 640px) {
+    .brands { padding: 70px 0; }
+}
