@@ -2,8 +2,7 @@
 /* Ported from CINFINI (2026-09-29): a fixed grid of SQUARE cells — 6 per row
    on a desktop, 4 on a tablet, 3 on a phone — measured on the grid's own
    width (container query), every logo already normalised into one square
-   canvas on upload. This site is dark, so each cell is a soft light tile so
-   logos show as supplied (Raviraj's pick, 2026-09-29). Hover / focus lifts
+   canvas on upload. Cells are transparent like CINFINI; logos keep their own colours. Hover / focus lifts
    the tile and shows the name; a brand with a URL is a link. */
 .brands {
     padding: 100px 0;
@@ -37,22 +36,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 14px;
-    background: #f4f4f2;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    color: #555;
+    border-radius: 0.75rem;
+    color: inherit;
     text-decoration: none;
     overflow: hidden;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    transition: background 0.2s;
 }
 
 a.brand-slot { cursor: pointer; }
 
+/* CINFINI-style: no tile, the page background shows through; hover / focus
+   tints the cell a shade lighter than the page (Raviraj, 2026-09-30) */
 .brand-slot:hover,
 .brand-slot:focus-visible {
-    background: #ffffff;
-    transform: translateY(-3px);
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--ring);
+    background: var(--dark-200);
     outline: none;
 }
 
@@ -73,7 +70,7 @@ a.brand-slot { cursor: pointer; }
     font-size: 0.68rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: #444;
+    color: var(--text-dim);
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s;
