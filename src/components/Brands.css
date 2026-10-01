@@ -22,7 +22,7 @@
     gap: 0.5rem;
     /* Raviraj 2026-09-30: ~30% more compact than the full column — the grid
        is capped narrower and centred, cells and gaps shrink with it */
-    max-width: 780px;
+    max-width: 975px; /* 2026-10-01: +25% over the 780px first cut */
     margin: 0 auto;
 }
 
