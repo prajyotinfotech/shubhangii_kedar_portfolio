@@ -14,6 +14,7 @@ interface ContentStats {
     testimonials: number;
     socialLinks: number;
     journeyMilestones: number;
+    brands: number;
 }
 
 export default function AdminDashboard() {
@@ -34,7 +35,8 @@ export default function AdminDashboard() {
                 musicReleases: content.musicReleases?.length || 0,
                 testimonials: content.testimonials?.length || 0,
                 socialLinks: content.socialLinks?.length || 0,
-                journeyMilestones: content.journeyMilestones?.length || 0
+                journeyMilestones: content.journeyMilestones?.length || 0,
+                brands: content.brands?.length || 0
             });
         } catch (err) {
             setError('Failed to load content stats');
@@ -49,13 +51,15 @@ export default function AdminDashboard() {
         { label: 'Gallery Items', value: stats?.gallery || 0, path: '/admin/gallery', color: '#f093fb' },
         { label: 'Testimonials', value: stats?.testimonials || 0, path: '/admin/testimonials', color: '#43e97b' },
         { label: 'Social Links', value: stats?.socialLinks || 0, path: '/admin/social', color: '#fa709a' },
-        { label: 'Journey Milestones', value: stats?.journeyMilestones || 0, path: '/admin/journey', color: '#ffd700' }
+        { label: 'Journey Milestones', value: stats?.journeyMilestones || 0, path: '/admin/journey', color: '#ffd700' },
+        { label: 'Brands', value: stats?.brands || 0, path: '/admin/brands', color: '#1DB954' }
     ];
 
     const quickLinks = [
         { label: 'Edit Hero Section', path: '/admin/hero', icon: '🎯' },
         { label: 'Update About Info', path: '/admin/about', icon: '👤' },
         { label: 'Manage Events', path: '/admin/events', icon: '📅' },
+        { label: 'Manage Brands', path: '/admin/brands', icon: '🏷️' },
         { label: 'Update Gallery', path: '/admin/gallery', icon: '🖼️' },
         { label: 'Edit Contact Info', path: '/admin/contact', icon: '📧' },
         { label: 'Manage Theme', path: '/admin/theme', icon: '🎨' }
