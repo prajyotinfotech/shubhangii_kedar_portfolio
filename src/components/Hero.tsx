@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { CountUp } from './CountUp'
 import slidePrimary from '../assets/3.webp'
 import slideStudio from '../assets/6.webp'
@@ -9,12 +9,11 @@ import instagramIcon from '../assets/icons/instagram.svg'
 import spotifyIcon from '../assets/icons/spotify.svg'
 import { useContentContext } from '../contexts/ContentContext'
 
-const HERO_VIDEO = '' // Provide a video URL if available
-
 type HeroAction = {
   label: string
   href: string
-  variant?: 'primary' | 'secondary'
+  // Free-form string to match the CMS content type; rendered as `btn-${variant}`.
+  variant?: string
 }
 
 type HeroSlide = {
@@ -25,7 +24,12 @@ type HeroSlide = {
   subtitle: string
   actions?: HeroAction[]
   mobileImage?: string
+  /** Optional looping background video; `image` is used as its poster. */
+  video?: string
 }
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
 
 type PillKind = 'youtube' | 'tracks' | 'instagram'
 type PillStat = { kind: PillKind; top?: string; sub?: string; value: number; color: string; delta?: string; desktopSize?: string; mobileSize?: string }
@@ -65,11 +69,11 @@ export const Hero: React.FC = () => {
   const { content } = useContentContext()
   const [activeSlide, setActiveSlide] = useState(0)
 
-  const heroSlides = content?.hero?.slides?.length ? content.hero.slides.map((s: any) => ({
-    ...s,
-    // Use local assets if the image path matches what we expect, or the path itself
-    image: s.image.includes('/assets/') ? s.image : s.image,
-  })) : staticHeroSlides
+  const contentSlides = content?.hero?.slides
+  const heroSlides: HeroSlide[] = useMemo(
+    () => (contentSlides?.length ? contentSlides.map((s) => ({ ...s, image: s.image || '' })) : staticHeroSlides),
+    [contentSlides]
+  )
 
   const heroPills = (content?.hero?.pills as PillStat[]) || STATIC_PILLS
 
@@ -79,6 +83,22 @@ export const Hero: React.FC = () => {
   const [typedSubtitle, setTypedSubtitle] = useState('')
   const [subtitleVisible, setSubtitleVisible] = useState(false)
   const [subtitleComplete, setSubtitleComplete] = useState(false)
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({})
+  const [reduceMotion] = useState(prefersReducedMotion)
+
+  // Only the active slide's video plays; the rest pause so a 3-slide hero
+  // never decodes three streams at once.
+  useEffect(() => {
+    heroSlides.forEach((slide, index) => {
+      const el = videoRefs.current[slide.id]
+      if (!el) return
+      if (index === activeSlide) {
+        el.play().catch(() => { /* autoplay blocked: poster stays visible */ })
+      } else {
+        el.pause()
+      }
+    })
+  }, [activeSlide, heroSlides])
 
   const goToSlide = (index: number) => {
     setActiveSlide((index + heroSlides.length) % heroSlides.length)
@@ -161,7 +181,20 @@ export const Hero: React.FC = () => {
             key={slide.id}
             className={`hero-slide${index === activeSlide ? ' is-active' : ''}`}
           >
-            {slide.mobileImage ? (
+            {slide.video && !reduceMotion ? (
+              <video
+                ref={(el) => { videoRefs.current[slide.id] = el }}
+                src={slide.video}
+                poster={slide.image || undefined}
+                muted
+                loop
+                playsInline
+                autoPlay={index === 0}
+                preload={index === 0 ? 'auto' : 'metadata'}
+                disablePictureInPicture
+                aria-label={slide.alt}
+              />
+            ) : slide.mobileImage ? (
               <picture>
                 <source media="(max-width: 640px)" srcSet={slide.mobileImage} />
                 <img
@@ -187,13 +220,6 @@ export const Hero: React.FC = () => {
         ))}
       </div>
       <div className="hero-background" />
-      {HERO_VIDEO && (
-        <div className="hero-video-wrap">
-          <video className="hero-video" autoPlay muted loop playsInline preload="none">
-            <source src={HERO_VIDEO} type="video/mp4" />
-          </video>
-        </div>
-      )}
 
       <button className="hero-nav hero-nav-prev" onClick={prevSlide} aria-label="Previous slide">
         <span aria-hidden="true">‹</span>

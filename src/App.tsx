@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import type React from 'react'
 import './App.css'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -18,8 +19,25 @@ import ContactBooking from './components/ContactBooking'
 import Footer from './components/Footer'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useScrollReveal } from './hooks/useScrollReveal'
+import { resolveSectionLayout, type SectionId } from './data/sectionLayout'
 
 import { useContentContext } from './contexts/ContentContext'
+
+// Hero is rendered unconditionally; every other home section is optional and
+// ordered by the admin-managed layout (content.sectionLayout).
+const SECTION_COMPONENTS: Record<SectionId, React.FC> = {
+  about: About,
+  brands: Brands,
+  stats: StatsShowcase,
+  'the-show': TheShow,
+  music: Music,
+  songlist: SongList,
+  'performed-at': PerformedAt,
+  events: Events,
+  gallery: Gallery,
+  testimonials: Testimonials,
+  contact: ContactBooking,
+}
 
 function App() {
   const { content, error, refetch, loading, usingCachedContent } = useContentContext()
@@ -130,18 +148,13 @@ function App() {
         )}
         <main>
           <Hero />
-          <About />
-          <Brands />
-          <StatsShowcase />
-          <TheShow />
-          <Music />
-          <SongList />
-          <PerformedAt />
-          <Events />
-          <Gallery />
-          <Testimonials />
+          {resolveSectionLayout(content.sectionLayout)
+            .filter((entry) => entry.visible)
+            .map((entry) => {
+              const Section = SECTION_COMPONENTS[entry.id]
+              return <Section key={entry.id} />
+            })}
           {/* <Newsletter /> */}
-          <ContactBooking />
         </main>
         <Footer />
         <a

@@ -76,6 +76,52 @@ router.post('/', authenticateToken, upload.single('image'), async (req, res, nex
 });
 
 /**
+ * POST /api/upload/video/sign
+ * Return a short-lived signature so the admin browser can upload a video
+ * STRAIGHT to Cloudinary (protected).
+ *
+ * Why not proxy through this server like images? The API runs as a Vercel
+ * serverless function whose request body is capped at ~4.5 MB, which is too
+ * small for even a well-compressed hero video. Signed direct uploads skip the
+ * server entirely; only the tiny signature request hits us.
+ */
+const VIDEO_MAX_BYTES = 25 * 1024 * 1024; // hard cap (also enforced client-side before upload); UI nudges toward <= 8 MB
+
+router.post('/video/sign', authenticateToken, (req, res, next) => {
+    try {
+        if (!config.cloudinary.cloudName || !config.cloudinary.apiKey || !config.cloudinary.apiSecret) {
+            return res.status(500).json({
+                error: 'Upload unavailable',
+                message: 'Cloudinary is not configured on the server'
+            });
+        }
+
+        const rawName = typeof req.body?.filename === 'string' ? req.body.filename : 'video';
+        const name = rawName.split('.')[0].replace(/[^a-zA-Z0-9]/g, '').slice(0, 40) || 'video';
+        const timestamp = Math.round(Date.now() / 1000);
+        const paramsToSign = {
+            timestamp,
+            folder: 'singer_portfolio',
+            public_id: `${name}-${Date.now()}`
+        };
+        const signature = cloudinary.utils.api_sign_request(paramsToSign, config.cloudinary.apiSecret);
+
+        res.json({
+            success: true,
+            data: {
+                cloudName: config.cloudinary.cloudName,
+                apiKey: config.cloudinary.apiKey,
+                signature,
+                maxBytes: VIDEO_MAX_BYTES,
+                ...paramsToSign
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+});
+
+/**
  * DELETE /api/upload/:publicId
  * Delete uploaded image from Cloudinary (protected)
  */

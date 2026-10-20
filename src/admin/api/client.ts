@@ -157,6 +157,101 @@ export async function uploadImage(file: File) {
     return handleResponse(response);
 }
 
+export const VIDEO_RECOMMENDED_MAX_BYTES = 8 * 1024 * 1024;
+export const VIDEO_MAX_BYTES = 25 * 1024 * 1024; // mirrors backend VIDEO_MAX_BYTES
+
+/**
+ * Read a video file's duration and dimensions in the browser (no upload).
+ * Resolves with nulls if the browser cannot decode the file.
+ */
+export function probeVideoFile(file: File): Promise<{ duration: number | null; width: number | null; height: number | null }> {
+    return new Promise((resolve) => {
+        const url = URL.createObjectURL(file);
+        const el = document.createElement('video');
+        el.preload = 'metadata';
+        const done = (v: { duration: number | null; width: number | null; height: number | null }) => { URL.revokeObjectURL(url); resolve(v); };
+        el.onloadedmetadata = () => done({ duration: el.duration, width: el.videoWidth, height: el.videoHeight });
+        el.onerror = () => done({ duration: null, width: null, height: null });
+        el.src = url;
+    });
+}
+
+/**
+ * Upload a video directly from the browser to Cloudinary.
+ *
+ * Flow: ask our API for a signature (auth-protected, tiny JSON), then POST the
+ * file to Cloudinary's upload endpoint. The file never passes through our
+ * serverless API, so it is not subject to Vercel's ~4.5 MB body limit.
+ * Progress is reported via `onProgress` (0..1).
+ */
+export async function uploadVideo(
+    file: File,
+    onProgress?: (fraction: number) => void
+): Promise<{ url: string; bytes: number; duration?: number; publicId: string }> {
+    if (!file.type.startsWith('video/')) {
+        throw new Error('Please choose a video file (MP4 recommended).');
+    }
+    if (file.size > VIDEO_MAX_BYTES) {
+        throw new Error(`Video is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is ${Math.round(VIDEO_MAX_BYTES / 1024 / 1024)} MB; please compress it first.`);
+    }
+
+    const signed = await fetch(`${API_URL}/api/upload/video/sign`, {
+        method: 'POST',
+        credentials: AUTH_CREDENTIALS,
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ filename: file.name })
+    }).then(handleResponse);
+
+    const { cloudName, apiKey, signature, timestamp, folder, public_id, maxBytes } = signed.data;
+
+    if (typeof maxBytes === 'number' && file.size > maxBytes) {
+        throw new Error(`Video is too large (${(file.size / 1024 / 1024).toFixed(1)} MB). Maximum is ${Math.round(maxBytes / 1024 / 1024)} MB; please compress it first.`);
+    }
+
+    const form = new FormData();
+    form.append('file', file);
+    form.append('api_key', apiKey);
+    form.append('timestamp', String(timestamp));
+    form.append('signature', signature);
+    form.append('folder', folder);
+    form.append('public_id', public_id);
+
+    type CloudinaryVideoResponse = {
+        secure_url: string;
+        bytes: number;
+        duration?: number;
+        public_id: string;
+        error?: { message?: string };
+    };
+
+    const result = await new Promise<CloudinaryVideoResponse>((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${cloudName}/video/upload`);
+        xhr.upload.onprogress = (e) => {
+            if (e.lengthComputable && onProgress) onProgress(e.loaded / e.total);
+        };
+        xhr.onerror = () => reject(new Error('Network error while uploading video'));
+        xhr.onload = () => {
+            let body: Partial<CloudinaryVideoResponse> = {};
+            try { body = JSON.parse(xhr.responseText || '{}'); } catch { /* fall through */ }
+            if (xhr.status >= 200 && xhr.status < 300) resolve(body as CloudinaryVideoResponse);
+            else reject(new Error(body?.error?.message || `Video upload failed (${xhr.status})`));
+        };
+        xhr.send(form);
+    });
+
+    // q_auto lets Cloudinary re-encode at a perceptually tuned bitrate on
+    // delivery; the container stays MP4 so <video src> works everywhere.
+    const url: string = String(result.secure_url).replace('/video/upload/', '/video/upload/q_auto/');
+
+    return {
+        url,
+        bytes: result.bytes,
+        duration: result.duration,
+        publicId: result.public_id
+    };
+}
+
 /**
  * Delete uploaded image
  */

@@ -17,6 +17,8 @@ export interface ContentData {
             subtitle: string;
             actions?: { label: string; href: string; variant?: string }[];
             mobileImage?: string;
+            /** Optional looping background video (MP4/WebM URL). The image acts as poster/fallback. */
+            video?: string;
         }[];
         pills: {
             kind: 'youtube' | 'tracks' | 'instagram';
@@ -164,6 +166,8 @@ export interface ContentData {
     bookingSettings?: {
         web3formsKey?: string;
     };
+    /** Ordered home-page sections (hero excluded, always first). See src/data/sectionLayout.ts */
+    sectionLayout?: { id: string; visible: boolean }[];
     theme?: {
         logoImage?: string;
         logoSize?: number;

@@ -27,6 +27,17 @@ const navItems: NavItem[] = [
         )
     },
     {
+        path: '/admin/sections',
+        label: 'Page Sections',
+        icon: (
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="4" width="18" height="4" rx="1" />
+                <rect x="3" y="10" width="18" height="4" rx="1" />
+                <rect x="3" y="16" width="18" height="4" rx="1" />
+            </svg>
+        )
+    },
+    {
         path: '/admin/hero',
         label: 'Hero Section',
         icon: (
@@ -186,23 +197,31 @@ const navItems: NavItem[] = [
 // Sidebar order: grouped by the job being done, mirroring the public page top-to-bottom
 const navGroups: { label: string | null; paths: string[] }[] = [
     { label: null, paths: ['/admin/dashboard'] },
-    { label: 'Page Content', paths: ['/admin/hero', '/admin/about', '/admin/journey'] },
+    { label: 'Page Content', paths: ['/admin/sections', '/admin/hero', '/admin/about', '/admin/journey'] },
     { label: 'Music & Shows', paths: ['/admin/music', '/admin/songlist', '/admin/events', '/admin/performed-at'] },
     { label: 'Community', paths: ['/admin/gallery', '/admin/testimonials', '/admin/social'] },
     { label: 'Settings', paths: ['/admin/contact', '/admin/booking-settings', '/admin/theme'] }
 ];
 
-export default function AdminSidebar() {
+interface AdminSidebarProps {
+    /** Drawer state on small screens (ignored on desktop where the sidebar is always visible). */
+    open?: boolean;
+    /** Called after any link/logout tap so the parent can close the drawer. */
+    onNavigate?: () => void;
+}
+
+export default function AdminSidebar({ open = false, onNavigate }: AdminSidebarProps) {
     const { admin, logout } = useAdminAuth();
     const navigate = useNavigate();
 
     const handleLogout = async () => {
+        onNavigate?.();
         await logout();
         navigate('/admin');
     };
 
     return (
-        <aside className="admin-sidebar">
+        <aside id="admin-sidebar" className={`admin-sidebar${open ? ' admin-sidebar--open' : ''}`}>
             <div className="admin-sidebar__header">
                 <div className="admin-sidebar__logo">
                     <span className="admin-sidebar__logo-icon">SK</span>
@@ -223,6 +242,7 @@ export default function AdminSidebar() {
                                 <NavLink
                                     key={item.path}
                                     to={item.path}
+                                    onClick={() => onNavigate?.()}
                                     className={({ isActive }) =>
                                         `admin-sidebar__link ${isActive ? 'admin-sidebar__link--active' : ''}`
                                     }

@@ -56,6 +56,7 @@ export default function AdminDashboard() {
     ];
 
     const quickLinks = [
+        { label: 'Arrange Page Sections', path: '/admin/sections', icon: '🧩' },
         { label: 'Edit Hero Section', path: '/admin/hero', icon: '🎯' },
         { label: 'Update About Info', path: '/admin/about', icon: '👤' },
         { label: 'Manage Events', path: '/admin/events', icon: '📅' },
