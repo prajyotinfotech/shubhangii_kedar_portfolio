@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { fetchSection, updateSection, uploadImage } from '../../api/client';
+import { fetchSection, updateSection, uploadImage, uploadVideo, probeVideoFile, VIDEO_RECOMMENDED_MAX_BYTES, VIDEO_MAX_BYTES } from '../../api/client';
+
+type MediaMode = 'image' | 'video';
+const MB = 1024 * 1024;
 import RichTextField from '../../components/RichTextField';
 import '../styles/editor.css';
 
@@ -10,6 +13,7 @@ interface Slide {
     heading: string[];
     subtitle: string;
     mobileImage?: string;
+    video?: string;
 }
 
 interface PillStat {
@@ -35,10 +39,65 @@ export default function HeroEditor() {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
+    const [videoProgress, setVideoProgress] = useState<{ index: number; fraction: number } | null>(null);
+    // Per-slide "Image or Video" choice. Derived from saved data on load; a slide
+    // with a video URL is in video mode. Switching back to Image clears the video.
+    const [mediaMode, setMediaMode] = useState<Record<string, MediaMode>>({});
+    const modeFor = (slide: Slide): MediaMode => mediaMode[slide.id] ?? (slide.video ? 'video' : 'image');
+    const setModeFor = (index: number, slide: Slide, mode: MediaMode) => {
+        setMediaMode(prev => ({ ...prev, [slide.id]: mode }));
+        if (mode === 'image' && slide.video) handleSlideChange(index, 'video', '');
+    };
 
     useEffect(() => {
         loadContent();
     }, []);
+
+    const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+        const file = e.target.files?.[0];
+        e.target.value = '';
+        if (!file) return;
+
+        // Pre-flight in the browser: type, size and (if decodable) length, before any upload starts.
+        if (!file.type.startsWith('video/')) {
+            setMessage({ type: 'error', text: 'That is not a video file. Please choose an MP4.' });
+            return;
+        }
+        if (file.size > VIDEO_MAX_BYTES) {
+            setMessage({ type: 'error', text: `Video is ${(file.size / MB).toFixed(1)} MB. The maximum is ${Math.round(VIDEO_MAX_BYTES / MB)} MB; please compress it (HandBrake or ffmpeg) and try again.` });
+            return;
+        }
+        const probe = await probeVideoFile(file);
+        const dims = probe.width && probe.height ? `${probe.width}×${probe.height}` : '';
+        const secs = probe.duration ? `${probe.duration.toFixed(1)} s` : '';
+
+        setSaving(true);
+        setMessage({ type: '', text: `Uploading ${[`${(file.size / MB).toFixed(1)} MB`, dims, secs].filter(Boolean).join(' · ')}…` });
+        setVideoProgress({ index, fraction: 0 });
+        try {
+            const result = await uploadVideo(file, (fraction) => setVideoProgress({ index, fraction }));
+            handleSlideChange(index, 'video', result.url);
+            setMediaMode(prev => ({ ...prev, [content.slides[index].id]: 'video' }));
+            const mb = (result.bytes / MB).toFixed(1);
+            const heavy = result.bytes > VIDEO_RECOMMENDED_MAX_BYTES;
+            const long = probe.duration != null && probe.duration > 20;
+            const notes = [
+                heavy ? `it is heavier than the recommended 8 MB, so phones will wait longer before the video replaces the poster` : '',
+                long ? `it is ${probe.duration!.toFixed(0)} s long; a 8–15 s loop feels smoother` : ''
+            ].filter(Boolean);
+            setMessage({
+                type: notes.length ? 'error' : 'success',
+                text: notes.length
+                    ? `Video uploaded (${mb} MB) but ${notes.join(', and ')}. It will work; consider re-exporting. Remember to Save.`
+                    : `Video uploaded (${mb} MB${dims ? `, ${dims}` : ''}${secs ? `, ${secs}` : ''}). Remember to Save All Changes.`
+            });
+        } catch (err) {
+            setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to upload video' });
+        } finally {
+            setVideoProgress(null);
+            setSaving(false);
+        }
+    };
 
     const loadContent = async () => {
         try {
@@ -160,9 +219,92 @@ export default function HeroEditor() {
                                         <input value={slide.alt} onChange={(e) => handleSlideChange(idx, 'alt', e.target.value)} />
                                     </div>
 
+                                    <div className="editor-field">
+                                        <label>Background</label>
+                                        <div className="hero-media-toggle" role="radiogroup" aria-label="Background type">
+                                            {(['image', 'video'] as MediaMode[]).map((mode) => (
+                                                <button
+                                                    key={mode}
+                                                    type="button"
+                                                    role="radio"
+                                                    aria-checked={modeFor(slide) === mode}
+                                                    className={`hero-media-toggle__btn${modeFor(slide) === mode ? ' is-active' : ''}`}
+                                                    onClick={() => setModeFor(idx, slide, mode)}
+                                                    disabled={saving}
+                                                >
+                                                    {mode === 'image' ? '🖼 Image' : '🎬 Video'}
+                                                </button>
+                                            ))}
+                                            <span className="editor-hint" style={{ margin: 0 }}>
+                                                {modeFor(slide) === 'image'
+                                                    ? 'Still photo. Max 4 MB per image.'
+                                                    : 'Looping muted clip. MP4, max 25 MB (2–5 MB ideal).'}
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    {modeFor(slide) === 'video' && (
+                                        <div className="editor-field hero-media-video">
+                                            <label>Video file</label>
+                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                                <input
+                                                    type="file"
+                                                    accept="video/mp4,video/webm,video/quicktime"
+                                                    onChange={(e) => handleVideoUpload(e, idx)}
+                                                    disabled={saving}
+                                                    id={`slide-video-${idx}`}
+                                                    hidden
+                                                />
+                                                <label htmlFor={`slide-video-${idx}`} className="editor-button editor-button--small" style={{ margin: 0 }}>
+                                                    {videoProgress?.index === idx
+                                                        ? `Uploading ${Math.round(videoProgress.fraction * 100)}%`
+                                                        : slide.video ? 'Replace Video' : 'Upload Video'}
+                                                </label>
+                                                <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                                <input
+                                                    value={slide.video || ''}
+                                                    onChange={(e) => handleSlideChange(idx, 'video', e.target.value)}
+                                                    placeholder="Video URL (.mp4)"
+                                                    style={{ flex: 1, minWidth: '200px' }}
+                                                />
+                                                {slide.video && (
+                                                    <button
+                                                        type="button"
+                                                        className="editor-button editor-button--danger editor-button--small"
+                                                        style={{ margin: 0 }}
+                                                        onClick={() => handleSlideChange(idx, 'video', '')}
+                                                    >
+                                                        Remove video
+                                                    </button>
+                                                )}
+                                            </div>
+                                            {videoProgress?.index === idx && (
+                                                <div className="hero-media-progress" aria-hidden="true">
+                                                    <span style={{ width: `${Math.round(videoProgress.fraction * 100)}%` }} />
+                                                </div>
+                                            )}
+                                            <p className="editor-hint" style={{ marginTop: '0.5rem' }}>
+                                                Best: MP4 (H.264), 1920×1080 or 1280×720, 8–15 s, no audio, <strong>2–5 MB</strong>. Recommended max 8 MB; hard limit 25 MB.
+                                                Uploads go straight to Cloudinary, which also compresses it for delivery.
+                                            </p>
+                                            {slide.video && (
+                                                <video
+                                                    src={slide.video}
+                                                    poster={slide.image || undefined}
+                                                    muted
+                                                    loop
+                                                    playsInline
+                                                    controls
+                                                    preload="metadata"
+                                                    style={{ marginTop: '0.75rem', width: '100%', maxWidth: '360px', borderRadius: '8px', background: '#000' }}
+                                                />
+                                            )}
+                                        </div>
+                                    )}
+
                                     <div className="editor-row">
                                         <div className="editor-field">
-                                            <label>Desktop Image</label>
+                                            <label>{modeFor(slide) === 'video' ? 'Poster Image (shown while the video loads)' : 'Desktop Image'}</label>
                                             <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                                                 <input
                                                     type="file"
@@ -183,28 +325,30 @@ export default function HeroEditor() {
                                                 />
                                             </div>
                                         </div>
-                                        <div className="editor-field">
-                                            <label>Mobile Image (Optional)</label>
-                                            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                                                <input
-                                                    type="file"
-                                                    accept="image/*"
-                                                    onChange={(e) => handleImageUpload(e, idx, 'mobileImage')}
-                                                    disabled={saving}
-                                                    style={{ width: 'auto' }}
-                                                    id={`slide-mob-${idx}`}
-                                                    hidden
-                                                />
-                                                <label htmlFor={`slide-mob-${idx}`} className="editor-button editor-button--small" style={{ margin: 0 }}>Upload</label>
-                                                <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
-                                                <input
-                                                    value={slide.mobileImage || ''}
-                                                    onChange={(e) => handleSlideChange(idx, 'mobileImage', e.target.value)}
-                                                    placeholder="URL"
-                                                    style={{ flex: 1 }}
-                                                />
+                                        {modeFor(slide) === 'image' && (
+                                            <div className="editor-field">
+                                                <label>Mobile Image (Optional)</label>
+                                                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                                    <input
+                                                        type="file"
+                                                        accept="image/*"
+                                                        onChange={(e) => handleImageUpload(e, idx, 'mobileImage')}
+                                                        disabled={saving}
+                                                        style={{ width: 'auto' }}
+                                                        id={`slide-mob-${idx}`}
+                                                        hidden
+                                                    />
+                                                    <label htmlFor={`slide-mob-${idx}`} className="editor-button editor-button--small" style={{ margin: 0 }}>Upload</label>
+                                                    <span style={{ fontSize: '0.9rem', color: '#666' }}>OR</span>
+                                                    <input
+                                                        value={slide.mobileImage || ''}
+                                                        onChange={(e) => handleSlideChange(idx, 'mobileImage', e.target.value)}
+                                                        placeholder="URL"
+                                                        style={{ flex: 1 }}
+                                                    />
+                                                </div>
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
 
                                     <div className="editor-field">

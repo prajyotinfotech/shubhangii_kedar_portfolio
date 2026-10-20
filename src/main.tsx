@@ -26,6 +26,7 @@ const ThemeManager = lazy(() => import('./admin/pages/sections/ThemeManager'))
 const SongListManager = lazy(() => import('./admin/pages/sections/SongListManager'))
 const BrandsManager = lazy(() => import('./admin/pages/sections/BrandsManager'))
 const BookingSettingsEditor = lazy(() => import('./admin/pages/sections/BookingSettingsEditor'))
+const SectionsManager = lazy(() => import('./admin/pages/sections/SectionsManager'))
 
 const AdminLoadingFallback = () => (
   <div style={{
@@ -66,6 +67,11 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/dashboard" element={
                 <Suspense fallback={<AdminLoadingFallback />}>
                   <AdminDashboard />
+                </Suspense>
+              } />
+              <Route path="/admin/sections" element={
+                <Suspense fallback={<AdminLoadingFallback />}>
+                  <SectionsManager />
                 </Suspense>
               } />
               <Route path="/admin/hero" element={

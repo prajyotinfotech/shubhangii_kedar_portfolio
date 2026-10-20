@@ -509,11 +509,17 @@ a {
     transition: opacity 1.2s ease, transform 1.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.hero-slide img {
+.hero-slide img,
+.hero-slide video {
     width: 100%;
     height: 100%;
     object-fit: cover;
     filter: saturate(120%) contrast(105%);
+}
+
+.hero-slide video {
+    display: block;
+    background: #121212;
 }
 
 .hero-slide::after {
@@ -650,21 +656,6 @@ a {
     background: url('data:image/svg+xml,<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg"><circle cx="40" cy="40" r="2" fill="rgba(255,255,255,0.04)"/><circle cx="80" cy="80" r="2" fill="rgba(255,255,255,0.04)"/></svg>');
     animation: float 5s infinite linear;
     mix-blend-mode: screen;
-}
-
-.hero-video-wrap {
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-}
-
-.hero-video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.35;
-    filter: saturate(120%);
 }
 
 @keyframes float {
@@ -1696,7 +1687,8 @@ a {
     transform: scale(1.02);
 }
 
-.hero-slide img {
+.hero-slide img,
+.hero-slide video {
     object-position: center top;
     object-fit: cover;
 }

@@ -1,14 +1,17 @@
 import { useEffect, useRef, useState } from 'react'
 import { useContentContext } from '../contexts/ContentContext'
+import { visibleSectionIds, type SectionId } from '../data/sectionLayout'
 
-const links = [
+// `section` ties a link to the admin-managed section layout; links whose
+// section is hidden are dropped. Home has no section: the hero is always shown.
+const links: { href: string; label: string; section?: SectionId }[] = [
   { href: '#home', label: 'Home' },
-  { href: '#about', label: 'About' },
-  { href: '#music', label: 'Music' },
-  { href: '#songlist', label: 'Discography' },
-  { href: '#events', label: 'Events' },
-  { href: '#gallery', label: 'Gallery' },
-  { href: '#contact', label: 'Contact' },
+  { href: '#about', label: 'About', section: 'about' },
+  { href: '#music', label: 'Music', section: 'music' },
+  { href: '#songlist', label: 'Discography', section: 'songlist' },
+  { href: '#events', label: 'Events', section: 'events' },
+  { href: '#gallery', label: 'Gallery', section: 'gallery' },
+  { href: '#contact', label: 'Contact', section: 'contact' },
 ]
 
 export const Navbar: React.FC = () => {
@@ -21,6 +24,8 @@ export const Navbar: React.FC = () => {
   const logoImage = content?.theme?.logoImage
   const logoSize = content?.theme?.logoSize || 48
   const logoPosition = content?.theme?.logoPosition ?? -20
+  const visibleSections = visibleSectionIds(content?.sectionLayout)
+  const visibleLinks = links.filter((link) => !link.section || visibleSections.has(link.section))
 
   useEffect(() => {
     const onScroll = () => {
@@ -79,7 +84,7 @@ export const Navbar: React.FC = () => {
           <div className="logo">Shubhangii Kedar</div>
         )}
         <ul className={`nav-menu${menuOpen ? ' active' : ''}`}>
-          {links.map((link) => (
+          {visibleLinks.map((link) => (
             <li key={link.href}>
               <a
                 href={link.href}
