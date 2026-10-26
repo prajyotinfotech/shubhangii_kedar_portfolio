@@ -3,6 +3,7 @@
  * Centralized API calls for admin panel
  */
 import { normalizeApiBaseUrl } from '../../utils/apiUrl';
+import { markContentUpdated } from '../../services/contentService';
 
 const API_URL = normalizeApiBaseUrl(import.meta.env.VITE_API_URL, 'http://localhost:3001');
 const AUTH_CREDENTIALS: RequestCredentials = 'include';
@@ -79,7 +80,9 @@ export async function updateSection(section: string, data: unknown) {
         headers: getAuthHeaders(),
         body: JSON.stringify(data)
     });
-    return handleResponse(response);
+    const result = await handleResponse(response);
+    markContentUpdated();
+    return result;
 }
 
 /**
@@ -92,7 +95,9 @@ export async function addItem(section: string, item: unknown) {
         headers: getAuthHeaders(),
         body: JSON.stringify(item)
     });
-    return handleResponse(response);
+    const result = await handleResponse(response);
+    markContentUpdated();
+    return result;
 }
 
 /**
@@ -105,7 +110,9 @@ export async function updateItem(section: string, itemId: string, updates: unkno
         headers: getAuthHeaders(),
         body: JSON.stringify(updates)
     });
-    return handleResponse(response);
+    const result = await handleResponse(response);
+    markContentUpdated();
+    return result;
 }
 
 /**
@@ -132,7 +139,9 @@ export async function deleteItem(section: string, itemId: string) {
     console.log('   Status Text:', response.statusText);
     console.log('   OK:', response.ok);
     
-    return handleResponse(response);
+    const result = await handleResponse(response);
+    markContentUpdated();
+    return result;
 }
 
 // ============ Upload API ============
