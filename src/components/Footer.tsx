@@ -2,21 +2,31 @@ import React from 'react'
 import { socialLinks as staticSocialLinks, type IconName } from '../data/content'
 import Icon from './Icon'
 import { useContentContext } from '../contexts/ContentContext'
+import { visibleSectionIds, type SectionId } from '../data/sectionLayout'
+
+// Same contract as Navbar: a link tied to a hidden section is dropped.
+const links: { href: string; label: string; section?: SectionId }[] = [
+  { href: '#home', label: 'Home' },
+  { href: '#music', label: 'Music', section: 'music' },
+  { href: '#songlist', label: 'Discography', section: 'songlist' },
+  { href: '#events', label: 'Events', section: 'events' },
+  { href: '#contact', label: 'Contact', section: 'contact' },
+]
 
 export const Footer: React.FC = () => {
   const { content } = useContentContext()
   const socialLinks = content?.socialLinks || staticSocialLinks
+  const visibleSections = visibleSectionIds(content?.sectionLayout)
+  const visibleLinks = links.filter((link) => !link.section || visibleSections.has(link.section))
 
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-top">
           <div className="footer-links">
-            <a href="#home">Home</a>
-            <a href="#music">Music</a>
-            <a href="#songlist">Discography</a>
-            <a href="#events">Events</a>
-            <a href="#contact">Contact</a>
+            {visibleLinks.map((link) => (
+              <a href={link.href} key={link.href}>{link.label}</a>
+            ))}
           </div>
           <div className="footer-social">
             {socialLinks.map((social) => (

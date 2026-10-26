@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import portraitImg from '../assets/6.webp'
 import { useContentContext } from '../contexts/ContentContext'
+import { visiblePartIds } from '../data/sectionLayout'
 
 function AchievementsCarousel({ items }: { items: string[] }) {
   const trackRef = useRef<HTMLDivElement>(null)
@@ -80,14 +81,21 @@ export const About: React.FC = () => {
   const { content, loading } = useContentContext()
   const about = content?.about
 
+  // Admin "Page Sections" part switches; a hidden part is not rendered at all.
+  const parts = visiblePartIds(content?.sectionLayout, 'about')
+  const showBio = parts.has('bio')
+  const showFootfall = parts.has('footfall')
+  const showAchievements = parts.has('achievements')
+
   if (loading) return <div className="about-loading-placeholder" style={{ minHeight: '400px' }}></div>
   if (!about) return null
+  if (!showBio && !showFootfall && !showAchievements) return null
 
   return (
     <section id="about" className="about">
       <div className="container">
         {/* Hero split: image + intro */}
-        <div className="about-grid">
+        {showBio && <div className="about-grid">
           <div className="about-image reveal-left">
             <div className="image-wrapper">
               <div className="image-placeholder" style={{ aspectRatio: (about as any).imageAspect || '4/5' }}>
@@ -110,10 +118,10 @@ export const About: React.FC = () => {
               />
             )}
           </div>
-        </div>
+        </div>}
 
         {/* Performance banner */}
-        {about.performanceBanner?.cities && (
+        {showFootfall && about.performanceBanner?.cities && (
           <div className="about-banner reveal-scale" style={{
             fontSize: about.performanceBanner.fontSize || undefined,
             fontFamily: about.performanceBanner.fontFamily || undefined,
@@ -129,8 +137,8 @@ export const About: React.FC = () => {
         )}
 
         {/* Achievements */}
-        {about.achievements && about.achievements.length > 0 && (
-          <div className="about-achievements reveal-scale" style={{ marginTop: '4rem' }}>
+        {showAchievements && about.achievements && about.achievements.length > 0 && (
+          <div className="about-achievements reveal-scale" style={{ marginTop: showBio || showFootfall ? '4rem' : 0 }}>
             <h3 className="about-subtitle" style={{ textAlign: 'center', marginBottom: '1rem' }}>
               <span className="achievements-liquid-title">Achievements</span>
             </h3>

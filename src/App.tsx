@@ -19,7 +19,7 @@ import ContactBooking from './components/ContactBooking'
 import Footer from './components/Footer'
 import ErrorBoundary from './components/ErrorBoundary'
 import { useScrollReveal } from './hooks/useScrollReveal'
-import { resolveSectionLayout, type SectionId } from './data/sectionLayout'
+import { resolveSectionLayout, isSectionShown, type SectionId } from './data/sectionLayout'
 
 import { useContentContext } from './contexts/ContentContext'
 
@@ -149,7 +149,7 @@ function App() {
         <main>
           <Hero />
           {resolveSectionLayout(content.sectionLayout)
-            .filter((entry) => entry.visible)
+            .filter(isSectionShown)
             .map((entry) => {
               const Section = SECTION_COMPONENTS[entry.id]
               return <Section key={entry.id} />
