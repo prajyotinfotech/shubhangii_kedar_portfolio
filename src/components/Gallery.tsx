@@ -10,6 +10,7 @@ import heroBg from '../assets/backofthelatestR.webp'
 import portrait from '../assets/PWP09949.webp'
 
 import { useContentContext } from '../contexts/ContentContext'
+import { visiblePartIds } from '../data/sectionLayout'
 
 const legacyAspectMap: Record<string, string> = {
   square: '1/1',
@@ -267,6 +268,12 @@ export const Gallery: React.FC = () => {
     return () => mq.removeEventListener('change', handler)
   }, [])
 
+  // Admin "Page Sections" part switches. A hidden part is not rendered at all,
+  // so its <img> tags / embed iframes / Instagram script are never requested.
+  const parts = visiblePartIds(content?.sectionLayout, 'gallery')
+  const showPhotos = parts.has('photos')
+  const showVideos = parts.has('videos')
+
   const allItems: GalleryItem[] = content?.gallery?.length
     ? content.gallery.map(item => ({
         src: item.image,
@@ -279,8 +286,10 @@ export const Gallery: React.FC = () => {
       }))
     : STATIC_PHOTOS
 
-  const photoItems = allItems.filter(item => item.type !== 'video').slice(0, GALLERY_MAX)
-  const videoItems = allItems.filter(item => item.type === 'video')
+  const photoItems = showPhotos ? allItems.filter(item => item.type !== 'video').slice(0, GALLERY_MAX) : []
+  const videoItems = showVideos ? allItems.filter(item => item.type === 'video') : []
+
+  if (!showPhotos && !showVideos) return null
 
   return (
     <section id="gallery" className="gallery">

@@ -12,6 +12,7 @@
 
 .sections-row {
     display: flex;
+    flex-wrap: wrap; /* the parts sub-tree wraps onto its own full-width line */
     align-items: center;
     gap: 0.75rem;
     padding: 0.75rem 1rem;
@@ -192,6 +193,82 @@
     min-width: 3.2rem;
 }
 
+/* Parts sub-tree (About, Gallery): indented rows under the section row */
+.sections-parts {
+    flex: 0 0 100%;
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0 0 0 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    position: relative;
+}
+
+.sections-parts::before {
+    /* vertical trunk line of the tree */
+    content: '';
+    position: absolute;
+    left: 1.25rem;
+    top: 0;
+    bottom: 0.9rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.sections-part {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.4rem 0.5rem 0.4rem 0;
+    margin-left: 0.9rem;
+    border-radius: 8px;
+    transition: opacity 160ms ease;
+}
+
+.sections-part__branch {
+    flex: 0 0 0.9rem;
+    height: 1px;
+    margin-left: -0.9rem;
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.sections-part__label {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.sections-part--hidden {
+    opacity: 0.55;
+}
+
+.sections-part--hidden .sections-part__label {
+    text-decoration: line-through;
+    text-decoration-color: rgba(255, 255, 255, 0.35);
+}
+
+.sections-parts--disabled {
+    opacity: 0.4;
+}
+
+.sections-parts--disabled .sections-switch {
+    cursor: not-allowed;
+}
+
+.sections-switch--small .sections-switch__track {
+    width: 34px;
+    height: 20px;
+}
+
+.sections-switch--small .sections-switch__thumb {
+    width: 14px;
+    height: 14px;
+}
+
+.sections-switch--small input:checked + .sections-switch__track .sections-switch__thumb {
+    transform: translateX(14px);
+}
+
 @media (max-width: 640px) {
     .sections-row {
         padding: 0.6rem 0.6rem 0.6rem 0.25rem;
@@ -218,5 +295,17 @@
     .sections-row--pinned .sections-row__desc {
         display: block;
         white-space: normal;
+    }
+
+    .sections-parts {
+        padding-left: 0.75rem;
+    }
+
+    .sections-parts::before {
+        left: 0.75rem;
+    }
+
+    .sections-part {
+        min-height: 40px; /* thumb-friendly */
     }
 }

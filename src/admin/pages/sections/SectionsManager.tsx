@@ -2,14 +2,18 @@
  * Page Sections Manager
  * Lets the admin show/hide each home-page section and reorder them by
  * holding the handle and dragging vertically. Hero is pinned at the top.
+ * Sections with parts (About, Gallery) show a sub-tree of switches so each
+ * part can be hidden on its own; a hidden section hides all its parts.
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { fetchSection, updateSection } from '../../api/client';
 import {
     defaultSectionLayout,
+    isSectionShown,
     resolveSectionLayout,
     sectionMeta,
     type SectionLayoutEntry,
+    type SectionPartId,
 } from '../../../data/sectionLayout';
 import '../styles/editor.css';
 import './SectionsManager.css';
@@ -63,9 +67,22 @@ export default function SectionsManager() {
 
     const dirty = JSON.stringify(layout) !== JSON.stringify(savedLayout);
     const hiddenCount = layout.filter(e => !e.visible).length;
+    // Parts switched off inside sections that are themselves still shown.
+    const hiddenPartCount = layout
+        .filter(e => e.visible)
+        .reduce((n, e) => n + (e.parts ?? []).filter(p => !p.visible).length, 0);
+    // Shown sections whose parts are all off: they will not appear on the page.
+    const emptySections = layout.filter(e => e.visible && !isSectionShown(e)).map(e => sectionMeta(e.id).label);
 
     const toggleVisible = (index: number) => {
         setLayout(prev => prev.map((entry, i) => (i === index ? { ...entry, visible: !entry.visible } : entry)));
+    };
+
+    const togglePart = (index: number, partId: SectionPartId) => {
+        setLayout(prev => prev.map((entry, i) => {
+            if (i !== index || !entry.parts) return entry;
+            return { ...entry, parts: entry.parts.map(p => (p.id === partId ? { ...p, visible: !p.visible } : p)) };
+        }));
     };
 
     const nudge = (index: number, delta: -1 | 1) => {
@@ -144,7 +161,7 @@ export default function SectionsManager() {
         try {
             await updateSection('sectionLayout', layout);
             setSavedLayout(layout);
-            setMessage({ type: 'success', text: 'Section layout saved. The public site picks it up within a few minutes (content cache).' });
+            setMessage({ type: 'success', text: 'Section layout saved. Open or reload the home page in this browser to see it; other visitors see it within about 5 minutes.' });
         } catch (err) {
             setMessage({ type: 'error', text: err instanceof Error ? err.message : 'Failed to save section layout' });
         } finally {
@@ -238,15 +255,61 @@ export default function SectionsManager() {
                                     <span className="sections-switch__track"><span className="sections-switch__thumb" /></span>
                                     <span className="sections-switch__text">{entry.visible ? 'Shown' : 'Hidden'}</span>
                                 </label>
+
+                                {meta.parts && entry.parts && (
+                                    <ul
+                                        className={`sections-parts${entry.visible ? '' : ' sections-parts--disabled'}`}
+                                        aria-label={`Parts of ${meta.label}`}
+                                    >
+                                        {meta.parts.map((partMeta) => {
+                                            const part = entry.parts!.find(p => p.id === partMeta.id);
+                                            const partVisible = part?.visible !== false;
+                                            return (
+                                                <li
+                                                    key={partMeta.id}
+                                                    className={`sections-part${partVisible ? '' : ' sections-part--hidden'}`}
+                                                >
+                                                    <span className="sections-part__branch" aria-hidden="true" />
+                                                    <div className="sections-row__body">
+                                                        <span className="sections-part__label">{partMeta.label}</span>
+                                                        <span className="sections-row__desc">{partMeta.description}</span>
+                                                    </div>
+                                                    <label className="sections-switch sections-switch--small">
+                                                        <input
+                                                            type="checkbox"
+                                                            role="switch"
+                                                            checked={partVisible}
+                                                            disabled={!entry.visible}
+                                                            onChange={() => togglePart(index, partMeta.id)}
+                                                            aria-label={`${partVisible ? 'Hide' : 'Show'} ${partMeta.label} in ${meta.label}`}
+                                                        />
+                                                        <span className="sections-switch__track"><span className="sections-switch__thumb" /></span>
+                                                        <span className="sections-switch__text">{partVisible ? 'Shown' : 'Hidden'}</span>
+                                                    </label>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
                             </li>
                         );
                     })}
                 </ul>
 
                 <p className="editor-hint" style={{ marginTop: '1rem' }}>
-                    {hiddenCount === 0
-                        ? 'All sections are shown.'
-                        : `${hiddenCount} section${hiddenCount === 1 ? '' : 's'} hidden. Hidden sections also disappear from the top navigation bar.`}
+                    {hiddenCount === 0 && hiddenPartCount === 0
+                        ? 'All sections and parts are shown.'
+                        : [
+                            hiddenCount > 0 ? `${hiddenCount} section${hiddenCount === 1 ? '' : 's'} hidden` : '',
+                            hiddenPartCount > 0 ? `${hiddenPartCount} part${hiddenPartCount === 1 ? '' : 's'} hidden` : '',
+                        ].filter(Boolean).join(', ') + '. Hidden sections also disappear from the top navigation bar.'}
+                    {emptySections.length > 0 && (
+                        <>
+                            {' '}
+                            <strong>{emptySections.join(', ')}</strong>
+                            {emptySections.length === 1 ? ' has' : ' have'} every part hidden, so the whole section stays off the page until a part is switched on.
+                        </>
+                    )}
                 </p>
             </div>
 

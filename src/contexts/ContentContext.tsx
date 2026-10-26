@@ -4,7 +4,7 @@
  */
 import { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { fetchContent, clearContentCache, ContentFetchError } from '../services/contentService';
+import { fetchContent, clearContentCache, ContentFetchError, CONTENT_UPDATED_EVENT, isContentBustStorageKey } from '../services/contentService';
 import type { ContentData } from '../services/contentService';
 
 interface ContentContextType {
@@ -25,8 +25,10 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     const [isStatic, setIsStatic] = useState(false);
     const [usingCachedContent, setUsingCachedContent] = useState(false);
 
-    const loadContent = async () => {
-        setLoading(true);
+    // `silent` refreshes the data without flipping `loading`, so an already
+    // rendered page swaps content in place instead of unmounting to a spinner.
+    const loadContent = async (silent = false) => {
+        if (!silent) setLoading(true);
         setError(null);
 
         try {
@@ -57,6 +59,22 @@ export function ContentProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         loadContent();
+
+        // Admin saved in this tab (caches already cleared by markContentUpdated).
+        const onUpdated = () => { loadContent(true); };
+        // Admin saved in another tab of this browser.
+        const onStorage = (e: StorageEvent) => {
+            if (isContentBustStorageKey(e.key)) {
+                clearContentCache();
+                loadContent(true);
+            }
+        };
+        window.addEventListener(CONTENT_UPDATED_EVENT, onUpdated);
+        window.addEventListener('storage', onStorage);
+        return () => {
+            window.removeEventListener(CONTENT_UPDATED_EVENT, onUpdated);
+            window.removeEventListener('storage', onStorage);
+        };
     }, []);
 
     return (

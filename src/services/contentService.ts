@@ -167,7 +167,7 @@ export interface ContentData {
         web3formsKey?: string;
     };
     /** Ordered home-page sections (hero excluded, always first). See src/data/sectionLayout.ts */
-    sectionLayout?: { id: string; visible: boolean }[];
+    sectionLayout?: { id: string; visible: boolean; parts?: { id: string; visible: boolean }[] }[];
     theme?: {
         logoImage?: string;
         logoSize?: number;
@@ -281,6 +281,29 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minute cache
 // Persistent cache key for resilience when Gist is unreachable
 const PERSISTENT_CACHE_KEY = 'sk-content-cache-v1';
 
+// Set (in this browser) whenever the admin saves. While it is younger than
+// BUST_WINDOW every load skips the persistent cache and fetches the Gist with a
+// unique query string, which bypasses GitHub's ~5 minute raw-file CDN cache.
+// Other visitors still see the normal CDN delay; only the editing browser is
+// forced fresh, which is where "I saved but nothing changed" is noticed.
+const CONTENT_BUST_KEY = 'sk-content-bust';
+const BUST_WINDOW = 10 * 60 * 1000;
+/** DOM event fired (same tab) after an admin save; ContentProvider listens. */
+export const CONTENT_UPDATED_EVENT = 'sk-content-updated';
+
+function readBustMarker(): number {
+    try {
+        const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(CONTENT_BUST_KEY) : null;
+        const ts = raw ? Number(raw) : 0;
+        return Number.isFinite(ts) ? ts : 0;
+    } catch { return 0; }
+}
+
+/** True when `key` is the storage key another tab writes on admin save. */
+export function isContentBustStorageKey(key: string | null): boolean {
+    return key === CONTENT_BUST_KEY;
+}
+
 function isContentData(value: unknown): value is ContentData {
     return Boolean(value && typeof value === 'object' && Object.keys(value as Record<string, unknown>).length > 0);
 }
@@ -330,26 +353,35 @@ export class ContentFetchError extends Error {
  * Uses cache to avoid repeated requests
  */
 export async function fetchContent(): Promise<ContentData> {
-    // Return cached content if still valid
     const now = Date.now();
-    if (contentCache && (now - cacheTimestamp) < CACHE_DURATION) {
+    const bustAt = readBustMarker();
+    const bustActive = bustAt > 0 && (now - bustAt) < BUST_WINDOW;
+
+    // Return cached content if still valid and not older than the last admin save
+    if (contentCache && (now - cacheTimestamp) < CACHE_DURATION && cacheTimestamp >= bustAt) {
         return contentCache;
     }
 
-    const persistentCache = readPersistentCache(CACHE_DURATION);
-    if (persistentCache) {
-        contentCache = persistentCache;
-        cacheTimestamp = now;
-        return persistentCache;
+    if (!bustActive) {
+        const persistentCache = readPersistentCache(CACHE_DURATION);
+        if (persistentCache) {
+            contentCache = persistentCache;
+            cacheTimestamp = now;
+            return persistentCache;
+        }
     }
 
     // FORCE GIST STRATEGY as requested:
     // "frontend is not fetching data from gist file it should always fetch data from gist file"
     const GIST_RAW_URL = import.meta.env.VITE_GIST_RAW_URL || 'https://gist.githubusercontent.com/prajyotinfotech/9edd7314a8b2f69a855037af01072b7e/raw/content.json';
+    // A unique query string makes the CDN miss and read the Gist afresh.
+    const fetchUrl = bustActive
+        ? `${GIST_RAW_URL}${GIST_RAW_URL.includes('?') ? '&' : '?'}cb=${now}`
+        : GIST_RAW_URL;
 
     try {
-        console.log('Fetching content from Gist:', GIST_RAW_URL);
-        const response = await fetch(GIST_RAW_URL);
+        console.log('Fetching content from Gist:', fetchUrl);
+        const response = await fetch(fetchUrl, bustActive ? { cache: 'no-store' } : undefined);
 
         if (!response.ok) {
             throw new Error(`Gist fetch error: ${response.status} ${response.statusText}`);
@@ -399,6 +431,25 @@ export async function fetchSection<K extends keyof ContentData>(
 export function clearContentCache(): void {
     contentCache = null;
     cacheTimestamp = 0;
+    try {
+        if (typeof localStorage !== 'undefined') localStorage.removeItem(PERSISTENT_CACHE_KEY);
+    } catch { /* ignore */ }
+}
+
+/**
+ * Call after any admin write succeeds. Drops every local cache, starts the
+ * CDN-bypass window for this browser, and notifies the live ContentProvider
+ * (this tab via a DOM event; other tabs via the native `storage` event that
+ * the localStorage write triggers).
+ */
+export function markContentUpdated(): void {
+    clearContentCache();
+    try {
+        if (typeof localStorage !== 'undefined') localStorage.setItem(CONTENT_BUST_KEY, String(Date.now()));
+    } catch { /* ignore */ }
+    try {
+        if (typeof window !== 'undefined') window.dispatchEvent(new Event(CONTENT_UPDATED_EVENT));
+    } catch { /* ignore */ }
 }
 
 /**
